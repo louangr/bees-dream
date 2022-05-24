@@ -1,0 +1,23 @@
+stages:
+  - build
+  - test
+
+
+.message_golang:
+  before_script:
+    - echo "Start golang build pipeline"
+    - go version
+  after_script:
+    - echo "Finish golang pipeline"
+
+build-code-golang:
+  stage: build
+  extends: .message_golang
+  script:
+    - echo "test"
+
+test-code-test:
+  stage: test
+  extends: .message_golang
+  script:
+    - rake test1
