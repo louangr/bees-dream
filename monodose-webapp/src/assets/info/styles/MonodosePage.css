@@ -3,6 +3,17 @@
 }
 
 body{
-    background-image: url('../images/background.png');
-    background-size:contain;
+    background-color: black;
+    background-size: contain;
+}
+
+.alveole{
+    background-image: url('../images/alveole.png');
+    background-repeat: no-repeat;
+    background-size: 1600px;
+    background-position: center;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

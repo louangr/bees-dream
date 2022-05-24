@@ -27,9 +27,9 @@
 	}
 	
 	/* conserver le ratio des images */
-	img {
+	/*img {
 		height: auto;
-	}
+	}*/
 	
 	/* gestion des mots longs */
 	textarea,
