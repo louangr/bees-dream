@@ -4,24 +4,32 @@ variables:
 stages:
   - build
   - test
-
+  - deploy
 
 .golang_setup:
-  image: golang:1.18.2-alpine
+  image: golang:$GO_VERSION-alpine
   before_script:
     - echo "Start golang build pipeline"
     - go version
   after_script:
     - echo "Finish golang pipeline"
 
-build-code-golang:
+golang:build:
   stage: build
   extends: .golang_setup
   script:
-    - echo "test"
+    - chmod +x ./cmd/script/build.sh
+    - ./cmd/script/build.sh
 
-test-code-test:
+golang:test:
   stage: test
   extends: .golang_setup
   script:
-    - rake test1
+    - chmod +x ./cmd/script/test.sh
+    - ./cmd/script/test.sh
+
+golang:deploy:
+  stage: deploy
+  needs: ["golang:build", "golang:test"]
+  script:
+    - echo "Deploy"
