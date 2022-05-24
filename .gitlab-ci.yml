@@ -18,7 +18,7 @@ golang:build:
   artifacts:
     expire_in: 30 days
     paths:
-      - "./$FOLDER/dist"
+      - "./$FOLDER/dist/$API_NAME"
   script:
     - cd $FOLDER && go build -o $API_NAME -v ./...
 
@@ -26,7 +26,7 @@ golang:test:
   stage: test
   extends: .golang_setup
   script:
-    - cd ./FOLDER/tests && go test -o api_test
+    - cd ./$FOLDER/tests && go test -o api_test
 
 golang:deploy:
   stage: deploy
