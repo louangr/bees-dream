@@ -1,5 +1,6 @@
 variables:
   GO_VERSION: "1.18"
+  API_NAME: "api-bee"
 
 stages:
   - build
@@ -16,17 +17,23 @@ stages:
 
 golang:build:
   stage: build
+  needs: []
   extends: .golang_setup
+  artifacts:
+    paths:
+      - "$API_NAME"
+    expire_in: 1 week
   script:
-    - chmod +x ./cmd/script/build.sh
-    - ./cmd/script/build.sh
+    - go build -o $API_NAME -v ./...
 
 golang:test:
   stage: test
+  needs: []
   extends: .golang_setup
   script:
-    - chmod +x ./cmd/script/test.sh
-    - ./cmd/script/test.sh
+    - cd ./tests
+    - go test -o api_test
+
 
 golang:deploy:
   stage: deploy
