@@ -1,4 +1,4 @@
-export const styles: { [key: string]: React.CSSProperties } = {
+const styles: { [key: string]: React.CSSProperties } = {
     container: {
         width: '100%',
         height: '100%',
@@ -7,3 +7,5 @@ export const styles: { [key: string]: React.CSSProperties } = {
         alignItems: 'center'
     }
 }
+
+export default styles
