@@ -15,14 +15,18 @@ stages:
 golang:build:
   stage: build
   extends: .golang_setup
+  artifacts:
+    expire_in: 30 days
+    paths:
+      - "./dist"
   script:
-    - cd $FOLDER && go build -o $API_NAME -v ./...
+    - cd $FOLDER && ./cmd/script/build.sh
 
 golang:test:
   stage: test
   extends: .golang_setup
   script:
-    - cd ./$FOLDER/tests && go test -o api_test
+    - cd $FOLDER && ./cmd/script/test.sh
 
 golang:deploy:
   stage: deploy
