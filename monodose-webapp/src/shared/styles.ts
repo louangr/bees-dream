@@ -5,6 +5,10 @@ const styles: { [key: string]: React.CSSProperties } = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    formContainer: {
+        display: 'flex',
+        flexDirection: 'column'
     }
 }
 
