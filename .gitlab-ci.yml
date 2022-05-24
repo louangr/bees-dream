@@ -18,7 +18,7 @@ golang:build:
   artifacts:
     expire_in: 30 days
     paths:
-      - "./dist"
+      - "./$FOLDER/dist"
   script:
     - cd $FOLDER && go build -o $API_NAME -v ./...
 
