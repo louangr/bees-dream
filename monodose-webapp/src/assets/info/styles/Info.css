@@ -1,21 +1,41 @@
 .info-container{
-    width: fit-content;
-    height: 200px;
+    width: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: baseline;
 }
 
-img{
-    width: 100px;
-    height: 100px;
+/*full screen*/
+@media (min-width: 800px){
+    img{
+        width: 80%;
+        height: auto;
+    }
+}
+
+/*mobile screen*/
+@media (max-width: 800px){
+    img{
+        width: 80%;
+        height: auto;
+    }
+
+    h2{
+        font-size: 2.5vw;
+    }
+
+    ul li{
+        font-size: 3vw;
+    }
 }
 
 ul{
+    font-size: xx-large;
     text-align: center;
     list-style-type: none;
     padding-left: 0;
     color: white;
-    font-size: larger;
     font-weight: bold;
 }
