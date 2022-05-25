@@ -25,6 +25,10 @@ interface BeeKeeperModalProps {
 
 const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModalOpen, handleClose }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [email, setEmail] = React.useState<string | undefined>(undefined)
+  const [hasEmailError, setHasEmailError] = React.useState<boolean>(false)
+  const [password, setPassword] = React.useState<string | undefined>(undefined)
+  const [hasPasswordError, setHasPasswordError] = React.useState<boolean>(false)
 
   const onSubmitButton = () => {
     if (mode === BeeKeeperModalMode.Edition) {
@@ -72,7 +76,6 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
               edge="start"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2 }}
             >
               <DeleteIcon />
             </IconButton>
@@ -80,22 +83,29 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
         )}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To subscribe to this website, please enter your email address here.
-          We will send updates occasionally.
-        </DialogContentText>
         <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Email Address"
-          type="email"
-          fullWidth
-          variant="standard"
+          required
+          error={hasEmailError}
+          id="outlined-required"
+          label={hasEmailError ? "Email required" : "Email"}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+        <TextField
+          required
+          error={hasPasswordError}
+          id="outlined-password-input"
+          label={hasPasswordError ? "Password required" : "Password"}
+          type="password"
+          autoComplete="current-password"
+          style={{
+            marginTop: 16,
+            marginBottom: 16
+          }}
+          onChange={(event) => setPassword(event.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <LoadingButton loading={isLoading} onClick={onSubmitButton}>{mode === BeeKeeperModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
+        <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === BeeKeeperModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
       </DialogActions>
     </Dialog>
   )
