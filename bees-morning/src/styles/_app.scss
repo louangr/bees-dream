@@ -1,0 +1,12 @@
+@use "./variables/fonts" as font;
+
+body{
+    background: url("../assets/video/NatureBeeBackground.gif") no-repeat center center fixed; 
+    overflow: hidden;
+    font-family: font.$helvetica;
+}
+
+.title{
+  text-align: center;
+}
+  

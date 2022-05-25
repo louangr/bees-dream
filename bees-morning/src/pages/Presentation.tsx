@@ -7,7 +7,7 @@ const Presentation = () => {
 
   function TextSliceType1({ slice }: any) {
     return (
-      <section>
+      <section className="slice-type-1">
         <div className="left-info">
           <PrismicRichText field={slice.primary.left_text} />
         </div>
@@ -22,13 +22,13 @@ const Presentation = () => {
     const src = prismicH.asImageSrc(slice.primary.image);
     if (src !== null) {
       return (
-        <section>
+        <section className="slice-type-2">
           <img src={src} alt={slice.primary.image.alt} />
         </section>
       );
     } else {
       return (
-        <section>
+        <section className="slice-type-2">
           <img alt={slice.primary.image.alt} />
         </section>
       );
@@ -37,7 +37,7 @@ const Presentation = () => {
 
   function TextSliceType3({ slice }: any) {
     return (
-      <section>
+      <section className="slice-type-3">
         <PrismicRichText field={slice.primary.center_text} />
       </section>
     );
