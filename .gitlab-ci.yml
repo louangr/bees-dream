@@ -2,7 +2,7 @@ variables:
   GO_VERSION: "1.18"
   API_NAME: "api-bee"
   FOLDER_API: "API"
-  TAG_LATEST: t-golang-api:latest
+  TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:latest
   TAG_COMMIT: t-golang-api:$CI_COMMIT_SHORT_SHA
   CONTAINER_NAME: "c-golang-api"
 
@@ -42,9 +42,9 @@ golang:publish:
     - echo $TAG_COMMIT
     - echo $TAG_LATEST
     - echo $CI_REGISTRY_IMAGE
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-    - docker build -t $CI_REGISTRY_IMAGE ./$FOLDER_API/.
-    - docker push $CI_REGISTRY_IMAGE
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin
+    - docker build -t $TAG_LATEST ./$FOLDER_API/.
+    - docker push $TAG_LATEST
 
 golang:deploy:
   image: alpine:latest
