@@ -2,10 +2,13 @@ variables:
   GO_VERSION: "1.18"
   API_NAME: "api-bee"
   FOLDER: "API"
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 
 stages:
   - build
   - test
+  - publish
   - deploy
 
 .golang_setup:
@@ -28,8 +31,28 @@ golang:test:
   script:
     - cd ./$FOLDER/tests && go test -o api_test
 
-golang:deploy:
-  stage: deploy
+golang:publish:
+  image: docker:latest
+  stage: publish
   needs: ["golang:build", "golang:test"]
+  services:
+    - docker:dind
   script:
-    - echo "Deploy"
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+
+golang:deploy:
+  image: alpine:latest
+  stage: deploy
+  needs: ["golang:publish"]
+  tags:
+    - deploy
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 80:80 --name my-app $TAG_COMMIT"
