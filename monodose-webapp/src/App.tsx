@@ -16,16 +16,16 @@ const App: React.FC = () => {
     return user === undefined
       ? <Login onLogin={(newUser: User) => setUser(newUser)} />
       : component
-  };
+  }
 
   return (
-      <UserContext.Provider value={value}>
-        <Routes>
-          <Route path={AppRoutes.Default} element={<MonodosePage />} />
-          <Route path={AppRoutes.Admin} element={checkAuthentification(<AdminPage />)} />
-          <Route path={AppRoutes.Form} element={checkAuthentification(<FormPage />)} />
-        </Routes>
-      </UserContext.Provider>
+    <UserContext.Provider value={value}>
+      <Routes>
+        <Route path={AppRoutes.Default} element={<MonodosePage />} />
+        <Route path={AppRoutes.Admin} element={checkAuthentification(<AdminPage />)} />
+        <Route path={AppRoutes.Form} element={checkAuthentification(<FormPage />)} />
+      </Routes>
+    </UserContext.Provider>
   )
 }
 
