@@ -28,7 +28,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       setIsLoading(true)
 
       // TODO: API call to get user from login and password
-      
+
       onLogin({
         login: email,
         password: password,
@@ -49,14 +49,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           required
           error={hasEmailError}
           id="outlined-required"
-          label={hasEmailError ? "Email required" : "Email"}
+          label={hasEmailError ? "Email requis" : "Email"}
           onChange={(event) => setEmail(event.target.value)}
         />
         <TextField
           required
           error={hasPasswordError}
           id="outlined-password-input"
-          label={hasPasswordError ? "Password required" : "Password"}
+          label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
           type="password"
           autoComplete="current-password"
           style={{

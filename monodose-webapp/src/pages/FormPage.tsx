@@ -60,7 +60,7 @@ const FormPage: React.FC = () => {
         <TextField
           margin='normal'
           fullWidth
-          label='Location'
+          label='Localisation'
           value={location}
           onChange={(event) => setLocation(event.target.value)}
         />
@@ -68,7 +68,7 @@ const FormPage: React.FC = () => {
         <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
           <DatePicker
             clearable
-            label='Production start date'
+            label='Date début de production'
             inputFormat='dd/MM/yyyy'
             value={productionStartDate}
             onChange={(newProductionStartDate) => {
@@ -87,7 +87,7 @@ const FormPage: React.FC = () => {
         <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
           <DatePicker
             clearable
-            label='Production end date'
+            label='Date fin de production'
             inputFormat='dd/MM/yyyy'
             value={productionEndDate}
             onChange={(newProductionEndDate) => {
@@ -107,7 +107,7 @@ const FormPage: React.FC = () => {
         <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
           <DatePicker
             disabled
-            label='DLUO date'
+            label='Date DLUO'
             inputFormat='dd/MM/yyyy'
             value={dluoDate}
             onChange={setDluoDate}
@@ -124,7 +124,7 @@ const FormPage: React.FC = () => {
         <TextField
           margin='normal'
           fullWidth
-          label='Honey variety'
+          label='Variété du miel'
           value={honeyVariety}
           onChange={(event) => setHoneyVariety(event.target.value)}
         />
@@ -137,7 +137,7 @@ const FormPage: React.FC = () => {
           sx={{ mt: 3, mb: 2 }}
           onClick={onSubmitButtonClick}
         >
-          SAVE
+          Enregistrer
         </Button>
 
       </div>
