@@ -42,7 +42,7 @@ golang:publish:
     - echo $TAG_COMMIT
     - echo $TAG_LATEST
     - echo $CI_REGISTRY_IMAGE
-    - echo $UNIV_PASSWORD | docker login -u $UNIV_LOGIN --password-stdin
+    - docker login docker-registry.univ-nantes.fr -u $UNIV_LOGIN -p $UNIV_PASSWORD 
     - docker build -t $TAG_LATEST ./$FOLDER_API/.
     - docker push $TAG_LATEST
 
