@@ -32,9 +32,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       onLogin({
         login: email,
         password: password,
-        firstname: '',
-        lastname: '',
-        role: ''
+        firstname: 'TestPrenom',
+        lastname: 'TestNom',
+        company: 'TestCompany',
+        role: 'admin'
       })
 
       setIsLoading(false)
