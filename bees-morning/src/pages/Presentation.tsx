@@ -1,11 +1,10 @@
-import React from "react";
+import { usePrismicDocumentByUID } from "@prismicio/react";
+import TemplatesPresentation from "../components/TemplatesPresentation";
 
 const Presentation = () => {
-  return (
-    <div className="content">
-      <p>Todo</p>
-    </div>
-  );
+  const [document] = usePrismicDocumentByUID("display-unit", "presentation");
+
+  return <TemplatesPresentation />;
 };
 
 export default Presentation;
