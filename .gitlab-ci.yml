@@ -2,8 +2,7 @@ variables:
   GO_VERSION: "1.18"
   API_NAME: "api-bee"
   FOLDER_API: "API"
-  TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:latest
-  TAG_COMMIT: t-golang-api:$CI_COMMIT_SHORT_SHA
+  TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:$CI_COMMIT_SHORT_SHA
   CONTAINER_NAME: "c-golang-api"
 
 stages:
@@ -54,4 +53,4 @@ golang:deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login docker-registry.univ-nantes.fr -u $UNIV_LOGIN -p $UNIV_PASSWORD"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_LATEST"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f $CONTAINER_NAME || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -dp 8080:8080 --name $CONTAINER_NAME $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -dp 8080:8080 --name $CONTAINER_NAME $TAG_LATEST"
