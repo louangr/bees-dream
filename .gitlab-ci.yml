@@ -47,7 +47,7 @@ golang:deploy:
   stage: publish
   needs: ["golang:publish"]
   script:
-    - chmod 777 $ID_RSA
+    - chmod og= $ID_RSA
     - apk update && apk add openssh-client
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login docker-registry.univ-nantes.fr -u $UNIV_LOGIN -p $UNIV_PASSWORD "
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_LATEST"
