@@ -6,9 +6,9 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import EditIcon from '@mui/icons-material/Edit'
-import { IconButton } from '@mui/material'
+import { Divider, IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { User } from '../models/User'
+import { Role, User } from '../models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
 
 export enum BeeKeeperModalMode {
@@ -29,6 +29,13 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
   const [hasEmailError, setHasEmailError] = React.useState<boolean>(false)
   const [password, setPassword] = React.useState<string | undefined>(undefined)
   const [hasPasswordError, setHasPasswordError] = React.useState<boolean>(false)
+  const [firstname, setFirstname] = React.useState<string | undefined>(undefined)
+  const [hasFirstnameError, setHasFirstnameError] = React.useState<boolean>(false)
+  const [lastname, setLastname] = React.useState<string | undefined>(undefined)
+  const [hasLastnameError, setHasLastnameError] = React.useState<boolean>(false)
+  const [company, setCompany] = React.useState<string | undefined>(undefined)
+  const [hasCompanyError, setHasCompanyError] = React.useState<boolean>(false)
+  const [role, setRole] = React.useState<Role>(Role.BeeKeeper)
 
   const onSubmitButton = () => {
     if (mode === BeeKeeperModalMode.Edition) {
@@ -61,48 +68,80 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
       >
         <p style={{ margin: 0, padding: 0 }}>{mode === BeeKeeperModalMode.Edition ? `${beekeeper?.firstname} ${beekeeper?.lastname}` : 'Nouvel apiculteur'}</p>
         {mode === BeeKeeperModalMode.Edition && (
-          <div>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-            >
-              <DeleteIcon />
-            </IconButton>
-          </div>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          >
+            <DeleteIcon />
+          </IconButton>
         )}
       </DialogTitle>
-      <DialogContent>
-        <TextField
-          required
-          error={hasEmailError}
-          id="outlined-required"
-          label={hasEmailError ? "Email required" : "Email"}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TextField
-          required
-          error={hasPasswordError}
-          id="outlined-password-input"
-          label={hasPasswordError ? "Password required" : "Password"}
-          type="password"
-          autoComplete="current-password"
-          style={{
-            marginTop: 16,
-            marginBottom: 16
-          }}
-          onChange={(event) => setPassword(event.target.value)}
-        />
+      <DialogContent style={{ paddingBottom: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
+            <TextField
+              required
+              error={hasEmailError}
+              id="outlined-required"
+              label={hasEmailError ? "Email required" : "Email"}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <TextField
+              required
+              error={hasPasswordError}
+              id="outlined-password-input"
+              label={hasPasswordError ? "Password required" : "Password"}
+              type="password"
+              autoComplete="current-password"
+              style={{
+                marginBottom: 16,
+                marginTop: 16
+              }}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={role}
+              label="Age"
+              onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
+            >
+              <MenuItem value={Role.Admin}>Administrateur</MenuItem>
+              <MenuItem value={Role.BeeKeeper}>Apiculteur</MenuItem>
+            </Select>
+          </div>
+          <Divider orientation="vertical" variant="middle" sx={{ borderRightWidth: 2, borderRadius: 10 }} flexItem />
+          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
+            <TextField
+              required
+              error={hasFirstnameError}
+              id="outlined-required"
+              label={hasFirstnameError ? "Email required" : "Email"}
+              onChange={(event) => setFirstname(event.target.value)}
+            />
+            <TextField
+              required
+              error={hasLastnameError}
+              id="outlined-required"
+              label={hasLastnameError ? "Email required" : "Email"}
+              style={{
+                marginBottom: 16,
+                marginTop: 16
+              }}
+              onChange={(event) => setLastname(event.target.value)}
+            />
+            <TextField
+              required
+              error={hasCompanyError}
+              id="outlined-required"
+              label={hasCompanyError ? "Email required" : "Email"}
+              onChange={(event) => setCompany(event.target.value)}
+            />
+          </div>
+        </div>
+
       </DialogContent>
       <DialogActions>
         <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === BeeKeeperModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
