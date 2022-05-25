@@ -1,0 +1,57 @@
+section {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.slice-type-1 {
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .left-info, .right-info{
+        width: auto;
+        height: auto;
+        margin: auto;
+
+        .content{
+            margin-top: 3%;
+            margin-right: 10%;
+            margin-left: 10%;
+            text-align: center;
+
+            .block-img{
+                width: 200px;
+                margin-top: 2%;
+                margin-bottom: 2%;
+            }
+        }
+    }
+
+    .line-break{
+        height: 70%;
+        background-color: white;
+        width: 10px;
+    }
+}
+
+.slice-type-2 {
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slice-type-3 {
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .text{
+        text-align: center;
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+}
