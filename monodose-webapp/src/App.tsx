@@ -17,7 +17,7 @@ const App: React.FC = () => {
     return user === undefined
       ? <Login onLogin={(newUser: User) => setUser(newUser)} />
       : component
-  };
+  }
 
   return (
     <UserContext.Provider value={value}>

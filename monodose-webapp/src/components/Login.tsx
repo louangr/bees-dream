@@ -1,7 +1,7 @@
 import React from "react"
 import { TextField } from "@mui/material"
 import LoadingButton from '@mui/lab/LoadingButton'
-import { User } from "../models/User"
+import { Role, User } from "../models/User"
 import SharedStyle from "../shared/styles"
 
 interface LoginProps {
@@ -28,13 +28,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       setIsLoading(true)
 
       // TODO: API call to get user from login and password
-      
+
       onLogin({
         login: email,
         password: password,
-        firstname: '',
-        lastname: '',
-        role: ''
+        firstname: 'TestPrenom',
+        lastname: 'TestNom',
+        company: 'TestCompany',
+        role: Role.Admin
       })
 
       setIsLoading(false)
@@ -48,14 +49,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           required
           error={hasEmailError}
           id="outlined-required"
-          label={hasEmailError ? "Email required" : "Email"}
+          label={hasEmailError ? "Email requis" : "Email"}
           onChange={(event) => setEmail(event.target.value)}
         />
         <TextField
           required
           error={hasPasswordError}
           id="outlined-password-input"
-          label={hasPasswordError ? "Password required" : "Password"}
+          label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
           type="password"
           autoComplete="current-password"
           style={{
