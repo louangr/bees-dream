@@ -7,6 +7,7 @@ import FormPage from "./pages/FormPage"
 import { User } from "./models/User"
 import Login from "./components/Login"
 import { UserContext } from "./context/UserContext"
+import QrPage from "./pages/QrPage"
 
 const App: React.FC = () => {
   const [user, setUser] = React.useState<User | undefined>(undefined)
@@ -19,13 +20,14 @@ const App: React.FC = () => {
   };
 
   return (
-      <UserContext.Provider value={value}>
-        <Routes>
-          <Route path={AppRoutes.Default} element={<MonodosePage />} />
-          <Route path={AppRoutes.Admin} element={checkAuthentification(<AdminPage />)} />
-          <Route path={AppRoutes.Form} element={checkAuthentification(<FormPage />)} />
-        </Routes>
-      </UserContext.Provider>
+    <UserContext.Provider value={value}>
+      <Routes>
+        <Route path={AppRoutes.Default} element={<MonodosePage />} />
+        <Route path={AppRoutes.Admin} element={checkAuthentification(<AdminPage />)} />
+        <Route path={AppRoutes.Form} element={checkAuthentification(<FormPage />)} />
+        <Route path={AppRoutes.Qrcode} element={<QrPage />} />
+      </Routes>
+    </UserContext.Provider>
   )
 }
 

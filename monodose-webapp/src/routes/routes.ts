@@ -1,5 +1,6 @@
 export enum AppRoutes {
   Default = "/",
   Admin = "/admin",
-  Form = "/form"
+  Form = "/form",
+  Qrcode = "/qrcode"
 }
