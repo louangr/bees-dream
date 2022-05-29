@@ -22,10 +22,16 @@ http localhost:8080/monodose/0
 echo -e "${IBlue}Get${Color_off} by id ${IRed}Failed"
 http localhost:8080/monodose/10
 
-echo -e "${IWhite}Post${Color_off} add monodose ${IGreen}succes"
+echo -e "${ICyan}Post${Color_off} add monodose ${IGreen}succes"
 http POST localhost:8080/monodose/ \
 id:=21 \
 Beekeeper:='{"lastname":"test lastname","firstname":"test firstname","compagny":"test compagny"}' \
 Dates:='{"dluo":"test dluo","make":"test make","endofproduction":"test endofproduction"}' \
 location="test location" \
 honeyVarity="test honeyVarity"
+
+echo -e "${ICyan}Post${Color_off} remove monodose ${IGreen}succes"
+http DELETE localhost:8080/monodose/4
+
+echo -e "${ICyan}Post${Color_off} remove monodose ${IRed}failed"
+http DELETE localhost:8080/monodose/4

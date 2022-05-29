@@ -61,8 +61,6 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &monodose)
 
-	fmt.Printf(monodose.String())
-
 	for _, item := range mondoses {
 		if monodose.Id == item.Id {
 
@@ -76,5 +74,25 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Item added")
 }
-func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {}
+func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	id, _ := strconv.Atoi(vars["id"])
+
+	var flag bool = false
+
+	for index, monodose := range mondoses {
+		if monodose.Id == id {
+			mondoses = append(mondoses[:index], mondoses[index+1:]...)
+			flag = true
+		}
+	}
+
+	if flag {
+		fmt.Fprintf(w, "Id %d deleted", id)
+	} else {
+		fmt.Fprintf(w, "id not found")
+	}
+
+}
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {}

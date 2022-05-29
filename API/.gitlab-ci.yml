@@ -40,7 +40,7 @@ golang:publish:
     - deployment
   script:
     - docker login docker-registry.univ-nantes.fr -u $UNIV_LOGIN -p $UNIV_PASSWORD
-    - docker build -t $TAG_LATEST .
+    - docker build -t $TAG_LATEST ./$FOLDER_API/.
     - docker push $TAG_LATEST
 
 golang:deploy:

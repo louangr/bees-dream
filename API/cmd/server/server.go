@@ -29,12 +29,12 @@ func main() {
 	//Add monodose
 	monodoseR.HandleFunc("/", routesM.Add).Methods("POST")
 
+	//Delete monodose
+	monodoseR.HandleFunc("/{id}", routesM.Delete).Methods("DELETE")
+
 	/*
 
 		monodoseR.HandleFunc("/").Methods("PUT")
-
-
-		monodoseR.HandleFunc("/{id}").Methods("DELETE")
 
 		//User
 
