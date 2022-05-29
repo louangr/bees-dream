@@ -41,8 +41,8 @@ golang:publish:
 
   services:
     - docker:dind
-      alias: docker
-      command: ["--tls=false"]
+    alias: docker
+    command: ["--tls=false"]
   tags:
     - deployment
   script:
