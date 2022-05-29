@@ -20,6 +20,10 @@ require internal/persistence/mongo v1.0.0
 
 replace internal/persistence/mongo => ./internal/persistence/mongo
 
+require internal/persistence/dao v1.0.0
+
+replace internal/persistence/dao => ./internal/persistence/dao
+
 //Mongo dependencies
 require (
 	github.com/go-stack/stack v1.8.0 // indirect

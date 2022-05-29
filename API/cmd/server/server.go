@@ -13,7 +13,7 @@ func main() {
 
 	const port string = "8080"
 
-	m.Connection()
+	m.Connexion()
 
 	router := mux.NewRouter()
 

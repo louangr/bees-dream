@@ -13,10 +13,12 @@ import (
 
 const envFile string = "./configs/.env"
 
+var conn *mongo.Client
+
 type MyMongo struct {
 }
 
-func Connection() {
+func Connexion() {
 
 	var uri string
 
@@ -36,5 +38,12 @@ func Connection() {
 
 	fmt.Println("📁 Connecté à la base mongodb")
 
-	fmt.Printf("%v", client)
+	conn = client
+}
+
+func GetConnexion() (*mongo.Client, error) {
+	if conn == nil {
+		return nil, fmt.Errorf("Impossible de se connecter")
+	}
+	return conn, nil
 }

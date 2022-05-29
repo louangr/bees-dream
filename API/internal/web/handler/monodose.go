@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	e "internal/entities"
+	d "internal/persistence/dao"
 	"internal/persistence/interfaces"
 	"io/ioutil"
 	"net/http"
@@ -11,11 +12,6 @@ import (
 
 	"github.com/gorilla/mux"
 )
-
-var mondoses []e.Monodose = []e.Monodose{
-	e.NewMonodose(0, e.Beekeeper{"dorian", "gaufron", "21 corps"}, e.Date{"21/08/2002", "21/03/2002", "21/08/2000"}, "Nantes", "Chatenier"),
-	e.NewMonodose(1, e.Beekeeper{"Louan", "portron", "super compagny"}, e.Date{"22/05/2001", "21/03/2000", "21/08/2020"}, "Tours", "Fôret"),
-}
 
 type MonodoseRoutes struct{}
 
@@ -25,8 +21,11 @@ func NewMonodoseRoutes() MonodoseRoutes {
 
 var _ interfaces.Routes = (*MonodoseRoutes)(nil)
 
+var dao d.DaoMonodose = d.NewDao()
+
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-	res, _ := json.Marshal(mondoses)
+
+	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
@@ -34,25 +33,18 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	var res e.Monodose
-
 	id, _ := strconv.Atoi(vars["id"])
 
-	for _, monodose := range mondoses {
-		if monodose.Id == id {
-			res = monodose
-		}
-	}
+	monodose, err := dao.FindById(id)
 
-	if !res.IsNil() {
-		js, _ := json.Marshal(res)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	} else {
+		js, _ := json.Marshal(monodose)
 
 		fmt.Fprintf(w, "%s", js)
-
-		return
 	}
 
-	fmt.Fprintf(w, "id not found")
 }
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
@@ -61,43 +53,30 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &monodose)
 
-	for _, item := range mondoses {
-		if monodose.Id == item.Id {
+	res, err := dao.Create(monodose)
 
-			fmt.Fprint(w, "L'id existe déjà")
-
-			return
-		}
+	if err != nil {
+		fmt.Fprint(w, err.Error())
+	} else {
+		fmt.Fprintf(w, "%v", res)
 	}
 
-	mondoses = append(mondoses, monodose)
-
-	fmt.Fprintf(w, "Item added")
 }
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	var flag bool = false
+	monodose, err := dao.Delete(id)
 
-	for index, monodose := range mondoses {
-		if monodose.Id == id {
-			mondoses = append(mondoses[:index], mondoses[index+1:]...)
-			flag = true
-		}
-	}
-
-	if flag {
-		fmt.Fprintf(w, "Id %d deleted", id)
+	if err != nil {
+		fmt.Fprint(w, err.Error())
 	} else {
-		fmt.Fprintf(w, "id not found")
+		fmt.Fprint(w, "%v", monodose)
 	}
 
 }
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
-
-	var flag bool = false
 
 	body, _ := ioutil.ReadAll(r.Body)
 
@@ -105,18 +84,12 @@ func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &monodose)
 
-	fmt.Printf(monodose.String())
+	res, err := dao.Update(monodose)
 
-	for index, item := range mondoses {
-		if item.Id == monodose.Id {
-			mondoses[index] = monodose
-			flag = true
-		}
-	}
-
-	if flag {
-		fmt.Fprintf(w, "Monodose with id %d updated", monodose.Id)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
 	} else {
-		fmt.Fprintf(w, "Monodose with id %d not found", monodose.Id)
+		fmt.Fprintf(w, "%v", res)
 	}
+
 }
