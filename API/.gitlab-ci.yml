@@ -40,9 +40,9 @@ golang:publish:
     DOCKER_TLS_CERTDIR: ""
 
   services:
-    - docker:dind
-    alias: docker
-    command: ["--tls=false"]
+    - name: docker:20-dind
+      alias: docker
+      command: ["--tls=false"]
   tags:
     - deployment
   script:
