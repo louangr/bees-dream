@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	m "internal/persistence/mongo"
 	h "internal/web/handler"
 	"net/http"
 
@@ -11,6 +12,8 @@ import (
 func main() {
 
 	const port string = "8080"
+
+	m.Connection()
 
 	router := mux.NewRouter()
 
