@@ -13,7 +13,7 @@ import (
 )
 
 var mondoses []e.Monodose = []e.Monodose{
-	e.NewMonodose(0, e.Beekeeper{"dorian", "gauron", "21 corps"}, e.Date{"21/08/2002", "21/03/2002", "21/08/2000"}, "Nantes", "Chatenier"),
+	e.NewMonodose(0, e.Beekeeper{"dorian", "gaufron", "21 corps"}, e.Date{"21/08/2002", "21/03/2002", "21/08/2000"}, "Nantes", "Chatenier"),
 	e.NewMonodose(1, e.Beekeeper{"Louan", "portron", "super compagny"}, e.Date{"22/05/2001", "21/03/2000", "21/08/2020"}, "Tours", "Fôret"),
 }
 

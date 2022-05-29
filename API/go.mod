@@ -6,7 +6,7 @@ require internal/web/handler v1.0.0
 
 replace internal/web/handler => ./internal/web/handler
 
-require internal/persistence/interfaces v1.0.0 // indirect
+require internal/persistence/interfaces v1.0.0
 
 replace internal/persistence/interfaces => ./internal/persistence/interfaces
 
