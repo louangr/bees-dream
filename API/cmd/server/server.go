@@ -1,17 +1,27 @@
 package main
 
-import "github.com/gorilla/mux"
+import (
+	"fmt"
+	h "internal/web/handler"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
 
 func main() {
+
+	const port string = "8080"
 
 	router := mux.NewRouter()
 
 	//Monodose
 
+	routesM := h.NewMonodoseRoutes()
+
 	monodoseR := router.PathPrefix("/monodose/").Subrouter()
 
 	//Get all monodose
-	monodoseR.HandleFunc("/").Methods("GET")
+	monodoseR.HandleFunc("/", routesM.GetAll).Methods("GET")
 
 	/* 	monodoseR.HandleFunc("/{id}").Methods("GET")
 
@@ -35,4 +45,8 @@ func main() {
 
 	   	//Login
 	   	router.HandleFunc("/login/").Methods("POST") */
+
+	fmt.Printf("🚀 Lancement de l'api sur le port %s", port)
+
+	http.ListenAndServe(":"+port, router)
 }
