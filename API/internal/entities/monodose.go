@@ -39,7 +39,7 @@ func (m *Monodose) IsNil() bool {
 }
 
 func (m *Monodose) String() string {
-	return fmt.Sprintf("Monodose{\n"+
+	return fmt.Sprintf("\nMonodose{\n"+
 		"id : %d,\n"+
 		"Beekeeper{\n"+
 		"\tlastname: %s,\n"+

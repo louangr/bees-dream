@@ -20,15 +20,15 @@ golang:build:
   artifacts:
     expire_in: 30 days
     paths:
-      - "./dist/$API_NAME"
+      - "./$FOLDER_API/dist/$API_NAME"
   script:
-    - go build -o $API_NAME -v ./...
+    - cd $FOLDER_API && go build -o $API_NAME -v ./...
 
 golang:test:
   stage: test
   extends: .golang_setup
   script:
-    - cd ./tests && go test -o api_test
+    - cd ./$FOLDER_API/tests && go test -o api_test
 
 golang:publish:
   image: docker:latest

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	e "internal/entities"
 	"internal/persistence/interfaces"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -52,8 +53,28 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "id not found")
-
 }
-func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {}
-func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request)    {}
+func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
+	body, _ := ioutil.ReadAll(r.Body)
+
+	var monodose e.Monodose
+
+	json.Unmarshal(body, &monodose)
+
+	fmt.Printf(monodose.String())
+
+	for _, item := range mondoses {
+		if monodose.Id == item.Id {
+
+			fmt.Fprint(w, "L'id existe déjà")
+
+			return
+		}
+	}
+
+	mondoses = append(mondoses, monodose)
+
+	fmt.Fprintf(w, "Item added")
+}
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {}
+func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {}

@@ -26,11 +26,13 @@ func main() {
 	//Get monodose by id
 	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
 
+	//Add monodose
+	monodoseR.HandleFunc("/", routesM.Add).Methods("POST")
+
 	/*
 
 		monodoseR.HandleFunc("/").Methods("PUT")
 
-		monodoseR.HandleFunc("/").Methods("POST")
 
 		monodoseR.HandleFunc("/{id}").Methods("DELETE")
 
