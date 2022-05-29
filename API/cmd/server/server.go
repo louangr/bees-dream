@@ -23,28 +23,31 @@ func main() {
 	//Get all monodose
 	monodoseR.HandleFunc("/", routesM.GetAll).Methods("GET")
 
-	/* 	monodoseR.HandleFunc("/{id}").Methods("GET")
+	//Get monodose by id
+	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
 
-	   	monodoseR.HandleFunc("/").Methods("PUT")
+	/*
 
-	   	monodoseR.HandleFunc("/").Methods("POST")
+		monodoseR.HandleFunc("/").Methods("PUT")
 
-	   	monodoseR.HandleFunc("/{id}").Methods("DELETE")
+		monodoseR.HandleFunc("/").Methods("POST")
 
-	   	//User
+		monodoseR.HandleFunc("/{id}").Methods("DELETE")
 
-	   	userR := router.PathPrefix("/user/").Subrouter()
+		//User
 
-	   	userR.HandleFunc("/").Methods("PUT")
+		userR := router.PathPrefix("/user/").Subrouter()
 
-	   	userR.HandleFunc("/").Methods("POST")
+		userR.HandleFunc("/").Methods("PUT")
 
-	   	userR.HandleFunc("/{id}").Methods("GET")
+		userR.HandleFunc("/").Methods("POST")
 
-	   	userR.HandleFunc("/{id}").Methods("DELETE")
+		userR.HandleFunc("/{id}").Methods("GET")
 
-	   	//Login
-	   	router.HandleFunc("/login/").Methods("POST") */
+		userR.HandleFunc("/{id}").Methods("DELETE")
+
+		//Login
+		router.HandleFunc("/login/").Methods("POST") */
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s", port)
 

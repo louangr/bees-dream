@@ -34,7 +34,11 @@ func NewMonodose(id int, beekeeper Beekeeper, dates Date, location string, honey
 	return Monodose{id, beekeeper, dates, location, honeyVarity}
 }
 
-func (m Monodose) String() string {
+func (m *Monodose) IsNil() bool {
+	return m == nil
+}
+
+func (m *Monodose) String() string {
 	return fmt.Sprintf("Monodose{\n"+
 		"id : %d,\n"+
 		"Beekeeper{\n"+

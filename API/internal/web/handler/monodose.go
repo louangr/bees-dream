@@ -6,6 +6,9 @@ import (
 	e "internal/entities"
 	"internal/persistence/interfaces"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 var mondoses []e.Monodose = []e.Monodose{
@@ -27,7 +30,30 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", res)
 }
 
-func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request)    {}
+func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	var res e.Monodose
+
+	id, _ := strconv.Atoi(vars["id"])
+
+	for _, monodose := range mondoses {
+		if monodose.Id == id {
+			res = monodose
+		}
+	}
+
+	if !res.IsNil() {
+		js, _ := json.Marshal(res)
+
+		fmt.Fprintf(w, "%s", js)
+
+		return
+	}
+
+	fmt.Fprintf(w, "id not found")
+
+}
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {}
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request)    {}
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {}
