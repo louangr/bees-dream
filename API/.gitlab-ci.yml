@@ -36,8 +36,10 @@ golang:publish:
   needs: ["golang:build", "golang:test"]
   services:
     - docker:dind
+  tags:
+    - deployment
   script:
-    - docker login docker-registry.univ-nantes.fr -u $UNIV_LOGIN -p $UNIV_PASSWORD 
+    - docker login docker-registry.univ-nantes.fr -u $UNIV_LOGIN -p $UNIV_PASSWORD
     - docker build -t $TAG_LATEST ./$FOLDER_API/.
     - docker push $TAG_LATEST
 
@@ -46,7 +48,7 @@ golang:deploy:
   stage: publish
   needs: ["golang:publish"]
   tags:
-   - deployment
+    - deployment
   script:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
