@@ -13,8 +13,8 @@ import (
 )
 
 var mondoses []e.Monodose = []e.Monodose{
-	{0, e.Beekeeper{"dorian", "gauron", "21 corps"}, e.Date{"21/08/2002", "21/03/2002", "21/08/2000"}, "Nantes", "Chatenier"},
-	{1, e.Beekeeper{"Louan", "portron", "super compagny"}, e.Date{"22/05/2001", "21/03/2000", "21/08/2020"}, "Tours", "Fôret"},
+	e.NewMonodose(0, e.Beekeeper{"dorian", "gauron", "21 corps"}, e.Date{"21/08/2002", "21/03/2002", "21/08/2000"}, "Nantes", "Chatenier"),
+	e.NewMonodose(1, e.Beekeeper{"Louan", "portron", "super compagny"}, e.Date{"22/05/2001", "21/03/2000", "21/08/2020"}, "Tours", "Fôret"),
 }
 
 type MonodoseRoutes struct{}
@@ -95,4 +95,28 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {}
+func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
+
+	var flag bool = false
+
+	body, _ := ioutil.ReadAll(r.Body)
+
+	var monodose e.Monodose
+
+	json.Unmarshal(body, &monodose)
+
+	fmt.Printf(monodose.String())
+
+	for index, item := range mondoses {
+		if item.Id == monodose.Id {
+			mondoses[index] = monodose
+			flag = true
+		}
+	}
+
+	if flag {
+		fmt.Fprintf(w, "Monodose with id %d updated", monodose.Id)
+	} else {
+		fmt.Fprintf(w, "Monodose with id %d not found", monodose.Id)
+	}
+}

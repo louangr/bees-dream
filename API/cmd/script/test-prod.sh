@@ -30,8 +30,16 @@ Dates:='{"dluo":"test dluo","make":"test make","endofproduction":"test endofprod
 location="test location" \
 honeyVarity="test honeyVarity"
 
-echo -e "${ICyan}Post${Color_off} remove monodose ${IGreen}succes"
+echo -e "${ICyan}DELETE${Color_off} remove monodose ${IGreen}succes"
 http DELETE localhost:8080/monodose/4
 
-echo -e "${ICyan}Post${Color_off} remove monodose ${IRed}failed"
+echo -e "${ICyan}DELETE${Color_off} remove monodose ${IRed}failed"
 http DELETE localhost:8080/monodose/4
+
+echo -e "${ICyan}PUT${Color_off} update monodose ${IGreen}succes"
+http PUT localhost:8080/monodose/ \
+id:=0 \
+Beekeeper:='{"lastname":"update lastname","firstname":"update firstname","compagny":"update compagny"}' \
+Dates:='{"dluo":"update dluo","make":"update make","endofproduction":"update endofproduction"}' \
+location="update location" \
+honeyVarity="update honeyVarity"

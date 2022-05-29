@@ -20,21 +20,23 @@ func main() {
 
 	monodoseR := router.PathPrefix("/monodose/").Subrouter()
 
-	//Get all monodose
+	//Get all
 	monodoseR.HandleFunc("/", routesM.GetAll).Methods("GET")
 
-	//Get monodose by id
+	//Get by id
 	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
 
-	//Add monodose
+	//Add
 	monodoseR.HandleFunc("/", routesM.Add).Methods("POST")
 
-	//Delete monodose
+	//Delete
 	monodoseR.HandleFunc("/{id}", routesM.Delete).Methods("DELETE")
+
+	//Update
+	monodoseR.HandleFunc("/", routesM.Update).Methods("PUT")
 
 	/*
 
-		monodoseR.HandleFunc("/").Methods("PUT")
 
 		//User
 
