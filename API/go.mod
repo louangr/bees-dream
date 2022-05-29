@@ -6,16 +6,12 @@ require internal/web/handler v1.0.0
 
 replace internal/web/handler => ./internal/web/handler
 
-require interfaces v1.0.0
+require internal/persistence/interfaces v1.0.0
 
-replace interfaces => ./internal/persistence/interfaces
+replace internal/persistence/interfaces => ./internal/persistence/interfaces
 
-require entities v1.0.0
+require internal/entities v1.0.0
 
-replace entities => ./internal/entities/
-
-require handler v1.0.0
-
-replace handler => ./web/handler
+replace internal/entities => ./internal/entities/
 
 require github.com/gorilla/mux v1.8.0 // indirect

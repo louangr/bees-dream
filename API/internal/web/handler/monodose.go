@@ -2,9 +2,9 @@ package handler
 
 import (
 	"encoding/json"
-	e "entities"
 	"fmt"
-	"interfaces"
+	e "internal/entities"
+	"internal/persistence/interfaces"
 	"net/http"
 )
 
