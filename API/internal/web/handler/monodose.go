@@ -146,12 +146,14 @@ func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &monodose)
 
-	res, err := dao.Update(monodose)
+	monodose, err := dao.Update(monodose)
 
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	} else {
-		fmt.Fprintf(w, "%v", res)
+		js, _ := json.Marshal(monodose)
+
+		fmt.Fprintf(w, "%s", js)
 	}
 
 }
