@@ -19,7 +19,7 @@ type swaggMonodoseStructArray struct {
 type Beekeeper struct {
 	LastName  string `json:"lastname"`
 	FirstName string `json:"firstname"`
-	Compagny  string `json:"company"`
+	Company   string `json:"company"`
 }
 
 type Date struct {
@@ -79,5 +79,5 @@ func (m *Monodose) String() string {
 		"},\n"+
 		"location : %s\n"+
 		"honeyVarity : %s\n"+
-		"}", m.Id, m.Beekeeper.LastName, m.Beekeeper.FirstName, m.Beekeeper.Compagny, m.Dates.Dluo, m.Dates.Make, m.Dates.EndOfProduction, m.Location, m.HoneyVariety)
+		"}", m.Id, m.Beekeeper.LastName, m.Beekeeper.FirstName, m.Beekeeper.Company, m.Dates.Dluo, m.Dates.Make, m.Dates.EndOfProduction, m.Location, m.HoneyVariety)
 }

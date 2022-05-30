@@ -28,13 +28,24 @@ require internal/persistence/dao v1.0.0
 
 replace internal/persistence/dao => ./internal/persistence/dao
 
+//Utils
 require utils v1.0.0
 
 replace utils => ./utils
 
+//Types
 require internal/persistence/types v1.0.0
 
 replace internal/persistence/types => ./internal/persistence/types
+
+//Handler
+require internal/web/handler/user v1.0.0
+
+replace internal/web/handler/user => ./internal/web/handler/user
+
+require internal/web/handler/monodose v1.0.0
+
+replace internal/web/handler/monodose => ./internal/web/handler/monodose
 
 //Mongo dependencies
 require (

@@ -21,7 +21,9 @@ package main
 import (
 	"fmt"
 	m "internal/persistence/mongo"
-	h "internal/web/handler"
+	handlerMonodose "internal/web/handler/monodose"
+	handlerUser "internal/web/handler/user"
+
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -45,7 +47,7 @@ func main() {
 
 	//Monodose
 
-	routesM := h.NewMonodoseRoutes()
+	routesM := handlerMonodose.NewMonodoseRoutes()
 
 	monodoseR := router.PathPrefix("/monodose").Subrouter()
 
@@ -64,20 +66,25 @@ func main() {
 	//Update
 	monodoseR.HandleFunc("", routesM.Update).Methods("PUT")
 
+	//User
+
+	routesU := handlerUser.NewUserRoutes()
+
+	userR := router.PathPrefix("/user").Subrouter()
+
+	userR.HandleFunc("", routesU.Update).Methods("PUT")
+
+	userR.HandleFunc("", routesU.Add).Methods("POST")
+
+	userR.HandleFunc("/{id}", routesU.Get).Methods("GET")
+
+	userR.HandleFunc("/{id}", routesU.Delete).Methods("DELETE")
+
 	/*
 
 
 		//User
 
-		userR := router.PathPrefix("/user/").Subrouter()
-
-		userR.HandleFunc("/").Methods("PUT")
-
-		userR.HandleFunc("/").Methods("POST")
-
-		userR.HandleFunc("/{id}").Methods("GET")
-
-		userR.HandleFunc("/{id}").Methods("DELETE")
 
 		//Login
 		router.HandleFunc("/login/").Methods("POST") */
