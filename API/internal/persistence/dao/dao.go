@@ -75,9 +75,7 @@ func (d *Dao[T]) FindById(id int) (T, error) {
 				return types.Empty(obj), fmt.Errorf("Id %d does not exist in %s collection", id, collection)
 			}
 		}
-
 		return obj, nil
-
 	}
 
 	return types.Empty(obj), fmt.Errorf("Can't get data from database")
