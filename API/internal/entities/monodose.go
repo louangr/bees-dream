@@ -24,8 +24,8 @@ type Beekeeper struct {
 
 type Date struct {
 	Dluo            string `json:"dluo"`
-	Make            string `json:"make"`
-	EndOfProduction string `json:"endOfProduction"`
+	Make            string `json:"startofproduction"`
+	EndOfProduction string `json:"endofproduction"`
 }
 
 type Monodose struct {
@@ -33,7 +33,7 @@ type Monodose struct {
 	Beekeeper    *Beekeeper `json:"beekeeper"`
 	Dates        *Date      `json:"dates"`
 	Location     string     `json:"location"`
-	HoneyVariety string     `json:"honeyVariety"`
+	HoneyVariety string     `json:"honeyvariety"`
 }
 
 func NewBeekeeper(lastName string, firstName string, compagny string) Beekeeper {
