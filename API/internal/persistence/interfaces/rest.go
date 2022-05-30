@@ -1,8 +1,10 @@
 package interfaces
 
-import e "internal/entities"
+import (
+	t "internal/persistence/types"
+)
 
-type RestDao[T e.Monodose | e.User] interface {
+type RestDao[T t.Collection] interface {
 	FindAll() []T
 	FindById(id int) (T, error)
 	Exist(id int) bool

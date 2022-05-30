@@ -2,18 +2,17 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
-	e "internal/entities"
+	"internal/persistence/types"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func BsonToStructs(data []primitive.M, storage *[]e.Monodose) {
+func BsonToStructs[T types.Collection](data []primitive.M, storage *[]T) {
 
 	for _, v := range data {
 
-		var t e.Monodose
+		var t T
 
 		BsonToStruct(v, &t)
 
@@ -22,20 +21,18 @@ func BsonToStructs(data []primitive.M, storage *[]e.Monodose) {
 
 }
 
-func BsonToStruct(data primitive.M, storage *e.Monodose) {
+func BsonToStruct[T types.Collection](data primitive.M, storage *T) {
 
 	bytess, _ := bson.Marshal(data)
 
 	bson.Unmarshal(bytess, &storage)
 }
 
-func StructToBson(data e.Monodose) bson.D {
+func StructToBson[T types.Collection](data T) bson.D {
 
 	var result bson.D
 
 	js, _ := json.Marshal(data)
-
-	fmt.Printf("test js : %v", js)
 
 	bson.Unmarshal(js, &result)
 

@@ -1,6 +1,8 @@
 package entities
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // swagger:response monodoseStruct
 type swaggMonodoseStruct struct {
@@ -17,13 +19,13 @@ type swaggMonodoseStructArray struct {
 type Beekeeper struct {
 	LastName  string `json:"lastname"`
 	FirstName string `json:"firstname"`
-	Compagny  string `json:"company"`
+	Company   string `json:"company"`
 }
 
 type Date struct {
 	Dluo            string `json:"dluo"`
-	Make            string `json:"make"`
-	EndOfProduction string `json:"endOfProduction"`
+	Make            string `json:"startofproduction"`
+	EndOfProduction string `json:"endofproduction"`
 }
 
 type Monodose struct {
@@ -31,7 +33,7 @@ type Monodose struct {
 	Beekeeper    *Beekeeper `json:"beekeeper"`
 	Dates        *Date      `json:"dates"`
 	Location     string     `json:"location"`
-	HoneyVariety string     `json:"honeyVariety"`
+	HoneyVariety string     `json:"honeyvariety"`
 }
 
 func NewBeekeeper(lastName string, firstName string, compagny string) Beekeeper {
@@ -50,6 +52,18 @@ func (m *Monodose) IsNil() bool {
 	return m == nil
 }
 
+func (m Monodose) GetId() int {
+	return m.Id
+}
+
+func (m Monodose) GetCollectionName() string {
+	return "monodose"
+}
+
+func (m Monodose) Empty() any {
+	return Monodose{}
+}
+
 func (m *Monodose) String() string {
 	return fmt.Sprintf("\nMonodose{\n"+
 		"id : %d,\n"+
@@ -65,5 +79,5 @@ func (m *Monodose) String() string {
 		"},\n"+
 		"location : %s\n"+
 		"honeyVarity : %s\n"+
-		"}", m.Id, m.Beekeeper.LastName, m.Beekeeper.FirstName, m.Beekeeper.Compagny, m.Dates.Dluo, m.Dates.Make, m.Dates.EndOfProduction, m.Location, m.HoneyVarity)
+		"}", m.Id, m.Beekeeper.LastName, m.Beekeeper.FirstName, m.Beekeeper.Company, m.Dates.Dluo, m.Dates.Make, m.Dates.EndOfProduction, m.Location, m.HoneyVariety)
 }

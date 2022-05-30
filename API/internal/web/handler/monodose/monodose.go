@@ -21,7 +21,7 @@ func NewMonodoseRoutes() MonodoseRoutes {
 
 var _ interfaces.Routes = (*MonodoseRoutes)(nil)
 
-var dao d.DaoMonodose = d.NewDao()
+var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 
 // swagger:operation GET /monodose monodose GetAll
 // ---
@@ -31,7 +31,7 @@ var dao d.DaoMonodose = d.NewDao()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -53,6 +53,7 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -73,12 +74,20 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 // ---
 // summary: Create a new monodose
 // description: If the request body format is not correct, a 400 status code will be returned
+// parameters:
+// - name: monodose
+//   in: body
+//   description: monodose to add
+//   schema:
+//     "$ref": "#/responses/monodoseStruct"
+//   required: true
 // responses:
 //   "200":
 //     "$ref": "#/responses/genericResponse"
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -103,7 +112,7 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 // summary: Delete a monodose by Id
 // description: If the monodose is not found, a 404 status code will be returned
 // parameters:
-// - name: code
+// - name: id
 //   in: path
 //   description: correspond to the monodose's Id
 //   type: string
@@ -114,6 +123,7 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -133,12 +143,20 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 // ---
 // summary: Update an existing monodose
 // description: If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
+// parameters:
+// - name: monodose
+//   in: body
+//   description: monodose to update
+//   schema:
+//     "$ref": "#/responses/monodoseStruct"
+//   required: true
 // responses:
 //   "200":
 //     "$ref": "#/responses/genericResponse"
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	body, _ := ioutil.ReadAll(r.Body)
 

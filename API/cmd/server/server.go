@@ -21,7 +21,9 @@ package main
 import (
 	"fmt"
 	m "internal/persistence/mongo"
-	h "internal/web/handler"
+	handlerMonodose "internal/web/handler/monodose"
+	handlerUser "internal/web/handler/user"
+
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -45,42 +47,45 @@ func main() {
 
 	//Monodose
 
-	routesM := h.NewMonodoseRoutes()
+	routesM := handlerMonodose.NewMonodoseRoutes()
 
-	monodoseR := router.PathPrefix("/monodose/").Subrouter()
+	monodoseR := router.PathPrefix("/monodose").Subrouter()
 
 	//Get all
-	monodoseR.HandleFunc("/", routesM.GetAll).Methods("GET")
+	monodoseR.HandleFunc("", routesM.GetAll).Methods("GET")
 
 	//Get by id
 	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
 
 	//Add
-	monodoseR.HandleFunc("/", routesM.Add).Methods("POST")
+	monodoseR.HandleFunc("", routesM.Add).Methods("POST")
 
 	//Delete
 	monodoseR.HandleFunc("/{id}", routesM.Delete).Methods("DELETE")
 
 	//Update
-	monodoseR.HandleFunc("/", routesM.Update).Methods("PUT")
+	monodoseR.HandleFunc("", routesM.Update).Methods("PUT")
+
+	//User
+
+	routesU := handlerUser.NewUserRoutes()
+
+	userR := router.PathPrefix("/user").Subrouter()
+
+	userR.HandleFunc("", routesU.Update).Methods("PUT")
+
+	userR.HandleFunc("", routesU.Add).Methods("POST")
+
+	userR.HandleFunc("", routesU.GetAll).Methods("GET")
+
+	userR.HandleFunc("/{id}", routesU.Get).Methods("GET")
+
+	userR.HandleFunc("/{id}", routesU.Delete).Methods("DELETE")
 
 	/*
-
-
-		//User
-
-		userR := router.PathPrefix("/user/").Subrouter()
-
-		userR.HandleFunc("/").Methods("PUT")
-
-		userR.HandleFunc("/").Methods("POST")
-
-		userR.HandleFunc("/{id}").Methods("GET")
-
-		userR.HandleFunc("/{id}").Methods("DELETE")
-
 		//Login
-		router.HandleFunc("/login/").Methods("POST") */
+		router.HandleFunc("/login/").Methods("POST")
+	*/
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
