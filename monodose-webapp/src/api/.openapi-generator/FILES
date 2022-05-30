@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/MonodoseApi.ts
+apis/index.ts
+index.ts
+models/Beekeeper.ts
+models/ModelDate.ts
+models/Monodose.ts
+models/Update200Response.ts
+models/index.ts
+runtime.ts
