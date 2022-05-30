@@ -1,33 +1,33 @@
-import * as React from 'react';
-import { Button, TextField } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import { fr } from 'date-fns/locale';
-import SharedStyle from '../shared/styles';
-import { Monodose } from '../models/Monodose';
-import SaveIcon from '@mui/icons-material/Save';
+import * as React from 'react'
+import { Button, TextField } from '@mui/material'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DatePicker from '@mui/lab/DatePicker'
+import { fr } from 'date-fns/locale'
+import SharedStyle from '../shared/styles'
+import { Monodose } from '../models/Monodose'
+import SaveIcon from '@mui/icons-material/Save'
 
 const FormPage: React.FC = () => {
 
-  const [monodose, setMonodose] = React.useState<Monodose | null>(null);
-  const [location, setLocation] = React.useState<string | undefined>('');
-  const [productionStartDate, setProductionStartDate] = React.useState<Date | null | undefined>(null);
-  const [productionEndDate, setProductionEndDate] = React.useState<Date | null | undefined>(null);
-  const [dluoDate, setDluoDate] = React.useState<Date | null | undefined>(null);
-  const [honeyVariety, setHoneyVariety] = React.useState<string | undefined>('');
+  const [monodose, setMonodose] = React.useState<Monodose | null>(null)
+  const [location, setLocation] = React.useState<string | undefined>('')
+  const [productionStartDate, setProductionStartDate] = React.useState<Date | null | undefined>(null)
+  const [productionEndDate, setProductionEndDate] = React.useState<Date | null | undefined>(null)
+  const [dluoDate, setDluoDate] = React.useState<Date | null | undefined>(null)
+  const [honeyVariety, setHoneyVariety] = React.useState<string | undefined>('')
 
   const onSubmitButtonClick = () => {
 
     // TODO : put monodose API
-    console.log(monodose);
+    console.log(monodose)
 
-  };
+  }
 
   React.useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const id = queryParams.get('id');
-    console.log('id: ' + id);
+    const queryParams = new URLSearchParams(window.location.search)
+    const id = queryParams.get('id')
+    console.log('id: ' + id)
 
     // TODO : get monodose API
     const monodose: Monodose = {
@@ -44,12 +44,12 @@ const FormPage: React.FC = () => {
       honeyvariety: 'variety',
     }
 
-    setMonodose(monodose);
-    setLocation(monodose.location);
-    setProductionStartDate(monodose.productionstartdate);
-    setProductionEndDate(monodose.productionenddate);
-    setDluoDate(monodose.dluodate);
-    setHoneyVariety(monodose.honeyvariety);
+    setMonodose(monodose)
+    setLocation(monodose.location)
+    setProductionStartDate(monodose.productionstartdate)
+    setProductionEndDate(monodose.productionenddate)
+    setDluoDate(monodose.dluodate)
+    setHoneyVariety(monodose.honeyvariety)
 
   }, [])
 
@@ -72,7 +72,7 @@ const FormPage: React.FC = () => {
             inputFormat='dd/MM/yyyy'
             value={productionStartDate}
             onChange={(newProductionStartDate) => {
-              setProductionStartDate(newProductionStartDate);
+              setProductionStartDate(newProductionStartDate)
             }}
             renderInput={(params) => (
               <TextField
@@ -91,8 +91,8 @@ const FormPage: React.FC = () => {
             inputFormat='dd/MM/yyyy'
             value={productionEndDate}
             onChange={(newProductionEndDate) => {
-              setProductionEndDate(newProductionEndDate);
-              setDluoDate(newProductionEndDate ? new Date(new Date(newProductionEndDate).setMonth(new Date(newProductionEndDate).getMonth() + 18)) : null);
+              setProductionEndDate(newProductionEndDate)
+              setDluoDate(newProductionEndDate ? new Date(new Date(newProductionEndDate).setMonth(new Date(newProductionEndDate).getMonth() + 18)) : null)
             }}
             renderInput={(params) => (
               <TextField
@@ -142,7 +142,7 @@ const FormPage: React.FC = () => {
 
       </div>
     </div >
-  );
-};
+  )
+}
 
-export default FormPage;
+export default FormPage
