@@ -31,7 +31,7 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -53,6 +53,7 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -79,6 +80,7 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -103,7 +105,7 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 // summary: Delete a monodose by Id
 // description: If the monodose is not found, a 404 status code will be returned
 // parameters:
-// - name: code
+// - name: id
 //   in: path
 //   description: correspond to the monodose's Id
 //   type: string
@@ -114,6 +116,7 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -139,6 +142,7 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	body, _ := ioutil.ReadAll(r.Body)
 
