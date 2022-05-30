@@ -1,9 +1,17 @@
 package dao
 
 import (
+	"context"
 	"fmt"
 	e "internal/entities"
 	"internal/persistence/interfaces"
+	m "internal/persistence/mongo"
+	"log"
+	"utils"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var monodoses []e.Monodose = []e.Monodose{
@@ -18,13 +26,60 @@ var _ interfaces.RestDao[e.Monodose] = (*DaoMonodose)(nil)
 
 func NewDao() DaoMonodose {
 	return DaoMonodose{}
+
 }
 
 func (d *DaoMonodose) FindAll() []e.Monodose {
-	return monodoses
+
+	var res []e.Monodose
+
+	conn, err := m.GetConnexion()
+
+	if err == nil {
+		var results []bson.M
+
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+
+		var option *options.FindOptions = options.Find().SetProjection(bson.D{{"_id", 0}})
+
+		cursor, err := coll.Find(context.Background(), bson.M{}, option)
+
+		if err = cursor.All(context.TODO(), &results); err != nil {
+			log.Fatalf("Impossible de récupérer l'ensemble des données dans %s : %v \n", "monodose", err)
+		}
+
+		utils.BsonToStructs(results, &res)
+
+	} else {
+		fmt.Printf("can't fetch find all")
+	}
+
+	conn.Disconnect(context.TODO())
+
+	return res
 }
 
 func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
+
+	conn, err := m.GetConnexion()
+
+	if err != nil {
+
+		var result []bson.M
+		//var data string
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+
+		var option *options.FindOptions = options.Find().SetProjection(bson.D{{"_id", 0}})
+
+		cursor, err := coll.Find(context.Background(), bson.D{{"id", id}}, option)
+
+		if err = cursor.All(context.TODO(), &result); err != nil {
+			log.Fatalf("Impossible de récupérer l'ensemble des données dans %s : %v \n", "monodose", err)
+		}
+
+	} else {
+		fmt.Printf("cant 'f fetch find by id")
+	}
 
 	for _, monodose := range monodoses {
 		if monodose.Id == id {
