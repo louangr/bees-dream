@@ -60,6 +60,10 @@ func (m Monodose) GetCollectionName() string {
 	return "monodose"
 }
 
+func (m Monodose) Empty() any {
+	return Monodose{}
+}
+
 func (m *Monodose) String() string {
 	return fmt.Sprintf("\nMonodose{\n"+
 		"id : %d,\n"+

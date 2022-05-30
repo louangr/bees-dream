@@ -28,21 +28,23 @@ func (d *Dao[T]) FindAll() (t []T) {
 
 	var res []T
 
-	conn, err := m.GetConnexion()
+	var obj T
 
-	//defer conn.Disconnect(context.TODO())
+	var collection string = types.GetCollection(obj)
+
+	conn, err := m.GetConnexion()
 
 	if err == nil {
 		var results []bson.M
 
-		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
 		var option *options.FindOptions = options.Find().SetProjection(bson.D{{"_id", 0}})
 
 		cursor, err := coll.Find(context.Background(), bson.M{}, option)
 
 		if err = cursor.All(context.TODO(), &results); err != nil {
-			log.Fatalf("Impossible de récupérer l'ensemble des données dans %s : %v \n", "monodose", err)
+			log.Fatalf("Impossible de récupérer l'ensemble des données dans %s : %v \n", collection, err)
 		}
 
 		utils.BsonToStructs(results, &res)
@@ -56,31 +58,37 @@ func (d *Dao[T]) FindAll() (t []T) {
 
 func (d *Dao[T]) FindById(id int) (T, error) {
 
-	var monodose T
+	var obj T
+
+	var collection string = types.GetCollection(obj)
 
 	conn, err := m.GetConnexion()
 
 	if err == nil {
 
-		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
-		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&monodose)
+		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&obj)
 
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
-				return monodose, fmt.Errorf("Id %d does not exist", id)
+				return types.Empty(obj), fmt.Errorf("Id %d does not exist in %s collection", id, collection)
 			}
 		}
 
-		return monodose, nil
+		return types.Empty(obj), nil
 
 	}
 
-	return monodose, fmt.Errorf("Can't get data from database")
+	return types.Empty(obj), fmt.Errorf("Can't get data from database")
 
 }
 
 func (d *Dao[T]) Exist(id int) bool {
+
+	var obj T
+
+	var collection string = types.GetCollection(obj)
 
 	conn, err := m.GetConnexion()
 
@@ -88,7 +96,7 @@ func (d *Dao[T]) Exist(id int) bool {
 
 		var monodose T
 
-		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
 		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&monodose)
 
@@ -109,6 +117,8 @@ func (d *Dao[T]) Delete(id int) (T, error) {
 
 	var empty T
 
+	var collection string = types.GetCollection(empty)
+
 	monodose, err := d.FindById(id)
 
 	if err != nil {
@@ -118,13 +128,13 @@ func (d *Dao[T]) Delete(id int) (T, error) {
 	conn, err := m.GetConnexion()
 
 	if err == nil {
-		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 		var filter bson.D = bson.D{{"Id", id}}
 
 		result, _ := coll.DeleteOne(context.TODO(), filter)
 
 		if result.DeletedCount == 0 {
-			return empty, fmt.Errorf("Can't delete object with id %d does not exist", id)
+			return empty, fmt.Errorf("Can't delete %s with id %d does not exist", collection, id)
 		}
 
 		return monodose, nil
@@ -143,7 +153,7 @@ func (d *Dao[T]) Create(item T) (T, error) {
 	var collection string = item.GetCollectionName()
 
 	if d.Exist(id) {
-		return empty, fmt.Errorf("Object monodose with id %d already exist", id)
+		return empty, fmt.Errorf("Object %s with id %d already exist", collection, id)
 	}
 
 	conn, err := m.GetConnexion()
@@ -154,7 +164,7 @@ func (d *Dao[T]) Create(item T) (T, error) {
 		_, err := coll.InsertOne(context.TODO(), item)
 
 		if err != nil {
-			return empty, fmt.Errorf("Can't insert object monodose with id %d in database", item.GetId())
+			return empty, fmt.Errorf("Can't insert object %s with id %d in database", collection, id)
 		}
 
 		return item, nil

@@ -47,22 +47,22 @@ func main() {
 
 	routesM := h.NewMonodoseRoutes()
 
-	monodoseR := router.PathPrefix("/monodose/").Subrouter()
+	monodoseR := router.PathPrefix("/monodose").Subrouter()
 
 	//Get all
-	monodoseR.HandleFunc("/", routesM.GetAll).Methods("GET")
+	monodoseR.HandleFunc("", routesM.GetAll).Methods("GET")
 
 	//Get by id
 	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
 
 	//Add
-	monodoseR.HandleFunc("/", routesM.Add).Methods("POST")
+	monodoseR.HandleFunc("", routesM.Add).Methods("POST")
 
 	//Delete
 	monodoseR.HandleFunc("/{id}", routesM.Delete).Methods("DELETE")
 
 	//Update
-	monodoseR.HandleFunc("/", routesM.Update).Methods("PUT")
+	monodoseR.HandleFunc("", routesM.Update).Methods("PUT")
 
 	/*
 
