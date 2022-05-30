@@ -1,14 +1,24 @@
-section {
-    width: 100%;
+.carousel {
+    height: 70vh;
+}
+
+.carousel-inner {
+    height:100%;    
+}
+
+.carousel-item {
     height: 100%;
-    position: absolute;
+}
+
+.carousel-caption {
+    height: 100%;
 }
 
 .slice-type-1 {
-    height: 70%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex: 1 1 0px;
+    flex-direction: row;
+    flex-wrap: nowrap;
 
     .left-info, .right-info{
         width: auto;
@@ -17,18 +27,24 @@ section {
 
         .content{
             margin-top: 3%;
-            margin-right: 10%;
-            margin-left: 10%;
+            margin-right: 2%;
+            margin-left: 2%;
             text-align: center;
 
-            .block-img{
-                width: 200px;
+            .block-img{               
+                display: block;
                 margin-top: 2%;
                 margin-bottom: 2%;
+                margin-left: auto;
+                margin-right: auto;
+
+                .img {
+                    width: inherit;
+                    height: inherit;
+                }
             }
         }
     }
-
     .line-break{
         height: 70%;
         background-color: white;
@@ -36,22 +52,32 @@ section {
     }
 }
 
+
 .slice-type-2 {
-    height: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+
 }
 
 .slice-type-3 {
-    height: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
 
     .text{
+        font-size: larger;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
         text-align: center;
         margin-left: 20%;
         margin-right: 20%;
     }
+}
+
+.carousel-indicators{
+    display: none;
 }
