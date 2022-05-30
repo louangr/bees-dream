@@ -81,6 +81,7 @@ func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
 
 	}
 
+	//Bot discord
 	return monodose, fmt.Errorf("Can't get data from database")
 
 }
