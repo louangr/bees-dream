@@ -116,14 +116,15 @@ func (d *DaoMonodose) Exist(id int) bool {
 
 func (d *DaoMonodose) Delete(id int) (e.Monodose, error) {
 
-	var monodose e.Monodose
-
-	conn, err := m.GetConnexion()
 	//defer conn.Disconnect(context.TODO())
 
-	t, _ := d.FindById(id)
+	monodose, err := d.FindById(id)
 
-	fmt.Printf("Test : %v", t)
+	if err != nil {
+		return monodose, err
+	}
+
+	conn, err := m.GetConnexion()
 
 	if err == nil {
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
@@ -132,7 +133,7 @@ func (d *DaoMonodose) Delete(id int) (e.Monodose, error) {
 		result, _ := coll.DeleteOne(context.TODO(), filter)
 
 		if result.DeletedCount == 0 {
-			return e.Monodose{}, fmt.Errorf("Object with id %d does not exist", id)
+			return e.Monodose{}, fmt.Errorf("Can't delete object with id %d does not exist", id)
 		}
 
 		return monodose, nil

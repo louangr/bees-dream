@@ -69,6 +69,8 @@ golang:deploy:
 discord:notification:
   image: alpine:latest
   stage: notification
+  tags:
+    - deployment
   script:
     - wget https://raw.githubusercontent.com/DiscordHooks/gitlab-ci-discord-webhook/master/send.sh
     - chmod +x send.sh
