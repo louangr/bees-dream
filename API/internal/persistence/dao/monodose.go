@@ -170,11 +170,27 @@ func (d *DaoMonodose) Create(item e.Monodose) (e.Monodose, error) {
 
 func (d *DaoMonodose) Update(item e.Monodose) (e.Monodose, error) {
 
-	for index, monodose := range monodoses {
-		if item.Id == monodose.Id {
-			monodoses[index] = monodose
-			return monodose, nil
+	if !d.Exist(item.Id) {
+		return e.Monodose{}, fmt.Errorf("Object monodose with id %d does not exist", item.Id)
+	}
+
+	conn, err := m.GetConnexion()
+
+	if err == nil {
+
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+
+		filter := bson.D{{"Id", item.Id}}
+
+		update := bson.D{{"$set", item}}
+
+		_, err := coll.UpdateOne(context.TODO(), filter, update)
+
+		if err != nil {
+			return e.Monodose{}, fmt.Errorf("Can't update object monodose with id %d in database", item.Id)
 		}
+
+		return item, nil
 	}
 
 	return e.Monodose{}, fmt.Errorf("item with id %d does not exist", item.Id)
