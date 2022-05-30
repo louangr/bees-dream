@@ -69,10 +69,11 @@ golang:deploy:
 discord:notification:
   image: alpine:latest
   stage: notification
+  needs: ["golang:deploy"]
   tags:
     - deployment
   script:
+    - apk add --update git curl
     - wget https://raw.githubusercontent.com/DiscordHooks/gitlab-ci-discord-webhook/master/send.sh
     - chmod +x send.sh
-    - ./send.sh success $WEBHOOK_URL
-  needs: ["golang:deploy"]
+    - /bin/ash ./send.sh success $WEBHOOK_URL

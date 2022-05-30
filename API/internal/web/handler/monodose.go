@@ -58,7 +58,10 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 	} else {
-		fmt.Fprintf(w, "%v", res)
+
+		js, _ := json.Marshal(res)
+
+		fmt.Fprintf(w, "%s", js)
 	}
 
 }

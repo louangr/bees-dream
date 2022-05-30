@@ -145,12 +145,26 @@ func (d *DaoMonodose) Delete(id int) (e.Monodose, error) {
 
 func (d *DaoMonodose) Create(item e.Monodose) (e.Monodose, error) {
 
-	if !d.Exist(item.Id) {
-		monodoses = append(monodoses, item)
-		return item, nil
+	if d.Exist(item.Id) {
+		return e.Monodose{}, fmt.Errorf("Object monodose with id %d already exist", item.Id)
 	}
 
-	return e.Monodose{}, fmt.Errorf("Item with id %d already exist", item.Id)
+	conn, err := m.GetConnexion()
+
+	if err == nil {
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+
+		_, err := coll.InsertOne(context.TODO(), item)
+
+		if err != nil {
+			return e.Monodose{}, fmt.Errorf("Can't insert object monodose with id %d in database", item.Id)
+		}
+
+		return item, nil
+
+	}
+
+	return e.Monodose{}, fmt.Errorf("Can't get data from database")
 
 }
 

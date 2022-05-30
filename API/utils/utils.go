@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"encoding/json"
+	"fmt"
 	e "internal/entities"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -25,4 +27,18 @@ func BsonToStruct(data primitive.M, storage *e.Monodose) {
 	bytess, _ := bson.Marshal(data)
 
 	bson.Unmarshal(bytess, &storage)
+}
+
+func StructToBson(data e.Monodose) bson.D {
+
+	var result bson.D
+
+	js, _ := json.Marshal(data)
+
+	fmt.Printf("test js : %v", js)
+
+	bson.Unmarshal(js, &result)
+
+	return result
+
 }
