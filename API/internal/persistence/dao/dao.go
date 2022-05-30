@@ -76,7 +76,7 @@ func (d *Dao[T]) FindById(id int) (T, error) {
 			}
 		}
 
-		return types.Empty(obj), nil
+		return obj, nil
 
 	}
 
