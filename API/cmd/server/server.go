@@ -76,18 +76,16 @@ func main() {
 
 	userR.HandleFunc("", routesU.Add).Methods("POST")
 
+	userR.HandleFunc("", routesU.GetAll).Methods("GET")
+
 	userR.HandleFunc("/{id}", routesU.Get).Methods("GET")
 
 	userR.HandleFunc("/{id}", routesU.Delete).Methods("DELETE")
 
 	/*
-
-
-		//User
-
-
 		//Login
-		router.HandleFunc("/login/").Methods("POST") */
+		router.HandleFunc("/login/").Methods("POST")
+	*/
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
