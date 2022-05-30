@@ -16,21 +16,19 @@ const Presentation = () => {
   function TextSliceType1(slice: any) {
     return (
       <Carousel.Item>
-        <Carousel.Caption>
-          <section className="slice-type-1">
-            <div className="left-info">
-              <div className="content">
-                <PrismicRichText field={slice.primary.left_text} />
-              </div>
+        <section className="slice-type-1">
+          <div className="left-info">
+            <div className="content">
+              <PrismicRichText field={slice.primary.left_text} />
             </div>
-            <div className="line-break" />
-            <div className="right-info">
-              <div className="content">
-                <PrismicRichText field={slice.primary.right_text} />
-              </div>
+          </div>
+          <div className="line-break" />
+          <div className="right-info">
+            <div className="content">
+              <PrismicRichText field={slice.primary.right_text} />
             </div>
-          </section>
-        </Carousel.Caption>
+          </div>
+        </section>
       </Carousel.Item>
     );
   }
@@ -40,25 +38,21 @@ const Presentation = () => {
     if (src !== null) {
       return (
         <Carousel.Item>
-          <Carousel.Caption>
-            <section className="slice-type-2">
-              <img
-                className="img-center"
-                src={src}
-                alt={slice.primary.image.alt}
-              />
-            </section>
-          </Carousel.Caption>
+          <section className="slice-type-2">
+            <img
+              className="img-center"
+              src={src}
+              alt={slice.primary.image.alt}
+            />
+          </section>
         </Carousel.Item>
       );
     } else {
       return (
         <Carousel.Item>
-          <Carousel.Caption>
-            <section className="slice-type-2">
-              <img className="img-center" alt={slice.primary.image.alt} />
-            </section>
-          </Carousel.Caption>
+          <section className="slice-type-2">
+            <img className="img-center" alt={slice.primary.image.alt} />
+          </section>
         </Carousel.Item>
       );
     }

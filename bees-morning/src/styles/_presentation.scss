@@ -1,5 +1,6 @@
 .carousel {
     height: 70vh;
+    align-items: center;
 }
 
 .carousel-inner {
@@ -16,11 +17,12 @@
 
 .slice-type-1 {
     display: flex;
-    flex: 1 1 0px;
     flex-direction: row;
     flex-wrap: nowrap;
 
     .left-info, .right-info{
+        display: flex;
+        justify-content: center;
         width: auto;
         height: auto;
         margin: auto;
@@ -31,20 +33,26 @@
             margin-left: 2%;
             text-align: center;
 
-            .block-img{               
-                display: block;
-                margin-top: 2%;
-                margin-bottom: 2%;
-                margin-left: auto;
-                margin-right: auto;
-
-                .img {
-                    width: inherit;
-                    height: inherit;
+            p{
+                text-align: justify;
+                margin-left: 4%;
+                margin-right: 4%;
+                img {
+                    display: block;
+                    margin-top: 2%;
+                    margin-bottom: 2%;
+                    margin-left: auto;
+                    margin-right: auto;
+    
+                    width: 35vw;
+                    height: auto;
+                    justify-self: center;
                 }
+            
             }
         }
     }
+
     .line-break{
         height: 70%;
         background-color: white;
