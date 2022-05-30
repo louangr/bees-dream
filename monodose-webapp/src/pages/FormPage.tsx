@@ -141,7 +141,7 @@ const FormPage: React.FC = () => {
               margin='normal'
               fullWidth
               label='Variété du miel'
-              value={honeyVariety}
+              value={honeyVariety || ''}
               onChange={(event) => setHoneyVariety(event.target.value)}
             />
 

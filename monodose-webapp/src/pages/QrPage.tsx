@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import QRCode from 'qrcode.react';
 import { Button } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
