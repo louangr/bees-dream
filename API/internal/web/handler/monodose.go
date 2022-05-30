@@ -72,7 +72,8 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprint(w, err.Error())
 	} else {
-		fmt.Fprint(w, "%v", monodose)
+		js, _ := json.Marshal(monodose)
+		fmt.Fprintf(w, "%s", js)
 	}
 
 }

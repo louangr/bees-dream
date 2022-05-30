@@ -35,6 +35,8 @@ func (d *DaoMonodose) FindAll() []e.Monodose {
 
 	conn, err := m.GetConnexion()
 
+	//defer conn.Disconnect(context.TODO())
+
 	if err == nil {
 		var results []bson.M
 
@@ -64,6 +66,7 @@ func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
 	var monodose e.Monodose
 
 	conn, err := m.GetConnexion()
+	//defer conn.Disconnect(context.TODO())
 
 	if err == nil {
 
@@ -81,34 +84,62 @@ func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
 
 	}
 
-	//Bot discord
 	return monodose, fmt.Errorf("Can't get data from database")
 
 }
 
 func (d *DaoMonodose) Exist(id int) bool {
 
-	for _, monodose := range monodoses {
-		if monodose.Id == id {
-			return true
+	conn, err := m.GetConnexion()
+	//defer conn.Disconnect(context.TODO())
+
+	if err == nil {
+
+		var monodose e.Monodose
+
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+
+		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&monodose)
+
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				return false
+			}
 		}
+
+		return true
+
 	}
 
 	return false
-
 }
 
 func (d *DaoMonodose) Delete(id int) (e.Monodose, error) {
 
-	for index, monodose := range monodoses {
-		if monodose.Id == id {
-			monodoses = append(monodoses[:index], monodoses[index+1:]...)
-			return monodose, nil
+	var monodose e.Monodose
+
+	conn, err := m.GetConnexion()
+	//defer conn.Disconnect(context.TODO())
+
+	t, _ := d.FindById(id)
+
+	fmt.Printf("Test : %v", t)
+
+	if err == nil {
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var filter bson.D = bson.D{{"Id", id}}
+
+		result, _ := coll.DeleteOne(context.TODO(), filter)
+
+		if result.DeletedCount == 0 {
+			return e.Monodose{}, fmt.Errorf("Object with id %d does not exist", id)
 		}
+
+		return monodose, nil
+
 	}
 
-	return e.Monodose{}, fmt.Errorf("id %d does not exist", id)
-
+	return e.Monodose{}, fmt.Errorf("Can't get data from database")
 }
 
 func (d *DaoMonodose) Create(item e.Monodose) (e.Monodose, error) {
