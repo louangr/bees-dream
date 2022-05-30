@@ -60,7 +60,7 @@ func main() {
 		//Login
 		router.HandleFunc("/login/").Methods("POST") */
 
-	fmt.Printf("🚀 Lancement de l'api sur le port %s", port)
+	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
 	http.ListenAndServe(":"+port, handlers.CORS(corsObj)(router))
 }

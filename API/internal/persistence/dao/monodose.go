@@ -51,7 +51,7 @@ func (d *DaoMonodose) FindAll() []e.Monodose {
 		utils.BsonToStructs(results, &res)
 
 	} else {
-		fmt.Printf("can't fetch find all")
+		log.Fatal("can't fetch find all")
 	}
 
 	conn.Disconnect(context.TODO())
@@ -61,33 +61,27 @@ func (d *DaoMonodose) FindAll() []e.Monodose {
 
 func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
 
+	var monodose e.Monodose
+
 	conn, err := m.GetConnexion()
 
-	if err != nil {
+	if err == nil {
 
-		var result []bson.M
-		//var data string
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
 
-		var option *options.FindOptions = options.Find().SetProjection(bson.D{{"_id", 0}})
+		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&monodose)
 
-		cursor, err := coll.Find(context.Background(), bson.D{{"id", id}}, option)
-
-		if err = cursor.All(context.TODO(), &result); err != nil {
-			log.Fatalf("Impossible de récupérer l'ensemble des données dans %s : %v \n", "monodose", err)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				return e.Monodose{}, fmt.Errorf("Id %d does not exist", id)
+			}
 		}
 
-	} else {
-		fmt.Printf("cant 'f fetch find by id")
+		return monodose, nil
+
 	}
 
-	for _, monodose := range monodoses {
-		if monodose.Id == id {
-			return monodose, nil
-		}
-	}
-
-	return e.Monodose{}, fmt.Errorf("Id %d does not exist", id)
+	return monodose, fmt.Errorf("Can't get data from database")
 
 }
 
