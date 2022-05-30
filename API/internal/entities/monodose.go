@@ -27,11 +27,11 @@ type Date struct {
 }
 
 type Monodose struct {
-	Id           int       `json:"id"`
-	Beekeeper    Beekeeper `json:"beekeeper"`
-	Dates        Date      `json:"dates"`
-	Location     string    `json:"location"`
-	HoneyVariety string    `json:"honeyVariety"`
+	Id           int        `json:"id"`
+	Beekeeper    *Beekeeper `json:"beekeeper"`
+	Dates        *Date      `json:"dates"`
+	Location     string     `json:"location"`
+	HoneyVariety string     `json:"honeyVariety"`
 }
 
 func NewBeekeeper(lastName string, firstName string, compagny string) Beekeeper {
@@ -43,7 +43,7 @@ func NewDate(dluo string, make string, endOfProduction string) Date {
 }
 
 func NewMonodose(id int, beekeeper Beekeeper, dates Date, location string, honeyVarity string) Monodose {
-	return Monodose{id, beekeeper, dates, location, honeyVarity}
+	return Monodose{id, &beekeeper, &dates, location, honeyVarity}
 }
 
 func (m *Monodose) IsNil() bool {

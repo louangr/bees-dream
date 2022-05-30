@@ -24,12 +24,16 @@ import (
 	h "internal/web/handler"
 	"net/http"
 
+	"github.com/gorilla/handlers"
+
 	"github.com/gorilla/mux"
 )
 
 func main() {
 
 	const port string = "8080"
+
+	corsObj := handlers.AllowedOrigins([]string{"*"})
 
 	m.Connexion()
 
@@ -78,7 +82,7 @@ func main() {
 		//Login
 		router.HandleFunc("/login/").Methods("POST") */
 
-	fmt.Printf("🚀 Lancement de l'api sur le port %s", port)
+	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
-	http.ListenAndServe(":"+port, router)
+	http.ListenAndServe(":"+port, handlers.CORS(corsObj)(router))
 }

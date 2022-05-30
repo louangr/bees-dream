@@ -33,7 +33,7 @@ func Connexion() {
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 
 	if err != nil {
-		log.Fatal("Erreur de connexion à la base mongoDB")
+		log.Fatal("Erreur de connexion à la base mongoDB : ", err)
 	}
 
 	fmt.Println("📁 Connecté à la base mongodb")

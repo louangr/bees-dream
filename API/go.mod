@@ -8,7 +8,11 @@ replace internal/web/handler => ./internal/web/handler
 
 require internal/persistence/interfaces v1.0.0
 
-require github.com/joho/godotenv v1.4.0 // indirect
+require (
+	github.com/felixge/httpsnoop v1.0.1 // indirect
+	github.com/gorilla/handlers v1.5.1 // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
+)
 
 replace internal/persistence/interfaces => ./internal/persistence/interfaces
 
@@ -23,6 +27,10 @@ replace internal/persistence/mongo => ./internal/persistence/mongo
 require internal/persistence/dao v1.0.0
 
 replace internal/persistence/dao => ./internal/persistence/dao
+
+require utils v1.0.0
+
+replace utils => ./utils
 
 //Mongo dependencies
 require (
