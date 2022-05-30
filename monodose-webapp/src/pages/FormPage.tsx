@@ -67,12 +67,18 @@ const FormPage: React.FC = () => {
 
         <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
           <DatePicker
+            showDaysOutsideCurrentMonth
             clearable
+            clearText='Effacer'
+            cancelText='Annuler'
             label='Date début de production'
             inputFormat='dd/MM/yyyy'
             value={productionStartDate}
             onChange={(newProductionStartDate) => {
               setProductionStartDate(newProductionStartDate)
+            }}
+            PopperProps={{
+              placement: 'auto-end'
             }}
             renderInput={(params) => (
               <TextField
@@ -86,13 +92,19 @@ const FormPage: React.FC = () => {
 
         <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
           <DatePicker
+            showDaysOutsideCurrentMonth
             clearable
+            clearText='Effacer'
+            cancelText='Annuler'
             label='Date fin de production'
             inputFormat='dd/MM/yyyy'
             value={productionEndDate}
             onChange={(newProductionEndDate) => {
               setProductionEndDate(newProductionEndDate)
               setDluoDate(newProductionEndDate ? new Date(new Date(newProductionEndDate).setMonth(new Date(newProductionEndDate).getMonth() + 18)) : null)
+            }}
+            PopperProps={{
+              placement: 'auto-end'
             }}
             renderInput={(params) => (
               <TextField

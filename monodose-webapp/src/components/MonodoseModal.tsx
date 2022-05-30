@@ -3,12 +3,10 @@ import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import EditIcon from '@mui/icons-material/Edit'
 import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Role, User } from '../models/User'
+import { Role } from '../models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Monodose } from '../models/Monodose'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -113,12 +111,18 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
           <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
             <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
               <DatePicker
+                showDaysOutsideCurrentMonth
                 clearable
+                clearText='Effacer'
+                cancelText='Annuler'
                 label='Date début de production'
                 inputFormat='dd/MM/yyyy'
                 value={productionStartDate}
                 onChange={(newProductionStartDate) => {
                   setProductionStartDate(newProductionStartDate);
+                }}
+                PopperProps={{
+                  placement: 'auto-end'
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -130,13 +134,19 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
             </LocalizationProvider>
             <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
               <DatePicker
+                showDaysOutsideCurrentMonth
                 clearable
+                clearText='Effacer'
+                cancelText='Annuler'
                 label='Date fin de production'
                 inputFormat='dd/MM/yyyy'
                 value={productionEndDate}
                 onChange={(newProductionEndDate) => {
                   setProductionEndDate(newProductionEndDate)
                   setDluoDate(newProductionEndDate ? new Date(new Date(newProductionEndDate).setMonth(new Date(newProductionEndDate).getMonth() + 18)) : null)
+                }}
+                PopperProps={{
+                  placement: 'auto-end'
                 }}
                 renderInput={(params) => (
                   <TextField
