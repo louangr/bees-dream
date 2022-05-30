@@ -3,9 +3,8 @@ package dao
 import (
 	"context"
 	"fmt"
-	e "internal/entities"
-	"internal/persistence/interfaces"
 	m "internal/persistence/mongo"
+	"internal/persistence/types"
 	"log"
 	"utils"
 
@@ -14,24 +13,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var monodoses []e.Monodose = []e.Monodose{
-	e.NewMonodose(0, e.Beekeeper{"dorian", "gaufron", "21 corps"}, e.Date{"21/08/2002", "21/03/2002", "21/08/2000"}, "Nantes", "Chatenier"),
-	e.NewMonodose(1, e.Beekeeper{"Louan", "portron", "super compagny"}, e.Date{"22/05/2001", "21/03/2000", "21/08/2020"}, "Tours", "Fôret"),
+type Dao[T types.Collection] struct {
 }
 
-type DaoMonodose struct {
-}
+//var _ interfaces.RestDao[types.Collection] = (*Dao[types.Collection])(nil)
 
-var _ interfaces.RestDao[e.Monodose] = (*DaoMonodose)(nil)
+func NewDao[T types.Collection]() Dao[T] {
 
-func NewDao() DaoMonodose {
-	return DaoMonodose{}
+	return Dao[T]{}
 
 }
 
-func (d *DaoMonodose) FindAll() []e.Monodose {
+func (d *Dao[T]) FindAll() (t []T) {
 
-	var res []e.Monodose
+	var res []T
 
 	conn, err := m.GetConnexion()
 
@@ -56,17 +51,14 @@ func (d *DaoMonodose) FindAll() []e.Monodose {
 		log.Fatal("can't fetch find all")
 	}
 
-	conn.Disconnect(context.TODO())
-
 	return res
 }
 
-func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
+func (d *Dao[T]) FindById(id int) (T, error) {
 
-	var monodose e.Monodose
+	var monodose T
 
 	conn, err := m.GetConnexion()
-	//defer conn.Disconnect(context.TODO())
 
 	if err == nil {
 
@@ -76,7 +68,7 @@ func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
 
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
-				return e.Monodose{}, fmt.Errorf("Id %d does not exist", id)
+				return monodose, fmt.Errorf("Id %d does not exist", id)
 			}
 		}
 
@@ -88,14 +80,13 @@ func (d *DaoMonodose) FindById(id int) (e.Monodose, error) {
 
 }
 
-func (d *DaoMonodose) Exist(id int) bool {
+func (d *Dao[T]) Exist(id int) bool {
 
 	conn, err := m.GetConnexion()
-	//defer conn.Disconnect(context.TODO())
 
 	if err == nil {
 
-		var monodose e.Monodose
+		var monodose T
 
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
 
@@ -114,9 +105,9 @@ func (d *DaoMonodose) Exist(id int) bool {
 	return false
 }
 
-func (d *DaoMonodose) Delete(id int) (e.Monodose, error) {
+func (d *Dao[T]) Delete(id int) (T, error) {
 
-	//defer conn.Disconnect(context.TODO())
+	var empty T
 
 	monodose, err := d.FindById(id)
 
@@ -133,65 +124,77 @@ func (d *DaoMonodose) Delete(id int) (e.Monodose, error) {
 		result, _ := coll.DeleteOne(context.TODO(), filter)
 
 		if result.DeletedCount == 0 {
-			return e.Monodose{}, fmt.Errorf("Can't delete object with id %d does not exist", id)
+			return empty, fmt.Errorf("Can't delete object with id %d does not exist", id)
 		}
 
 		return monodose, nil
 
 	}
 
-	return e.Monodose{}, fmt.Errorf("Can't get data from database")
+	return empty, fmt.Errorf("Can't get data from database")
 }
 
-func (d *DaoMonodose) Create(item e.Monodose) (e.Monodose, error) {
+func (d *Dao[T]) Create(item T) (T, error) {
 
-	if d.Exist(item.Id) {
-		return e.Monodose{}, fmt.Errorf("Object monodose with id %d already exist", item.Id)
+	var empty T
+
+	var id int = item.GetId()
+
+	var collection string = item.GetCollectionName()
+
+	if d.Exist(id) {
+		return empty, fmt.Errorf("Object monodose with id %d already exist", id)
 	}
 
 	conn, err := m.GetConnexion()
 
 	if err == nil {
-		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
 		_, err := coll.InsertOne(context.TODO(), item)
 
 		if err != nil {
-			return e.Monodose{}, fmt.Errorf("Can't insert object monodose with id %d in database", item.Id)
+			return empty, fmt.Errorf("Can't insert object monodose with id %d in database", item.GetId())
 		}
 
 		return item, nil
 
 	}
 
-	return e.Monodose{}, fmt.Errorf("Can't get data from database")
+	return empty, fmt.Errorf("Can't get data from database")
 
 }
 
-func (d *DaoMonodose) Update(item e.Monodose) (e.Monodose, error) {
+func (d *Dao[T]) Update(item T) (T, error) {
 
-	if !d.Exist(item.Id) {
-		return e.Monodose{}, fmt.Errorf("Object monodose with id %d does not exist", item.Id)
+	var empty T
+
+	var id int = item.GetId()
+
+	var collection string = item.GetCollectionName()
+
+	if !d.Exist(id) {
+		return empty, fmt.Errorf("Object %s with id %d does not exist", collection, id)
 	}
 
 	conn, err := m.GetConnexion()
 
 	if err == nil {
 
-		var coll *mongo.Collection = conn.Database("bee-dream").Collection("monodose")
+		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
-		filter := bson.D{{"Id", item.Id}}
+		filter := bson.D{{"Id", id}}
 
 		update := bson.D{{"$set", item}}
 
 		_, err := coll.UpdateOne(context.TODO(), filter, update)
 
 		if err != nil {
-			return e.Monodose{}, fmt.Errorf("Can't update object monodose with id %d in database", item.Id)
+			return empty, fmt.Errorf("Can't update object %s with id %d in database", collection, id)
 		}
 
 		return item, nil
 	}
 
-	return e.Monodose{}, fmt.Errorf("item with id %d does not exist", item.Id)
+	return empty, fmt.Errorf("%s with id %d does not exist", collection, id)
 }

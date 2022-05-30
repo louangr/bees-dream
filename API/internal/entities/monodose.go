@@ -1,6 +1,8 @@
 package entities
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // swagger:response monodoseStruct
 type swaggMonodoseStruct struct {
@@ -48,6 +50,14 @@ func NewMonodose(id int, beekeeper Beekeeper, dates Date, location string, honey
 
 func (m *Monodose) IsNil() bool {
 	return m == nil
+}
+
+func (m Monodose) GetId() int {
+	return m.Id
+}
+
+func (m Monodose) GetCollectionName() string {
+	return "monodose"
 }
 
 func (m *Monodose) String() string {

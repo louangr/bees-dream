@@ -21,7 +21,7 @@ func NewMonodoseRoutes() MonodoseRoutes {
 
 var _ interfaces.Routes = (*MonodoseRoutes)(nil)
 
-var dao d.DaoMonodose = d.NewDao()
+var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 
 // swagger:operation GET /monodose monodose GetAll
 // ---

@@ -32,6 +32,10 @@ require utils v1.0.0
 
 replace utils => ./utils
 
+require internal/persistence/types v1.0.0
+
+replace internal/persistence/types => ./internal/persistence/types
+
 //Mongo dependencies
 require (
 	github.com/go-stack/stack v1.8.0 // indirect
