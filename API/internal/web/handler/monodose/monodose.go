@@ -74,6 +74,13 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 // ---
 // summary: Create a new monodose
 // description: If the request body format is not correct, a 400 status code will be returned
+// parameters:
+// - name: monodose
+//   in: body
+//   description: monodose to add
+//   schema:
+//     "$ref": "#/responses/monodoseStruct"
+//   required: true
 // responses:
 //   "200":
 //     "$ref": "#/responses/genericResponse"
@@ -136,6 +143,13 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 // ---
 // summary: Update an existing monodose
 // description: If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
+// parameters:
+// - name: monodose
+//   in: body
+//   description: monodose to update
+//   schema:
+//     "$ref": "#/responses/monodoseStruct"
+//   required: true
 // responses:
 //   "200":
 //     "$ref": "#/responses/genericResponse"

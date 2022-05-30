@@ -42,6 +42,17 @@
         ],
         "summary": "Update an existing monodose",
         "operationId": "Update",
+        "parameters": [
+          {
+            "description": "monodose to update",
+            "name": "monodose",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/responses/monodoseStruct"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/genericResponse"
@@ -58,6 +69,17 @@
         ],
         "summary": "Create a new monodose",
         "operationId": "Add",
+        "parameters": [
+          {
+            "description": "monodose to add",
+            "name": "monodose",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/responses/monodoseStruct"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/genericResponse"
