@@ -2,24 +2,36 @@ package entities
 
 import "fmt"
 
+// swagger:response monodoseStruct
+type swaggMonodoseStruct struct {
+	// in:body
+	Body Monodose
+}
+
+// swagger:response monodoseStructArray
+type swaggMonodoseStructArray struct {
+	// in:body
+	Body []Monodose
+}
+
 type Beekeeper struct {
-	LastName  string
-	FirstName string
-	Compagny  string
+	LastName  string `json:"lastname"`
+	FirstName string `json:"firstname"`
+	Compagny  string `json:"company"`
 }
 
 type Date struct {
-	Dluo            string
-	Make            string
-	EndOfProduction string
+	Dluo            string `json:"dluo"`
+	Make            string `json:"make"`
+	EndOfProduction string `json:"endOfProduction"`
 }
 
 type Monodose struct {
-	Id          int
-	Beekeeper   Beekeeper
-	Dates       Date
-	Location    string
-	HoneyVarity string
+	Id           int       `json:"id"`
+	Beekeeper    Beekeeper `json:"beekeeper"`
+	Dates        Date      `json:"dates"`
+	Location     string    `json:"location"`
+	HoneyVariety string    `json:"honeyVariety"`
 }
 
 func NewBeekeeper(lastName string, firstName string, compagny string) Beekeeper {

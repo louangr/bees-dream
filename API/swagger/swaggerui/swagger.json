@@ -1,0 +1,216 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Bee's Dream beekeepers and monodoses APIs",
+    "title": "Bee's Dream beekeepers and monodoses APIs",
+    "contact": {
+      "name": "21Team",
+      "email": "by@carrier.pigeon"
+    },
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/monodose": {
+      "get": {
+        "description": "If the are not monodoses, an empty array will be returned",
+        "tags": [
+          "monodose"
+        ],
+        "summary": "Return all monodoses",
+        "operationId": "GetAll",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/monodoseStructArray"
+          }
+        }
+      },
+      "put": {
+        "description": "If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned",
+        "tags": [
+          "monodose"
+        ],
+        "summary": "Update an existing monodose",
+        "operationId": "Update",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/genericResponse"
+          },
+          "400": {
+            "$ref": "#/responses/genericResponse"
+          }
+        }
+      },
+      "post": {
+        "description": "If the request body format is not correct, a 400 status code will be returned",
+        "tags": [
+          "monodose"
+        ],
+        "summary": "Create a new monodose",
+        "operationId": "Add",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/genericResponse"
+          },
+          "400": {
+            "$ref": "#/responses/genericResponse"
+          }
+        }
+      }
+    },
+    "/monodose/{id}": {
+      "get": {
+        "description": "If the monodose is not found, a 404 status code will be returned",
+        "tags": [
+          "monodose"
+        ],
+        "summary": "Return a monodose by Id",
+        "operationId": "Get",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "correspond to the monodose's Id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/monodoseStruct"
+          },
+          "404": {
+            "$ref": "#/responses/genericResponse"
+          }
+        }
+      },
+      "delete": {
+        "description": "If the monodose is not found, a 404 status code will be returned",
+        "tags": [
+          "monodose"
+        ],
+        "summary": "Delete a monodose by Id",
+        "operationId": "Delete",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "correspond to the monodose's Id",
+            "name": "code",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/genericResponse"
+          },
+          "404": {
+            "$ref": "#/responses/genericResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Beekeeper": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string",
+          "x-go-name": "Compagny"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        }
+      },
+      "x-go-package": "internal/entities"
+    },
+    "Date": {
+      "type": "object",
+      "properties": {
+        "dluo": {
+          "type": "string",
+          "x-go-name": "Dluo"
+        },
+        "endOfProduction": {
+          "type": "string",
+          "x-go-name": "EndOfProduction"
+        },
+        "make": {
+          "type": "string",
+          "x-go-name": "Make"
+        }
+      },
+      "x-go-package": "internal/entities"
+    },
+    "Monodose": {
+      "type": "object",
+      "properties": {
+        "beekeeper": {
+          "$ref": "#/definitions/Beekeeper"
+        },
+        "dates": {
+          "$ref": "#/definitions/Date"
+        },
+        "honeyVariety": {
+          "type": "string",
+          "x-go-name": "HoneyVariety"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Id"
+        },
+        "location": {
+          "type": "string",
+          "x-go-name": "Location"
+        }
+      },
+      "x-go-package": "internal/entities"
+    }
+  },
+  "responses": {
+    "genericResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "x-go-name": "Message"
+          }
+        }
+      }
+    },
+    "monodoseStruct": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Monodose"
+      }
+    },
+    "monodoseStructArray": {
+      "description": "",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Monodose"
+        }
+      }
+    }
+  }
+}

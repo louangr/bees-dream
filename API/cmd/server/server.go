@@ -1,3 +1,21 @@
+// Package classification Bee's Dream beekeepers and monodoses APIs
+//
+// Bee's Dream beekeepers and monodoses APIs
+//
+// Terms Of Service:
+//
+//	Schemes: http, https
+//	Version: 1.0.0
+//	BasePath: /
+//	Contact: 21Team <by@carrier.pigeon>
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+// swagger:meta
 package main
 
 import (
@@ -16,6 +34,10 @@ func main() {
 	m.Connexion()
 
 	router := mux.NewRouter()
+
+	//Swagger
+	fs := http.FileServer(http.Dir("./swagger/swaggerui"))
+	router.PathPrefix("/swaggerui/").Handler(http.StripPrefix("/swaggerui/", fs))
 
 	//Monodose
 
