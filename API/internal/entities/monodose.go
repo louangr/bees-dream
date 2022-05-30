@@ -65,5 +65,5 @@ func (m *Monodose) String() string {
 		"},\n"+
 		"location : %s\n"+
 		"honeyVarity : %s\n"+
-		"}", m.Id, m.Beekeeper.LastName, m.Beekeeper.FirstName, m.Beekeeper.Compagny, m.Dates.Dluo, m.Dates.Make, m.Dates.EndOfProduction, m.Location, m.HoneyVarity)
+		"}", m.Id, m.Beekeeper.LastName, m.Beekeeper.FirstName, m.Beekeeper.Compagny, m.Dates.Dluo, m.Dates.Make, m.Dates.EndOfProduction, m.Location, m.HoneyVariety)
 }
