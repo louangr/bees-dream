@@ -54,13 +54,13 @@ const Presentation = ({ idPresentoire }: any) => {
     <div className="main-content">
       <div className="carousel-wrapper">
         <Carousel
-          fade
           controls={false}
           keyboard={false}
           touch={false}
           activeIndex={index}
           onSelect={handleSelect}
           indicators={false}
+          interval={10000}
         >
           {documentEvent?.data.body.map((element: any) => {
             return EventSliceType1(element);
