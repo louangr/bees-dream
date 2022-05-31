@@ -13,6 +13,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { fr } from 'date-fns/locale';
+import QRCode from 'qrcode.react'
 
 export enum MonodoseModalMode {
   Edition,
@@ -26,6 +27,21 @@ interface MonodoseModalProps {
   handleClose: () => void
 }
 
+function qr_urlImg(idQr: string) {
+  var canvas = document.getElementById(idQr) as HTMLCanvasElement;
+
+  return canvas.toDataURL("image/png");
+}
+
+
+function download_qr(idQr: string) {
+  var img = qr_urlImg(idQr);
+  var link = document.createElement('a');
+  link.download = idQr + ".png";
+  link.href = img;
+  link.click();
+}
+
 const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOpen, handleClose }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [location, setLocation] = React.useState<string | undefined>(undefined)
@@ -34,6 +50,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
   const [productionEndDate, setProductionEndDate] = React.useState<Date | null | undefined>(null)
   const [dluoDate, setDluoDate] = React.useState<Date | null | undefined>(null)
   const [role, setRole] = React.useState<Role>(Role.BeeKeeper)
+  const [qrvalue, setQrvalue] = React.useState<string | undefined>(undefined)
 
   const onSubmitButton = () => {
     if (mode === MonodoseModalMode.Edition) {
@@ -47,6 +64,10 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
 
       // TODO: POST to API to add monodose
 
+      //setQrvalue(monodose?.id)
+      setQrvalue('1') //tmp
+      download_qr("QRCodeParent")
+      download_qr("QRCodeEnfant")
       setIsLoading(false)
     }
 
@@ -172,6 +193,19 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
               />
             </LocalizationProvider>
           </div>
+
+        </div>
+        <div style={{ display: "none" }}>
+          <QRCode
+            id="QRCodeParent"
+            size={50}
+            value={"http://localhost:3000/form?id=" + qrvalue}
+          />
+          <QRCode
+            id="QRCodeEnfant"
+            size={50}
+            value={"http://localhost:3000?id=" + qrvalue}
+          />
         </div>
 
       </DialogContent>
