@@ -3,7 +3,8 @@ export interface Monodose {
     beekeeper: {
         firstname: string
         lastname: string
-        company: string
+        company: string,
+        age?: number
     }
     dates: {
         dluo: string
