@@ -27,16 +27,12 @@ import (
 
 	"net/http"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
 func main() {
 
 	const port string = "8080"
-
-	corsObj := handlers.AllowedOrigins([]string{"http://localhost:3000"})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
 
 	err := m.Connexion()
 
@@ -102,5 +98,5 @@ func main() {
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
-	http.ListenAndServe(":"+port, handlers.CORS(corsObj, methodsOk)(router))
+	http.ListenAndServe(":"+port, router)
 }
