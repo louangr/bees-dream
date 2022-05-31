@@ -1,6 +1,7 @@
 variables:
   GO_VERSION: "1.18"
   API_NAME: "api-bee"
+  CLIENT_NAME: "client-bee-dream"
   FOLDER_API: "API"
   TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:latest
   CONTAINER_NAME: "c-golang-api"
@@ -24,13 +25,14 @@ golang:build:
     paths:
       - "./$FOLDER_API/dist/$API_NAME"
   script:
-    - cd $FOLDER_API && go build -o $API_NAME -v ./...
+    - cd $FOLDER_API && ./cmd/script/build.sh
 
 golang:test:
   stage: test
   extends: .golang_setup
   script:
-    - cd ./$FOLDER_API/tests && go test -o api_test
+    - cd $FOLDER_API
+    #- ./cmd/script/build.sh && ./cmd/script/test-prod-client.sh
 
 golang:publish:
   image: docker:latest
@@ -65,6 +67,15 @@ golang:deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_LATEST"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f $CONTAINER_NAME || true"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -dp 8080:8080 --name $CONTAINER_NAME $TAG_LATEST"
+
+golang:test-deploy:
+  stage: notification
+  extends: .golang_setup
+  needs: ["golang:deploy"]
+  script:
+    - cd $FOLDER_API
+    - ./cmd/script/test-prod-client.sh
+    - ./dist/$CLIENT_NAME
 
 discord:notification:
   image: alpine:latest
