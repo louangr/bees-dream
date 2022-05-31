@@ -10,15 +10,14 @@ const Questions = ({ value }: any) => {
   let reponse = <PrismicRichText field={value?.answer} />;
   let question = <PrismicRichText field={value?.question} />;
 
-  const change = () => {
-    setTimeout(() => {
-      setflag(true);
-    }, 9000);
-  };
-
   useEffect(() => {
-    change();
-  }, []);
+    const timeOut = setTimeout(() => {
+      console.log(flag);
+      setflag(!flag);
+    }, 10000);
+
+    return () => clearInterval(timeOut);
+  }, [flag]);
 
   return (
     <div className="questions">
