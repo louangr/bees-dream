@@ -6,10 +6,23 @@
 			0%{
 				fill: #FFFF;
 			}
+			50%{
+				fill:#FFD326
+			}
 			100%{
-				fill: #FFD326;
+				fill:#FFFF
 			}
 		}
+
+		@keyframes turnOffAlvelole {
+			0%{
+				fill:#FFD326
+			}
+			100%{
+				fill:#FFFF
+			}
+		}
+
 		.s0 { fill: #646464 }
 
 		.s1{
@@ -18,59 +31,42 @@
 		}
 
 		#Forme1{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 1s;
-			animation-fill-mode: forwards;
+			animation: animeAlveole 2s 0s 1 both;
+			animation-iteration-count: infinite;
 		}
 
 		#Forme2{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 2s;
-			animation-fill-mode: forwards;
+			animation: animeAlveole 2s 1s 1 both;
+			animation-iteration-count: infinite;
 		}
 
 		#Forme3{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 3s;
-			animation-fill-mode: forwards;
+			animation: animeAlveole 2s 0s 1 both;
+			animation-iteration-count: infinite;
 		}
 
 		#Forme7{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 4s;
-			animation-fill-mode: forwards;
+			animation: animeAlveole 2s 1s 1 both;
+			animation-iteration-count: infinite;
 		}
 
 		#Forme6{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 5s;
-			animation-fill-mode: forwards;
+			animation: animeAlveole 2s 0s 1 both;
+			animation-iteration-count: infinite;
 		}
 
 		#Forme5{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 6s;
-			animation-fill-mode: forwards;
+			animation: animeAlveole 2s 1s 1 both;
+			animation-iteration-count: infinite;
 		}
 
 		#Forme4{
-			animation-name: animeAlveole;
-			animation-duration: 2s;
-			animation-delay: 7s;
-			animation-fill-mode: forwards;
+			fill: #FFD326;
+			animation-iteration-count: infinite;
 		}
 
 	</style>
 	<g id="layer1">
-		<g id="g81">
-			<path id="Forme 4" class="s0" d="m177 313v-205l188-108h2l175 101h1 1l175-101h1l188 108h1v204l176 102v219l-176 102v204l-188 109h-3l-175-101h-2l-174 101h-2l-188-109-1-204-176-102v-219"/>
-		</g>
 		<path id="Forme1" class="s1" d="m200 313v-189l163-95h4l162 94v191l-162 94h-4"/>
 		<path id="Forme2" class="s1" d="m555 313v-189l163-95h4l162 94v191l-162 94h-4"/>
 		<path id="Forme3" class="s1" d="m732 620v-189l163-95h4l162 94v191l-162 94h-4"/>

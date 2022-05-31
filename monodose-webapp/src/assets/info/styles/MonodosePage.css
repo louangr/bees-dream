@@ -70,13 +70,17 @@
         align-self: center;
         justify-self: center; 
     }
+
+    .loading-svg{
+        width: 200px;
+    }
 }
 
 /*------------------------mobile screen--------------------------------------------------------*/
 @media (max-width:800px){
     .background-container
     {
-        background-image: none;
+        background-color: black;
         width: 100%;
         height: 100%;
     }
@@ -140,5 +144,13 @@
 
         margin-bottom: 400px;
     }
+
+    .loading-svg{
+        width: 20vw;
+    }
+}
+
+.chargement{
+    text-align: center;
 }
 
