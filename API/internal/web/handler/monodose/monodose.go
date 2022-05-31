@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -33,8 +32,7 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
-	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	res, _ := json.Marshal(dao.FindAll())
@@ -59,8 +57,7 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
-	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	vars := mux.Vars(r)
@@ -97,8 +94,7 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
-	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	body, _ := ioutil.ReadAll(r.Body)
@@ -137,8 +133,7 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
-	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	vars := mux.Vars(r)
@@ -174,8 +169,7 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
-	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	body, _ := ioutil.ReadAll(r.Body)
