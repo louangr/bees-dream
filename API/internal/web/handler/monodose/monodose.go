@@ -79,7 +79,7 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   in: body
 //   description: monodose to add
 //   schema:
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/definitions/Monodose"
 //   required: true
 // responses:
 //   "200":
@@ -148,7 +148,7 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   in: body
 //   description: monodose to update
 //   schema:
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/definitions/Monodose"
 //   required: true
 // responses:
 //   "200":

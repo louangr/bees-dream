@@ -7,3 +7,7 @@ type swaggGenericResponse struct {
 		Message string `json:"message"`
 	}
 }
+
+type GenericResponse struct {
+	Message string `json:"message"`
+}
