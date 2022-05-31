@@ -37,7 +37,7 @@ func main() {
 
 	const port string = "8080"
 
-	corsObj := handlers.AllowedOrigins([]string{"*"})
+	corsObj := handlers.AllowedOrigins([]string{"http://localhost:3000"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
 
 	err := m.Connexion()
