@@ -1,0 +1,91 @@
+.carousel {
+    height: 70vh;
+    align-items: center;
+}
+
+.carousel-inner {
+    height:100%;    
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.carousel-caption {
+    height: 100%;
+}
+
+.slice-type-1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    .left-info, .right-info{
+        display: flex;
+        justify-content: center;
+        width: auto;
+        height: auto;
+        margin: auto;
+
+        .content{
+            margin-top: 3%;
+            margin-right: 2%;
+            margin-left: 2%;
+            text-align: center;
+
+            p{
+                text-align: justify;
+                margin-left: 4%;
+                margin-right: 4%;
+                img {
+                    display: block;
+                    margin-top: 2%;
+                    margin-bottom: 2%;
+                    margin-left: auto;
+                    margin-right: auto;
+    
+                    width: 35vw;
+                    height: auto;
+                    justify-self: center;
+                }
+            
+            }
+        }
+    }
+
+    .line-break{
+        height: 200px;
+        background-color: white;
+        width: 10px;
+    }
+}
+
+
+.slice-type-2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+}
+
+.slice-type-3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .text{
+        font-size: larger;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: justify;
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+}
+
+.carousel-indicators{
+    display: none;
+}
