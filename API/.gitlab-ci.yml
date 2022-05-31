@@ -14,7 +14,7 @@ stages:
   - notification
 
 .golang_setup:
-  image: golang:$GO_VERSION-alpine
+  image: golang:$GO_VERSION
   needs: []
 
 golang:build:
@@ -25,7 +25,6 @@ golang:build:
     paths:
       - "./$FOLDER_API/dist/$API_NAME"
   script:
-    - RUN apk update && apk add bash
     - cd $FOLDER_API
     - ./cmd/script/build.sh
 
