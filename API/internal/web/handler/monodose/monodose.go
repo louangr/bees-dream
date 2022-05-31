@@ -32,7 +32,7 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	//w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
 	w.Header().Set("Access-Control-Allow-Origin", hostname)
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")

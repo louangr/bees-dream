@@ -1,14 +1,6 @@
 package tests
 
-import (
-	"fmt"
-	"net/http"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
-)
-
-func TestFindAllMonodose(t *testing.T) {
+/* func TestFindAllMonodose(t *testing.T) {
 
 	const uri string = "http://localhost:8080/monodose"
 
@@ -29,6 +21,7 @@ func TestFindAllMonodose(t *testing.T) {
 
 	   	json.Unmarshal(body, &data)
 
-	   	assert.Greater(t, len(data), 1) */
+	   	assert.Greater(t, len(data), 1)
 
 }
+*/
