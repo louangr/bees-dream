@@ -31,7 +31,6 @@ var dao d.Dao[e.User] = d.NewDao[e.User]()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (u UserRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -53,7 +52,6 @@ func (u UserRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -80,7 +78,6 @@ func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var user e.User
@@ -116,7 +113,6 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -142,7 +138,6 @@ func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	body, _ := ioutil.ReadAll(r.Body)
 

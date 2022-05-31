@@ -20,8 +20,10 @@ package main
 import (
 	"fmt"
 	m "internal/persistence/mongo"
-	handlerMonodose "internal/web/handler/monodose"
-	handlerUser "internal/web/handler/user"
+	hLogin "internal/web/handler/login"
+	hMonodose "internal/web/handler/monodose"
+	hUser "internal/web/handler/user"
+
 	"log"
 	. "utils"
 
@@ -51,7 +53,7 @@ func main() {
 
 	//Monodose
 
-	routesM := handlerMonodose.NewMonodoseRoutes()
+	routesM := hMonodose.NewMonodoseRoutes()
 
 	monodoseR := router.PathPrefix("/monodose").Subrouter()
 
@@ -72,7 +74,7 @@ func main() {
 
 	//User
 
-	routesU := handlerUser.NewUserRoutes()
+	routesU := hUser.NewUserRoutes()
 
 	userR := router.PathPrefix("/user").Subrouter()
 
@@ -91,10 +93,11 @@ func main() {
 	//Delete
 	userR.HandleFunc("/{id}", MiddlewareJson(routesU.Delete)).Methods("DELETE")
 
-	/*
-		//Login
-		router.HandleFunc("/login/").Methods("POST")
-	*/
+	//Login
+
+	routesL := hLogin.NewLoginRoutes()
+
+	router.HandleFunc("/login", routesL.Connexion).Methods("POST")
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 

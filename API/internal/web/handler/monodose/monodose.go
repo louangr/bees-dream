@@ -91,7 +91,6 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
@@ -130,7 +129,6 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
@@ -166,7 +164,6 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
