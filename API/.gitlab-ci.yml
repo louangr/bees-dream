@@ -25,6 +25,7 @@ golang:build:
     paths:
       - "./$FOLDER_API/dist/$API_NAME"
   script:
+    - ls -la
     - ./cmd/script/build.sh
 
 golang:test:
