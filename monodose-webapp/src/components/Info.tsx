@@ -1,4 +1,4 @@
-import IInfo from "../interfaces/IInfo";
+import IInfo from "../models/IInfo";
 import '../assets/info/styles/Info.css'
 
 const Info = ({icon, description, informations,className}:IInfo) =>{

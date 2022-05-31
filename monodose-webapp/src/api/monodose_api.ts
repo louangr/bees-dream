@@ -1,7 +1,7 @@
 import axios from "axios";
-import IMonodose from "../interfaces/IMonodose";
+import {Monodose} from "../models/Monodose";
 
-let data: IMonodose;
+let data: Monodose;
 
 const fetchInfoMonodose = async () => {
     const queryParams = new URLSearchParams(window.location.search)
@@ -13,16 +13,19 @@ const fetchInfoMonodose = async () => {
     const result = request.data;
     data = {
         id: result.id,
-        apiculteur: {
-            prenom: result.beekeeper.firstname,
-            nom: result.beekeeper.lastname,
-            entreprise: result.beekeeper.company,
-            age:21
-        },
-        localisation: result.location,
-        dateProduction: result.dates.startofproduction,
-        dateDLUO: result.dates.dluo,
-        variety: 'Acacia'
+        beekeeper: {
+            firstname: result.beekeeper.firstname,
+            lastname: result.beekeeper.lastname,
+            company: result.beekeeper.company,
+            age: 21
+            },
+            dates: {
+                dluo: result.dates.dluo,
+                startofproduction: result.dates.startofproduction,
+                endofproduction: result.dates.endofproduction
+            },
+            location:  result.location,
+            honeyvariety: 'acacia'
       }
 
   } catch (err) {
