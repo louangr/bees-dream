@@ -35,8 +35,8 @@ func main() {
 
 	const port string = "8080"
 
-	corsObj := handlers.AllowedOrigins([]string{"http://localhost:3000"})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
+	// corsObj := handlers.AllowedOrigins([]string{"http://localhost:3000"})
+	// methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
 
 	err := m.Connexion()
 
@@ -45,6 +45,7 @@ func main() {
 	}
 
 	router := mux.NewRouter()
+	router.Use(CORS)
 
 	//Swagger
 	fs := http.FileServer(http.Dir("./swagger/swaggerui"))
@@ -57,22 +58,20 @@ func main() {
 	monodoseR := router.PathPrefix("/monodose").Subrouter()
 
 	//Get all
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.GetAll)).Methods("GET")
+	monodoseR.HandleFunc("", routesM.GetAll ).Methods("GET")
 
 	//Get by id
-	monodoseR.HandleFunc("/{id}", MiddlewareJson(routesM.Get)).Methods("GET")
+	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
 
 	//Add
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.Add)).Methods("POST")
+	monodoseR.HandleFunc("", routesM.Add).Methods("POST")
 
 	//Delete
-	monodoseR.HandleFunc("/{id}", MiddlewareJson(routesM.Delete)).Methods("DELETE")
+	monodoseR.HandleFunc("/{id}", routesM.Delete).Methods("DELETE")
 
 	//Update
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.Update)).Methods("PUT")
-
-	//CORSVerification
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.CORSVerification)).Methods("OPTIONS")
+	monodoseR.HandleFunc("", routesM.Update).Methods("PUT")
+ 
 
 	//User
 
@@ -81,19 +80,19 @@ func main() {
 	userR := router.PathPrefix("/user").Subrouter()
 
 	//Update
-	userR.HandleFunc("", MiddlewareJson(routesU.Update)).Methods("PUT")
+	userR.HandleFunc("", routesU.Update).Methods("PUT")
 
 	//Add
-	userR.HandleFunc("", MiddlewareJson(routesU.Add)).Methods("POST")
+	userR.HandleFunc("", routesU.Add).Methods("POST")
 
 	//Get all
-	userR.HandleFunc("", MiddlewareJson(routesU.GetAll)).Methods("GET")
+	userR.HandleFunc("", routesU.GetAll).Methods("GET")
 
 	//Get by id
-	userR.HandleFunc("/{id}", MiddlewareJson(routesU.Get)).Methods("GET")
+	userR.HandleFunc("/{id}", routesU.Get).Methods("GET")
 
 	//Delete
-	userR.HandleFunc("/{id}", MiddlewareJson(routesU.Delete)).Methods("DELETE")
+	userR.HandleFunc("/{id}", routesU.Delete).Methods("DELETE")
 
 	/*
 		//Login
@@ -102,5 +101,28 @@ func main() {
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
-	http.ListenAndServe(":"+port, handlers.CORS(corsObj, methodsOk)(router))
+	//http.ListenAndServe(":"+port, handlers.CORS(corsObj, methodsOk)(router))
+	http.ListenAndServe(":"+port, router)
+}
+
+func CORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Set headers
+		w.Header().Set("Access-Control-Allow-Headers:", "*")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		fmt.Println("ok")
+
+		// Next
+		next.ServeHTTP(w, r)
+		return
+	})
 }
