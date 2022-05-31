@@ -3,10 +3,8 @@ import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import EditIcon from '@mui/icons-material/Edit'
-import { Divider, IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Role, User } from '../models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -85,14 +83,14 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
               required
               error={hasEmailError}
               id="outlined-required"
-              label={hasEmailError ? "Email required" : "Email"}
+              label={hasEmailError ? "Email requis" : "Email"}
               onChange={(event) => setEmail(event.target.value)}
             />
             <TextField
               required
               error={hasPasswordError}
               id="outlined-password-input"
-              label={hasPasswordError ? "Password required" : "Password"}
+              label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
               type="password"
               autoComplete="current-password"
               style={{
@@ -101,16 +99,21 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
               }}
               onChange={(event) => setPassword(event.target.value)}
             />
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={role}
-              label="Age"
-              onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
-            >
-              <MenuItem value={Role.Admin}>Administrateur</MenuItem>
-              <MenuItem value={Role.BeeKeeper}>Apiculteur</MenuItem>
-            </Select>
+            <FormControl>
+              <InputLabel id="simple-select" color="primary">
+                Rôle
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={role}
+                label="Rôle"
+                onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
+                >
+                <MenuItem style={{ color: '#00000099' }} value={Role.Admin}>Administrateur</MenuItem>
+                <MenuItem style={{ color: '#00000099' }} value={Role.BeeKeeper}>Apiculteur</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <Divider orientation="vertical" variant="middle" sx={{ borderRightWidth: 2, borderRadius: 10 }} flexItem />
           <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
@@ -118,14 +121,14 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
               required
               error={hasFirstnameError}
               id="outlined-required"
-              label={hasFirstnameError ? "Email required" : "Email"}
+              label={hasFirstnameError ? "Prénom required" : "Prénom"}
               onChange={(event) => setFirstname(event.target.value)}
             />
             <TextField
               required
               error={hasLastnameError}
               id="outlined-required"
-              label={hasLastnameError ? "Email required" : "Email"}
+              label={hasLastnameError ? "Nom requis" : "Nom"}
               style={{
                 marginBottom: 16,
                 marginTop: 16
@@ -136,7 +139,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
               required
               error={hasCompanyError}
               id="outlined-required"
-              label={hasCompanyError ? "Email required" : "Email"}
+              label={hasCompanyError ? "Entreprise requis" : "Entreprise"}
               onChange={(event) => setCompany(event.target.value)}
             />
           </div>

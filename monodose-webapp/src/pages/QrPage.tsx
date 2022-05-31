@@ -57,15 +57,14 @@ const QrPage: React.FC = () => {
 
     function qr_urlImg(idQr: string) {
         var canvas = document.getElementById(idQr) as HTMLCanvasElement;
-        var img = canvas.toDataURL("image/png");
 
-        return img;
+
+        return canvas.toDataURL("image/png");
     }
 
 
     function download_qr(idQr: string) {
-        var canvas = document.getElementById(idQr) as HTMLCanvasElement;
-        var img = canvas.toDataURL("image/png");
+        var img = qr_urlImg(idQr);
         var link = document.createElement('a');
         link.download = idQr + ".png";
         link.href = img;
@@ -103,7 +102,7 @@ const QrPage: React.FC = () => {
                         <p>Qr Code Enfant</p>
                         <QRCode
                             id="QRCodeEnfant"
-                            size={50}
+                            size={10}
                             value={QrValue}
                         />
                         <Button
