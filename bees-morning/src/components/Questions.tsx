@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/_questions.scss";
-import Alveole from "../assets/image/abeille-svg-yellow.svg";
+import AlveoleAnimated from "../assets/image/abeille-svg-yellow.svg";
+import AlveoleFixed from "../assets/image/fix-abeille-svg-yellow.svg";
 import Logo from "../assets/image/LogoBeesDream.webp";
 import { PrismicRichText } from "@prismicio/react";
 
@@ -13,7 +14,7 @@ const Questions = ({ value }: any) => {
   useEffect(() => {
     const timeOut = setTimeout(() => {
       setflag(!flag);
-    }, 10000);
+    }, 9000);
 
     return () => clearInterval(timeOut);
   }, [flag]);
@@ -23,7 +24,16 @@ const Questions = ({ value }: any) => {
       <img src={Logo} className="logo" alt="Logo" />
       <div className="containerText">
         {flag ? reponse : question}
-        <img src={Alveole} className="alveole" id="alveole" alt="Alveole" />
+        {!flag ? (
+          <object
+            type="image/svg+xml"
+            data={AlveoleAnimated}
+            className="alveole"
+            id="alveole"
+          />
+        ) : (
+          <img src={AlveoleFixed} className="alveole" alt="Alveole" />
+        )}
       </div>
     </div>
   );

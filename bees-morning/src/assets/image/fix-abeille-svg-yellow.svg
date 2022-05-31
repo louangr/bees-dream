@@ -1,0 +1,19 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1086 1050" width="1086" height="1050">
+	<title>abeille-svg</title>
+	<style>
+		.s0 { fill: #646464 } 
+		.s1 { fill: #02a114 } 
+	</style>
+	<g id="layer1">
+		<g id="g81">
+			<path id="Forme 4" class="s0" d="m177 313v-205l188-108h2l175 101h1 1l175-101h1l188 108h1v204l176 102v219l-176 102v204l-188 109h-3l-175-101h-2l-174 101h-2l-188-109-1-204-176-102v-219"/>
+		</g>
+		<path id="forme2" class="s1" d="m200 313v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m555 313v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m732 620v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m378 619v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m25 619v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m201 925v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m555 925v-189l163-95h4l162 94v191l-162 94h-4"/>
+	</g>
+</svg>

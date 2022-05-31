@@ -45,7 +45,7 @@ const Presentation = ({ idPresentoire }: any) => {
         } else if (indexQuestion === numberQuestion - 1) {
           setIndexQuestion(0);
         }
-      }, 20000);
+      }, 18000);
       return () => clearInterval(interval);
     }
   }, [documentState.state, indexQuestion, documentQuestion]);

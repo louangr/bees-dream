@@ -16,50 +16,50 @@
 			transition: all .5s;
 			fill: #FFFF;
 		}
-
-		#Forme1{
+		
+		#forme1{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 1s;
 			animation-fill-mode: forwards;
 		}
 
-		#Forme2{
+		#forme2{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 2s;
 			animation-fill-mode: forwards;
 		}
 
-		#Forme3{
+		#forme3{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 3s;
 			animation-fill-mode: forwards;
 		}
 
-		#Forme7{
+		#forme7{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 4s;
 			animation-fill-mode: forwards;
 		}
 
-		#Forme6{
+		#forme6{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 5s;
 			animation-fill-mode: forwards;
 		}
 
-		#Forme5{
+		#forme5{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 6s;
 			animation-fill-mode: forwards;
 		}
 
-		#Forme4{
+		#forme4{
 			animation-name: animeAlveole;
 			animation-duration: 2s;
 			animation-delay: 7s;
@@ -69,14 +69,14 @@
 	</style>
 	<g id="layer1">
 		<g id="g81">
-			<path id="Forme 4" class="s0" d="m177 313v-205l188-108h2l175 101h1 1l175-101h1l188 108h1v204l176 102v219l-176 102v204l-188 109h-3l-175-101h-2l-174 101h-2l-188-109-1-204-176-102v-219"/>
+			<path id="forme 4" class="s0" d="m177 313v-205l188-108h2l175 101h1 1l175-101h1l188 108h1v204l176 102v219l-176 102v204l-188 109h-3l-175-101h-2l-174 101h-2l-188-109-1-204-176-102v-219"/>
 		</g>
-		<path id="Forme1" class="s1" d="m200 313v-189l163-95h4l162 94v191l-162 94h-4"/>
-		<path id="Forme2" class="s1" d="m555 313v-189l163-95h4l162 94v191l-162 94h-4"/>
-		<path id="Forme3" class="s1" d="m732 620v-189l163-95h4l162 94v191l-162 94h-4"/>
-		<path id="Forme4" class="s1" d="m378 619v-189l163-95h4l162 94v191l-162 94h-4"/>
-		<path id="Forme5" class="s1" d="m25 619v-189l163-95h4l162 94v191l-162 94h-4"/>
-		<path id="Forme6" class="s1" d="m201 925v-189l163-95h4l162 94v191l-162 94h-4"/>
-		<path id="Forme7" class="s1" d="m555 925v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme1" class="s1" d="m200 313v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme2" class="s1" d="m555 313v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme3" class="s1" d="m732 620v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme4" class="s1" d="m378 619v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme5" class="s1" d="m25 619v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme6" class="s1" d="m201 925v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="forme7" class="s1" d="m555 925v-189l163-95h4l162 94v191l-162 94h-4"/>
 	</g>
 </svg>
