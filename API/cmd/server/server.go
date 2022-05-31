@@ -23,6 +23,7 @@ import (
 	m "internal/persistence/mongo"
 	handlerMonodose "internal/web/handler/monodose"
 	handlerUser "internal/web/handler/user"
+	"log"
 
 	"net/http"
 
@@ -37,7 +38,11 @@ func main() {
 
 	corsObj := handlers.AllowedOrigins([]string{"*"})
 
-	m.Connexion()
+	err := m.Connexion()
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
 	router := mux.NewRouter()
 
@@ -76,18 +81,16 @@ func main() {
 
 	userR.HandleFunc("", routesU.Add).Methods("POST")
 
+	userR.HandleFunc("", routesU.GetAll).Methods("GET")
+
 	userR.HandleFunc("/{id}", routesU.Get).Methods("GET")
 
 	userR.HandleFunc("/{id}", routesU.Delete).Methods("DELETE")
 
 	/*
-
-
-		//User
-
-
 		//Login
-		router.HandleFunc("/login/").Methods("POST") */
+		router.HandleFunc("/login/").Methods("POST")
+	*/
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
