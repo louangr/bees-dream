@@ -31,9 +31,6 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -55,9 +52,6 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -91,9 +85,6 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -129,9 +120,6 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -164,9 +152,6 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -186,11 +171,6 @@ func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m MonodoseRoutes) CORSVerification(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-	w.Header().Set("Toto-Test", "http://localhost:3000")
-	fmt.Print("salut ici")
-
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "%s", "ouiuiui")
 }
