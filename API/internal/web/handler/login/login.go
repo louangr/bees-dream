@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	e "internal/entities"
+	"internal/persistence/dao"
 	"io/ioutil"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginRoutes struct{}
@@ -16,27 +19,34 @@ func NewLoginRoutes() LoginRoutes {
 
 func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 
-	body, _ := ioutil.ReadAll(r.Body)
+	var auth dao.Authentification = dao.NewAuthentification()
+
+	var user e.User
 
 	var login e.Login
 
+	body, _ := ioutil.ReadAll(r.Body)
+
 	json.Unmarshal(body, &login)
 
-	fmt.Printf("%s", login)
+	user, err := auth.Authentification(login.Login)
 
-	login.HashPassword()
+	if err != nil {
+		fmt.Fprintf(w, "%s", err.Error())
+		return
+	}
 
-	fmt.Printf("%s", login)
+	password, _ := login.UnHashPassword()
 
-	fmt.Fprintf(w, "oui")
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 
-	/* 	if err != nil {
-	   		fmt.Fprint(w, err.Error())
-	   	} else {
+	if err != nil {
+		fmt.Fprintf(w, "Wrong password for login %s", user.Login)
+		return
+	}
 
-	   		js, _ := json.Marshal(res)
+	js, _ := json.Marshal(user)
 
-	   		fmt.Fprintf(w, "%s", js)
-	   	} */
+	fmt.Fprintf(w, "%s", js)
 
 }

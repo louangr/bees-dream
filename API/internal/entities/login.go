@@ -1,7 +1,13 @@
 package entities
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -26,6 +32,31 @@ func (l *Login) HashPassword() error {
 	l.Password = string(bytes)
 
 	return nil
+}
+
+func (l *Login) UnHashPassword() (string, error) {
+	privateKey, _ := ioutil.ReadFile("./configs/privatekey.pem")
+
+	cipherText, _ := base64.StdEncoding.DecodeString(l.Password)
+
+	block, _ := pem.Decode(privateKey)
+
+	if block == nil {
+		return "", fmt.Errorf("private key error!")
+	}
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return "", err
+	}
+
+	res, err := rsa.DecryptPKCS1v15(rand.Reader, priv, cipherText)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(res), nil
+
 }
 
 func (l Login) String() string {

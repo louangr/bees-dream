@@ -91,11 +91,8 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
-<<<<<<< HEAD
-=======
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
->>>>>>> 6dea4667dd9c25a539f9dbabb97739225f57f6ab
 
 	body, _ := ioutil.ReadAll(r.Body)
 
@@ -132,11 +129,8 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
-<<<<<<< HEAD
-=======
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
->>>>>>> 6dea4667dd9c25a539f9dbabb97739225f57f6ab
 
 	vars := mux.Vars(r)
 
@@ -195,7 +189,8 @@ func (m MonodoseRoutes) CORSVerification(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 	w.Header().Set("Toto-Test", "http://localhost:3000")
+	fmt.Print("salut ici")
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "%s", "")
+	fmt.Fprintf(w, "%s", "ouiuiui")
 }

@@ -74,7 +74,7 @@ func main() {
 	monodoseR.HandleFunc("", MiddlewareJson(routesM.Update)).Methods("PUT")
 
 	//CORSVerification
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.CORSVerification)).Methods("OPTIONS")
+	monodoseR.HandleFunc("", routesM.CORSVerification).Methods("OPTIONS")
 
 	//User
 
