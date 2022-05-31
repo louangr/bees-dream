@@ -25,7 +25,7 @@ golang:build:
     paths:
       - "./$FOLDER_API/dist/$API_NAME"
   script:
-    - cd $FOLDER_API && ./cmd/script/build.sh
+    - ./cmd/script/build.sh
 
 golang:test:
   stage: test
