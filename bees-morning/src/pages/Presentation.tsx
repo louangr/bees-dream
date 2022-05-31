@@ -161,25 +161,4 @@ function EventSliceType1(slice: any) {
   );
 }
 
-function EventSliceType2(slice: any) {
-  return (
-    <Carousel.Item>
-      <section className="slice-type-1">
-        <div className="left-info">
-          <div className="content">
-            <PrismicRichText field={slice.primary.left_text} />
-          </div>
-        </div>
-        <div className="line-break" />
-        <div className="right-info">
-          <div className="content">
-            Text
-            <PrismicRichText field={slice.primary.right_text} />
-          </div>
-        </div>
-      </section>
-    </Carousel.Item>
-  );
-}
-
 export default Presentation;
