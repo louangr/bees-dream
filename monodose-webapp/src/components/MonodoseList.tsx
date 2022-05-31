@@ -30,7 +30,7 @@ const columns: readonly Column[] = [
 // TODO: random data, remove them after connecting the list to API
 const rows: Monodose[] = [
     {
-        id: '1',
+        id: 1,
         beekeeper: {
             firstname: 'FirstName',
             lastname: 'LastName',
