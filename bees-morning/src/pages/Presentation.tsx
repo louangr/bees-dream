@@ -10,7 +10,7 @@ const Presentation = () => {
   const [index, setIndex] = useState(0);
 
   const handleSelect = (selectedIndex: number, e: any) => {
-    setIndex(0);
+    setIndex(selectedIndex);
   };
 
   function TextSliceType1(slice: any) {
