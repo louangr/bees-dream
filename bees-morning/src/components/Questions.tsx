@@ -12,7 +12,6 @@ const Questions = ({ value }: any) => {
 
   useEffect(() => {
     const timeOut = setTimeout(() => {
-      console.log(flag);
       setflag(!flag);
     }, 10000);
 
