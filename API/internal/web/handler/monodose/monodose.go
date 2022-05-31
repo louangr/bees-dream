@@ -172,5 +172,7 @@ func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 func (m MonodoseRoutes) CORSVerification(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "%s", "ouiuiui")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+	fmt.Fprintf(w, "%s", "{}")
 }
