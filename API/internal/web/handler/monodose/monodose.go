@@ -57,7 +57,7 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", r.URL.String())
+	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	vars := mux.Vars(r)
