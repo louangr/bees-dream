@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -32,6 +33,10 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
+	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -54,6 +59,10 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
+	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -74,6 +83,13 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 // ---
 // summary: Create a new monodose
 // description: If the request body format is not correct, a 400 status code will be returned
+// parameters:
+// - name: monodose
+//   in: body
+//   description: monodose to add
+//   schema:
+//     "$ref": "#/definitions/Monodose"
+//   required: true
 // responses:
 //   "200":
 //     "$ref": "#/responses/genericResponse"
@@ -81,6 +97,10 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
+	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -117,6 +137,10 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
+	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
@@ -136,6 +160,13 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 // ---
 // summary: Update an existing monodose
 // description: If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
+// parameters:
+// - name: monodose
+//   in: body
+//   description: monodose to update
+//   schema:
+//     "$ref": "#/definitions/Monodose"
+//   required: true
 // responses:
 //   "200":
 //     "$ref": "#/responses/genericResponse"
@@ -143,6 +174,9 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	hostname := fmt.Sprintf("%s://%s", strings.ToLower(strings.Split(r.Proto, "/")[0]), r.Host)
+	w.Header().Set("Access-Control-Allow-Origin", hostname)
+	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 
 	body, _ := ioutil.ReadAll(r.Body)
 

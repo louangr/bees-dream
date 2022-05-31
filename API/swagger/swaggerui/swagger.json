@@ -19,7 +19,6 @@
     },
     "version": "1.0.0"
   },
-  "basePath": "/",
   "paths": {
     "/monodose": {
       "get": {
@@ -42,6 +41,17 @@
         ],
         "summary": "Update an existing monodose",
         "operationId": "Update",
+        "parameters": [
+          {
+            "description": "monodose to update",
+            "name": "monodose",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Monodose"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/genericResponse"
@@ -58,6 +68,17 @@
         ],
         "summary": "Create a new monodose",
         "operationId": "Add",
+        "parameters": [
+          {
+            "description": "monodose to add",
+            "name": "monodose",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Monodose"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/genericResponse"
@@ -127,7 +148,7 @@
       "properties": {
         "company": {
           "type": "string",
-          "x-go-name": "Compagny"
+          "x-go-name": "Company"
         },
         "firstname": {
           "type": "string",
@@ -147,11 +168,11 @@
           "type": "string",
           "x-go-name": "Dluo"
         },
-        "endOfProduction": {
+        "endofproduction": {
           "type": "string",
           "x-go-name": "EndOfProduction"
         },
-        "make": {
+        "startofproduction": {
           "type": "string",
           "x-go-name": "Make"
         }
@@ -167,7 +188,7 @@
         "dates": {
           "$ref": "#/definitions/Date"
         },
-        "honeyVariety": {
+        "honeyvariety": {
           "type": "string",
           "x-go-name": "HoneyVariety"
         },

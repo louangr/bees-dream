@@ -6,7 +6,6 @@
 //
 //	Schemes: http, https
 //	Version: 1.0.0
-//	BasePath: /
 //	Contact: 21Team <by@carrier.pigeon>
 //
 //	Consumes:
@@ -27,8 +26,6 @@ import (
 
 	"net/http"
 
-	"github.com/gorilla/handlers"
-
 	"github.com/gorilla/mux"
 )
 
@@ -36,7 +33,8 @@ func main() {
 
 	const port string = "8080"
 
-	corsObj := handlers.AllowedOrigins([]string{"*"})
+	// corsObj := handlers.AllowedOrigins([]string{"*"})
+	// methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
 
 	err := m.Connexion()
 
@@ -94,5 +92,6 @@ func main() {
 
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 
-	http.ListenAndServe(":"+port, handlers.CORS(corsObj)(router))
+	// http.ListenAndServe(":"+port, handlers.CORS(corsObj, methodsOk)(router))
+	http.ListenAndServe(":"+port, router)
 }
