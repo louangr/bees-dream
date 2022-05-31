@@ -9,6 +9,7 @@
     "@mui/lab": "^5.0.0-alpha.83",
     "@mui/material": "^5.8.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.4",
+    "@openapitools/openapi-generator-cli": "^2.5.1",
     "@types/jest": "^27.5.1",
     "@types/node": "^16.11.36",
     "@types/react": "^18.0.9",
