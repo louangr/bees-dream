@@ -92,16 +92,14 @@ func (d *Dao[T]) Exist(id int) bool {
 
 	if err == nil {
 
-		var monodose T
+		var item T
 
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
-		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&monodose)
+		coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&item)
 
-		if err != nil {
-			if err == mongo.ErrNoDocuments {
-				return false
-			}
+		if item.GetId() == 0 {
+			return false
 		}
 
 		return true
@@ -160,7 +158,6 @@ func (d *Dao[T]) Create(item T) (T, error) {
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
 		_, err := coll.InsertOne(context.TODO(), item)
-
 		if err != nil {
 			return empty, fmt.Errorf("Can't insert object %s with id %d in database", collection, id)
 		}

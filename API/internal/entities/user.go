@@ -3,17 +3,17 @@ package entities
 import "fmt"
 
 type Information struct {
-	FirstName string `json:"firstname"`
-	LastName  string `json:"lastname"`
-	Company   string `json:"company"`
+	FirstName string `json:"firstname" bson:"FirstName"`
+	LastName  string `json:"lastname" bson:"LastName"`
+	Company   string `json:"company" bson:"Company"`
 }
 
 type User struct {
-	Id           int         `json:"id"`
-	Informations Information `json:"informations"`
-	Role         string      `json:"role"`
-	Login        string      `json:"login"`
-	Password     string      `json:"password"`
+	Id           int         `json:"id" bson:"Id"`
+	Informations Information `json:"informations" bson:"Informations"`
+	Role         string      `json:"role" bson:"Role"`
+	Login        string      `json:"login" bson:"Login"`
+	Password     string      `json:"password" bson:"Password"`
 }
 
 func NewUser(id int, informations Information, role string, login string, password string) User {
