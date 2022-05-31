@@ -25,9 +25,8 @@ golang:build:
     paths:
       - "./$FOLDER_API/dist/$API_NAME"
   script:
-    - ls -la
+    - RUN apk update && apk add bash
     - cd $FOLDER_API
-    - ls -la
     - ./cmd/script/build.sh
 
 golang:test:
