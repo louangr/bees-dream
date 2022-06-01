@@ -15,7 +15,6 @@ const MonodosePage: React.FC = () => {
     const [data, setData] = useState<any>()
     
     useEffect(() => {
-        
         window.setTimeout(() => {fetchInfoMonodose().then( (infos:Monodose) => {
             setData(infos);
         })},2000)

@@ -26,10 +26,10 @@
     }
 
     .alveole {
-        min-width: 600px;
+        min-width: 800px;
         width: 50vw;
         height: 50vw;
-        min-height: 600px;
+        min-height: 800px;
         text-align: center;
     
         display: grid;
@@ -79,7 +79,7 @@
 }
 
 /*------------------------mobile screen--------------------------------------------------------*/
-@media (max-width:800px){
+@media only screen and (max-width:800px) and (orientation: portrait){
 
     .background-container
     {
