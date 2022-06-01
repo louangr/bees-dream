@@ -1,6 +1,6 @@
 variables:
   GO_VERSION: "1.18"
-  API_NAME: "api-bee"
+  API_NAME: "api-bee-dream"
   CLIENT_NAME: "client-bee-dream"
   FOLDER_API: "API"
   TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:latest
