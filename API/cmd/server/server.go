@@ -65,7 +65,7 @@ func main() {
 	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	routesL := hLogin.NewLoginRoutes()
-	router.HandleFunc("/login", routesL.Connexion).Methods("POST")
+	router.HandleFunc("/login", HeadersMiddleware(routesL.Connexion)).Methods("POST")
 	router.HandleFunc("/login", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	fs := http.FileServer(http.Dir("./swagger/swaggerui"))
