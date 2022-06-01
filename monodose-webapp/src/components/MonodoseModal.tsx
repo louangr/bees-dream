@@ -1,4 +1,5 @@
 import * as React from 'react'
+import "../bufferprocess"
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -6,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Button } from '@mui/material';
 import { Role } from '../models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Monodose } from '../models/Monodose'
@@ -13,7 +15,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { fr } from 'date-fns/locale';
-import QRCode from 'qrcode.react'
+import QRCode from 'qrcode.react';
+import { Document, Page, Image, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
 
 export enum MonodoseModalMode {
   Edition,
@@ -27,20 +30,6 @@ interface MonodoseModalProps {
   handleClose: () => void
 }
 
-function qr_urlImg(idQr: string) {
-  var canvas = document.getElementById(idQr) as HTMLCanvasElement;
-
-  return canvas.toDataURL("image/png");
-}
-
-
-function download_qr(idQr: string) {
-  var img = qr_urlImg(idQr);
-  var link = document.createElement('a');
-  link.download = idQr + ".png";
-  link.href = img;
-  link.click();
-}
 
 const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOpen, handleClose }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
@@ -50,7 +39,49 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
   const [productionEndDate, setProductionEndDate] = React.useState<Date | null | undefined>(null)
   const [dluoDate, setDluoDate] = React.useState<Date | null | undefined>(null)
   const [role, setRole] = React.useState<Role>(Role.BeeKeeper)
-  const [qrvalue, setQrvalue] = React.useState<string | undefined>(undefined)
+  const [qrvalue, setQrvalue] = React.useState<string>('')
+
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+    },
+
+    section: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: "center",
+    },
+    imageParent: {
+
+      marginTop: 10,
+      marginBottom: 0,
+      marginHorizontal: 5,
+      width: 60,
+      height: 60,
+    },
+    imageEnfant: {
+      marginVertical: 15,
+      marginHorizontal: 10,
+      width: 50,
+      height: 50,
+    },
+  });
+
+  const DocPDF = () => (<Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Image style={styles.imageParent}
+          source={() => qr_urlImg("QRCodeParent")} />
+        {
+          Array(159).fill(1).map(() => (
+            <Image style={styles.imageEnfant}
+              source={() => qr_urlImg("QRCodeEnfant")} />
+          ))
+        }
+      </View>
+    </Page>
+  </Document>);
+
 
   const onSubmitButton = () => {
     if (mode === MonodoseModalMode.Edition) {
@@ -65,14 +96,32 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
       // TODO: POST to API to add monodose
 
       //setQrvalue(monodose?.id)
-      setQrvalue('1') //tmp
-      download_qr("QRCodeParent")
-      download_qr("QRCodeEnfant")
+      //tmp
+
+      if (qrvalue == '') {
+        setQrvalue('1')
+      }
+      console.log(qrvalue)
+      download_qr("BtnPDF")
+
+
       setIsLoading(false)
     }
 
     // TODO: according to the result API, close the modal or display error message
     handleClose()
+  }
+
+  const qr_urlImg = (idQr: string) => {
+    var canvas = document.getElementById(idQr) as HTMLCanvasElement;
+
+    return canvas.toDataURL("image/png");
+  }
+
+
+  const download_qr = (idQr: string) => {
+    var btn = document.getElementById(idQr) as HTMLButtonElement;
+    btn.click();
   }
 
   return (
@@ -206,6 +255,14 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
             size={50}
             value={"http://localhost:3000?id=" + qrvalue}
           />
+          <PDFDownloadLink document={<DocPDF />} fileName="qrcodes.pdf">
+            <Button
+              id="BtnPDF"
+            >
+              Télécharger en PDF
+            </Button>
+          </PDFDownloadLink>
+
         </div>
 
       </DialogContent>
