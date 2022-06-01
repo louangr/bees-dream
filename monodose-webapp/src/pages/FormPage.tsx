@@ -9,6 +9,7 @@ import { Monodose } from '../models/Monodose'
 import SaveIcon from '@mui/icons-material/Save'
 import LoadingButton from '@mui/lab/LoadingButton'
 import moment from 'moment'
+import MessageAlert from '../components/MessageAlert'
 
 const FormPage: React.FC = () => {
 
@@ -19,6 +20,8 @@ const FormPage: React.FC = () => {
   const [dluoDate, setDluoDate] = React.useState<Date | null>(null)
   const [honeyVariety, setHoneyVariety] = React.useState<string>('')
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isAlertOpen, setIsAlertOpen] = React.useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = React.useState<string>('')
 
   const onSubmitButtonClick = () => {
 
@@ -70,10 +73,17 @@ const FormPage: React.FC = () => {
     const queryParams = new URLSearchParams(window.location.search)
     const id = queryParams.get('id')
 
+    // TODO 
     fetch(`http://167.99.83.46:8080/monodose/${id}`)
-      .then((res) => res.json())
-      .then((result) => {
-        setMonodose(result)
+      .then(async (result) => {
+        try {
+          const data = await result.json()
+          setMonodose(data)
+        } catch (error) {
+          setIsAlertOpen(true)
+          setAlertMessage('Erreur')
+        }
+
       })
 
   }, [])
@@ -198,7 +208,13 @@ const FormPage: React.FC = () => {
 
       ) : (
         <>
-          Aucune monodose trouvée
+          <MessageAlert
+            isOpen={isAlertOpen}
+            onClose={() => setIsAlertOpen(false)}
+            message={alertMessage}
+            isClosable={false}
+            isAutoHidden={false}
+            type='error' />
         </>
       )
 
