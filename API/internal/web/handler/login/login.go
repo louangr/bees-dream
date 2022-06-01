@@ -17,6 +17,24 @@ func NewLoginRoutes() LoginRoutes {
 	return LoginRoutes{}
 }
 
+// swagger:operation POST /login login Login
+// ---
+// summary: Ask for login
+// description: Ask for login by send Login object in the request body
+// parameters:
+// - name: login
+//   in: body
+//   description: login info to check
+//   schema:
+//     "$ref": "#/definitions/Login"
+//   required: true
+// responses:
+//   "200":
+//     "$ref": "#/responses/userStruct"
+//   "404":
+//     "$ref": "#/responses/errorsJson"
+//   "500":
+//     "$ref": "#/responses/errorsJson"
 func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 
 	var auth dao.Authentification = dao.NewAuthentification()

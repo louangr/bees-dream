@@ -20,6 +20,38 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/login": {
+      "post": {
+        "description": "Ask for login by send Login object in the request body",
+        "tags": [
+          "login"
+        ],
+        "summary": "Ask for login",
+        "operationId": "Login",
+        "parameters": [
+          {
+            "description": "login info to check",
+            "name": "login",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userStruct"
+          },
+          "404": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
+          }
+        }
+      }
+    },
     "/monodose": {
       "get": {
         "description": "If the are not monodoses, an empty array will be returned",
@@ -27,10 +59,13 @@
           "monodose"
         ],
         "summary": "Return all monodoses",
-        "operationId": "GetAll",
+        "operationId": "GetAllMonodoses",
         "responses": {
           "200": {
             "$ref": "#/responses/monodoseStructArray"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
           }
         }
       },
@@ -40,7 +75,7 @@
           "monodose"
         ],
         "summary": "Update an existing monodose",
-        "operationId": "Update",
+        "operationId": "UpdateMonodose",
         "parameters": [
           {
             "description": "monodose to update",
@@ -54,9 +89,12 @@
         ],
         "responses": {
           "200": {
+            "$ref": "#/responses/monodoseStruct"
+          },
+          "404": {
             "$ref": "#/responses/errorsJson"
           },
-          "400": {
+          "500": {
             "$ref": "#/responses/errorsJson"
           }
         }
@@ -67,7 +105,7 @@
           "monodose"
         ],
         "summary": "Create a new monodose",
-        "operationId": "Add",
+        "operationId": "AddMonodose",
         "parameters": [
           {
             "description": "monodose to add",
@@ -81,9 +119,12 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/monodoseStruct"
           },
           "400": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
             "$ref": "#/responses/errorsJson"
           }
         }
@@ -96,7 +137,7 @@
           "monodose"
         ],
         "summary": "Return a monodose by Id",
-        "operationId": "Get",
+        "operationId": "GetMonodoseById",
         "parameters": [
           {
             "type": "string",
@@ -112,6 +153,9 @@
           },
           "404": {
             "$ref": "#/responses/errorsJson"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
           }
         }
       },
@@ -121,7 +165,7 @@
           "monodose"
         ],
         "summary": "Delete a monodose by Id",
-        "operationId": "Delete",
+        "operationId": "DeleteMonodoseById",
         "parameters": [
           {
             "type": "string",
@@ -133,9 +177,148 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/monodoseStruct"
           },
           "404": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "description": "If the are not users, an empty array will be returned",
+        "tags": [
+          "user"
+        ],
+        "summary": "Return all users",
+        "operationId": "GetAllUsers",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userStructArray"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
+          }
+        }
+      },
+      "put": {
+        "description": "If the request body format is not correct or the target user Id is not found, a 400 status code will be returned",
+        "tags": [
+          "user"
+        ],
+        "summary": "Update an existing user",
+        "operationId": "UpdateUser",
+        "parameters": [
+          {
+            "description": "user to update",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userStruct"
+          },
+          "404": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
+          }
+        }
+      },
+      "post": {
+        "description": "If the request body format is not correct, a 400 status code will be returned",
+        "tags": [
+          "user"
+        ],
+        "summary": "Create a new user",
+        "operationId": "AddUser",
+        "parameters": [
+          {
+            "description": "user to add",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userStruct"
+          },
+          "400": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "description": "If the user is not found, a 404 status code will be returned",
+        "tags": [
+          "user"
+        ],
+        "summary": "Return a user by Id",
+        "operationId": "GetUserById",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "correspond to the user's Id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userStruct"
+          },
+          "404": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
+            "$ref": "#/responses/errorsJson"
+          }
+        }
+      },
+      "delete": {
+        "description": "If the user is not found, a 404 status code will be returned",
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete a user by Id",
+        "operationId": "DeleteUserById",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "correspond to the user's Id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userStruct"
+          },
+          "404": {
+            "$ref": "#/responses/errorsJson"
+          },
+          "500": {
             "$ref": "#/responses/errorsJson"
           }
         }
@@ -184,6 +367,38 @@
       },
       "x-go-package": "internal/entities"
     },
+    "Information": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string",
+          "x-go-name": "Company"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        }
+      },
+      "x-go-package": "internal/entities"
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        }
+      },
+      "x-go-package": "internal/entities"
+    },
     "Monodose": {
       "type": "object",
       "properties": {
@@ -208,6 +423,32 @@
         }
       },
       "x-go-package": "internal/entities"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Id"
+        },
+        "informations": {
+          "$ref": "#/definitions/Information"
+        },
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "role": {
+          "type": "string",
+          "x-go-name": "Role"
+        }
+      },
+      "x-go-package": "internal/entities"
     }
   },
   "responses": {
@@ -228,6 +469,12 @@
         }
       }
     },
+    "loginStruct": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Login"
+      }
+    },
     "monodoseStruct": {
       "description": "",
       "schema": {
@@ -240,6 +487,15 @@
         "type": "array",
         "items": {
           "$ref": "#/definitions/Monodose"
+        }
+      }
+    },
+    "userStructArray": {
+      "description": "",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/User"
         }
       }
     }

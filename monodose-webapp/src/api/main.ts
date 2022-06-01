@@ -1,4 +1,4 @@
-import { MonodoseApi } from "./apis"
+import { LoginApi, MonodoseApi, UserApi } from "./apis"
 import { Configuration } from "./runtime"
 
 const configuration = new Configuration({
@@ -6,3 +6,5 @@ const configuration = new Configuration({
 })
 
 export const MonodoseApiClient: MonodoseApi = new MonodoseApi(configuration)
+export const UserApiClient: UserApi = new UserApi(configuration)
+export const LoginApiClient: LoginApi = new LoginApi(configuration)
