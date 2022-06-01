@@ -74,8 +74,3 @@ func main() {
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
 	http.ListenAndServe(":"+port, router)
 }
-
-func CORSVerification(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "%s", "{}")
-}

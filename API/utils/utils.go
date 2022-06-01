@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"internal/persistence/types"
 	"net/http"
 
@@ -49,4 +50,9 @@ func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 		w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 		handler(w, r)
 	}
+}
+
+func CORSVerification(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "%s", "{}")
 }

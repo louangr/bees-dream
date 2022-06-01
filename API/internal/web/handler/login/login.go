@@ -5,6 +5,7 @@ import (
 	"fmt"
 	e "internal/entities"
 	"internal/persistence/dao"
+	"internal/persistence/errors"
 	"io/ioutil"
 	"net/http"
 
@@ -19,34 +20,42 @@ func NewLoginRoutes() LoginRoutes {
 
 func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 
-	var auth dao.Authentification = dao.NewAuthentification()
-
 	var user e.User
 
 	var login e.Login
+
+	var messageError string
+
+	var auth dao.Authentification = dao.NewAuthentification()
 
 	body, _ := ioutil.ReadAll(r.Body)
 
 	json.Unmarshal(body, &login)
 
-	user, err := auth.Authentification(login.Login)
+	user, errAuth := auth.Authentification(login.Login)
 
-	if err != nil {
-		fmt.Fprintf(w, "%s", err.Error())
-		return
+	if !errAuth.IsNil() {
+		w.WriteHeader(errAuth.Code)
+
+		fmt.Fprintf(w, "%s", errAuth.ToJson())
+	} else {
+		password, _ := login.UnHashPassword()
+
+		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+		if err != nil {
+
+			messageError = fmt.Sprintf("Wrong password for login %s", user.Login)
+			errAuth = errors.NewError(401, messageError)
+
+			w.WriteHeader(errAuth.Code)
+			fmt.Fprintf(w, "%s", errAuth.ToJson())
+			return
+		}
+
+		js, _ := json.Marshal(user)
+
+		fmt.Fprintf(w, "%s", js)
 	}
-
-	password, _ := login.UnHashPassword()
-
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-
-	if err != nil {
-		fmt.Fprintf(w, "Wrong password for login %s", user.Login)
-		return
-	}
-
-	js, _ := json.Marshal(user)
-
-	fmt.Fprintf(w, "%s", js)
 
 }
