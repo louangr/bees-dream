@@ -26,8 +26,8 @@
     }
 
     .alveole {
-        width: 690px;
-        height: 660px;
+        width: 600px;
+        height: 600px;
         text-align: center;
     
         display: grid;
@@ -78,9 +78,10 @@
 
 /*------------------------mobile screen--------------------------------------------------------*/
 @media (max-width:800px){
+
     .background-container
     {
-        background-color: black;
+        background-image: none;
         width: 100%;
         height: 100%;
     }
