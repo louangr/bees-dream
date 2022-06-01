@@ -41,9 +41,10 @@ func StructToBson[T types.Collection](data T) bson.D {
 
 }
 
-func MiddlewareJson(handler http.HandlerFunc) http.HandlerFunc {
+func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
 		handler(w, r)
