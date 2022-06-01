@@ -49,7 +49,7 @@ export interface Monodose {
      * @type {string}
      * @memberof Monodose
      */
-    honeyVariety?: string;
+    honeyvariety?: string;
     /**
      * 
      * @type {number}
@@ -76,7 +76,7 @@ export function MonodoseFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         
         'beekeeper': !exists(json, 'beekeeper') ? undefined : BeekeeperFromJSON(json['beekeeper']),
         'dates': !exists(json, 'dates') ? undefined : ModelDateFromJSON(json['dates']),
-        'honeyVariety': !exists(json, 'honeyVariety') ? undefined : json['honeyVariety'],
+        'honeyvariety': !exists(json, 'honeyvariety') ? undefined : json['honeyvariety'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'location': !exists(json, 'location') ? undefined : json['location'],
     };
@@ -93,7 +93,7 @@ export function MonodoseToJSON(value?: Monodose | null): any {
         
         'beekeeper': BeekeeperToJSON(value.beekeeper),
         'dates': ModelDateToJSON(value.dates),
-        'honeyVariety': value.honeyVariety,
+        'honeyvariety': value.honeyvariety,
         'id': value.id,
         'location': value.location,
     };

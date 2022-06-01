@@ -24,7 +24,9 @@ const MonodosePage: React.FC = () => {
     return (
         <div className='background-container'>
         <div className='monodose-page-container'>
-            {data ? <div className='alveole'>
+            {data ?
+            
+            <div className='alveole'>
                 <img src={Logo} className='logo'/>
                 <Info icon={Apiculteur} description={'Apiculteur'} informations={[data.beekeeper.firstname+' '+data.beekeeper.lastname,data.beekeeper.company,data.beekeeper.age+' ans']} className='apiculteur'/>
                 <Info icon={Localisation} description='Localisation' informations={[data.location]} className='localisation'/>

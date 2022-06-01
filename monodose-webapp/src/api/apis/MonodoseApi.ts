@@ -27,8 +27,16 @@ export interface DeleteRequest {
     id: string;
 }
 
+export interface AddRequest {
+    monodose: Monodose;
+}
+
 export interface GetRequest {
     id: string;
+}
+
+export interface UpdateRequest {
+    monodose: Monodose;
 }
 
 /**
@@ -72,16 +80,23 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the request body format is not correct, a 400 status code will be returned
      * Create a new monodose
      */
-    async addRaw(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
+    async addRaw(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
+        if (requestParameters.monodose === null || requestParameters.monodose === undefined) {
+            throw new runtime.RequiredError('monodose','Required parameter requestParameters.monodose was null or undefined when calling add.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
             path: `/monodose`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: MonodoseToJSON(requestParameters.monodose),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => Update200ResponseFromJSON(jsonValue));
@@ -91,8 +106,8 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the request body format is not correct, a 400 status code will be returned
      * Create a new monodose
      */
-    async add(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
-        const response = await this.addRaw(initOverrides);
+    async add(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
+        const response = await this.addRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -160,16 +175,23 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
      * Update an existing monodose
      */
-    async updateRaw(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
+    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
+        if (requestParameters.monodose === null || requestParameters.monodose === undefined) {
+            throw new runtime.RequiredError('monodose','Required parameter requestParameters.monodose was null or undefined when calling update.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
             path: `/monodose`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
+            body: MonodoseToJSON(requestParameters.monodose),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => Update200ResponseFromJSON(jsonValue));
@@ -179,8 +201,8 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
      * Update an existing monodose
      */
-    async update(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
-        const response = await this.updateRaw(initOverrides);
+    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
+        const response = await this.updateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
