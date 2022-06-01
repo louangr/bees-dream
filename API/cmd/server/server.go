@@ -46,25 +46,25 @@ func main() {
 
 	routesM := hMonodose.NewMonodoseRoutes()
 	monodoseR := router.PathPrefix("/monodose").Subrouter()
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.GetAll)).Methods("GET")
-	monodoseR.HandleFunc("/{id:[0-9]+}", MiddlewareJson(routesM.Get)).Methods("GET")
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.Add)).Methods("POST")
-	monodoseR.HandleFunc("", MiddlewareJson(routesM.Update)).Methods("PUT")
-	monodoseR.HandleFunc("/{id:[0-9]+}", MiddlewareJson(routesM.Delete)).Methods("DELETE")
-	monodoseR.HandleFunc("", MiddlewareJson(CORSVerification)).Methods("OPTIONS")
+	monodoseR.HandleFunc("", HeadersMiddleware(routesM.GetAll)).Methods("GET")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Get)).Methods("GET")
+	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Add)).Methods("POST")
+	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Update)).Methods("PUT")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Delete)).Methods("DELETE")
+	monodoseR.HandleFunc("", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	routesU := hUser.NewUserRoutes()
 	userR := router.PathPrefix("/user").Subrouter()
-	userR.HandleFunc("", MiddlewareJson(routesU.GetAll)).Methods("GET")
-	userR.HandleFunc("/{id:[0-9]+}", MiddlewareJson(routesU.Get)).Methods("GET")
-	userR.HandleFunc("", MiddlewareJson(routesU.Add)).Methods("POST")
-	userR.HandleFunc("", MiddlewareJson(routesU.Update)).Methods("PUT")
-	userR.HandleFunc("/{id:[0-9]+}", MiddlewareJson(routesU.Delete)).Methods("DELETE")
-	userR.HandleFunc("", MiddlewareJson(CORSVerification)).Methods("OPTIONS")
+	userR.HandleFunc("", HeadersMiddleware(routesU.GetAll)).Methods("GET")
+	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesU.Get)).Methods("GET")
+	userR.HandleFunc("", HeadersMiddleware(routesU.Add)).Methods("POST")
+	userR.HandleFunc("", HeadersMiddleware(routesU.Update)).Methods("PUT")
+	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesU.Delete)).Methods("DELETE")
+	userR.HandleFunc("", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	routesL := hLogin.NewLoginRoutes()
 	router.HandleFunc("/login", routesL.Connexion).Methods("POST")
-	router.HandleFunc("/login", MiddlewareJson(CORSVerification)).Methods("OPTIONS")
+	router.HandleFunc("/login", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	fs := http.FileServer(http.Dir("./swagger/swaggerui"))
 	router.PathPrefix("/swaggerui/").Handler(http.StripPrefix("/swaggerui/", fs))
@@ -75,11 +75,5 @@ func main() {
 
 func CORSVerification(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
-
-	fmt.Println(w.Header())
-
-	fmt.Fprintf(w, "%s", "{dddd}")
+	fmt.Fprintf(w, "%s", "{}")
 }
