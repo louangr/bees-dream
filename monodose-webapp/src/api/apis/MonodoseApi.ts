@@ -15,27 +15,27 @@
 
 import * as runtime from '../runtime';
 import {
+    Login404Response,
+    Login404ResponseFromJSON,
+    Login404ResponseToJSON,
     Monodose,
     MonodoseFromJSON,
     MonodoseToJSON,
-    Update200Response,
-    Update200ResponseFromJSON,
-    Update200ResponseToJSON,
 } from '../models';
 
-export interface DeleteRequest {
-    id: string;
-}
-
-export interface AddRequest {
+export interface AddMonodoseRequest {
     monodose: Monodose;
 }
 
-export interface GetRequest {
+export interface DeleteMonodoseByIdRequest {
     id: string;
 }
 
-export interface UpdateRequest {
+export interface GetMonodoseByIdRequest {
+    id: string;
+}
+
+export interface UpdateMonodoseRequest {
     monodose: Monodose;
 }
 
@@ -45,44 +45,12 @@ export interface UpdateRequest {
 export class MonodoseApi extends runtime.BaseAPI {
 
     /**
-     * If the monodose is not found, a 404 status code will be returned
-     * Delete a monodose by Id
-     */
-    async _deleteRaw(requestParameters: DeleteRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling _delete.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/monodose/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => Update200ResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * If the monodose is not found, a 404 status code will be returned
-     * Delete a monodose by Id
-     */
-    async _delete(requestParameters: DeleteRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
-        const response = await this._deleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * If the request body format is not correct, a 400 status code will be returned
      * Create a new monodose
      */
-    async addRaw(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
+    async addMonodoseRaw(requestParameters: AddMonodoseRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Monodose>> {
         if (requestParameters.monodose === null || requestParameters.monodose === undefined) {
-            throw new runtime.RequiredError('monodose','Required parameter requestParameters.monodose was null or undefined when calling add.');
+            throw new runtime.RequiredError('monodose','Required parameter requestParameters.monodose was null or undefined when calling addMonodose.');
         }
 
         const queryParameters: any = {};
@@ -99,15 +67,75 @@ export class MonodoseApi extends runtime.BaseAPI {
             body: MonodoseToJSON(requestParameters.monodose),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => Update200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => MonodoseFromJSON(jsonValue));
     }
 
     /**
      * If the request body format is not correct, a 400 status code will be returned
      * Create a new monodose
      */
-    async add(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
-        const response = await this.addRaw(requestParameters, initOverrides);
+    async addMonodose(requestParameters: AddMonodoseRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Monodose> {
+        const response = await this.addMonodoseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * If the monodose is not found, a 404 status code will be returned
+     * Delete a monodose by Id
+     */
+    async deleteMonodoseByIdRaw(requestParameters: DeleteMonodoseByIdRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Monodose>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteMonodoseById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/monodose/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MonodoseFromJSON(jsonValue));
+    }
+
+    /**
+     * If the monodose is not found, a 404 status code will be returned
+     * Delete a monodose by Id
+     */
+    async deleteMonodoseById(requestParameters: DeleteMonodoseByIdRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Monodose> {
+        const response = await this.deleteMonodoseByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * If the are not monodoses, an empty array will be returned
+     * Return all monodoses
+     */
+    async getAllMonodosesRaw(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Array<Monodose>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/monodose`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MonodoseFromJSON));
+    }
+
+    /**
+     * If the are not monodoses, an empty array will be returned
+     * Return all monodoses
+     */
+    async getAllMonodoses(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Array<Monodose>> {
+        const response = await this.getAllMonodosesRaw(initOverrides);
         return await response.value();
     }
 
@@ -115,9 +143,9 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the monodose is not found, a 404 status code will be returned
      * Return a monodose by Id
      */
-    async getRaw(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Monodose>> {
+    async getMonodoseByIdRaw(requestParameters: GetMonodoseByIdRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Monodose>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling get.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getMonodoseById.');
         }
 
         const queryParameters: any = {};
@@ -138,36 +166,8 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the monodose is not found, a 404 status code will be returned
      * Return a monodose by Id
      */
-    async get(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Monodose> {
-        const response = await this.getRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * If the are not monodoses, an empty array will be returned
-     * Return all monodoses
-     */
-    async getAllRaw(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Array<Monodose>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/monodose`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MonodoseFromJSON));
-    }
-
-    /**
-     * If the are not monodoses, an empty array will be returned
-     * Return all monodoses
-     */
-    async getAll(initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Array<Monodose>> {
-        const response = await this.getAllRaw(initOverrides);
+    async getMonodoseById(requestParameters: GetMonodoseByIdRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Monodose> {
+        const response = await this.getMonodoseByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -175,9 +175,9 @@ export class MonodoseApi extends runtime.BaseAPI {
      * If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
      * Update an existing monodose
      */
-    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Update200Response>> {
+    async updateMonodoseRaw(requestParameters: UpdateMonodoseRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Monodose>> {
         if (requestParameters.monodose === null || requestParameters.monodose === undefined) {
-            throw new runtime.RequiredError('monodose','Required parameter requestParameters.monodose was null or undefined when calling update.');
+            throw new runtime.RequiredError('monodose','Required parameter requestParameters.monodose was null or undefined when calling updateMonodose.');
         }
 
         const queryParameters: any = {};
@@ -194,15 +194,15 @@ export class MonodoseApi extends runtime.BaseAPI {
             body: MonodoseToJSON(requestParameters.monodose),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => Update200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => MonodoseFromJSON(jsonValue));
     }
 
     /**
      * If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
      * Update an existing monodose
      */
-    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Update200Response> {
-        const response = await this.updateRaw(requestParameters, initOverrides);
+    async updateMonodose(requestParameters: UpdateMonodoseRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Monodose> {
+        const response = await this.updateMonodoseRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
