@@ -1,9 +1,9 @@
 export interface Monodose {
-    id: string
+    id: number
     beekeeper: {
         firstname: string
         lastname: string
-        company: string,
+        company: string
         age?: number
     }
     dates: {

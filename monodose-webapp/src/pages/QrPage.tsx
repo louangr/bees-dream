@@ -46,11 +46,17 @@ const QrPage: React.FC = () => {
                 <Image style={styles.imageParent}
 
                     source={() => qr_urlImg("QRCodeParent")} />
-            </View>
-            <View style={styles.section}>
-                <Image style={styles.imageEnfant}
 
-                    source={() => qr_urlImg("QRCodeEnfant")} />
+                {
+
+                    Array(100).fill(1).map(() => (
+
+                        <Image style={styles.imageEnfant}
+
+                            source={() => qr_urlImg("QRCodeEnfant")} />
+
+                    ))
+                }
             </View>
         </Page>
     </Document>);
@@ -78,7 +84,7 @@ const QrPage: React.FC = () => {
                 <Button
                     startIcon={<QrCode2Icon />}
                     variant="contained"
-                    onClick={() => { /*setQrValue('{site}/monodose/{id}');*/setQrValue('google.com'); setQrVisibility(true); }}
+                    onClick={() => { /*setQrValue('{site}/monodose/{id}');*/setQrValue('192.168.226.1:3000/?id=5'); setQrVisibility(true); }}
                 >
                     Générer QR
                 </Button>
@@ -87,7 +93,7 @@ const QrPage: React.FC = () => {
                         <p>QR Code Parent</p>
                         <QRCode
                             id="QRCodeParent"
-                            size={50}
+                            size={100}
                             value="google.fr"
                         />
                         <Button
@@ -102,7 +108,7 @@ const QrPage: React.FC = () => {
                         <p>Qr Code Enfant</p>
                         <QRCode
                             id="QRCodeEnfant"
-                            size={10}
+                            size={50}
                             value={QrValue}
                         />
                         <Button
