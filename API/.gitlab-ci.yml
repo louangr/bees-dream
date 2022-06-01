@@ -5,6 +5,8 @@ variables:
   FOLDER_API: "API"
   TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:latest
   CONTAINER_NAME: "c-golang-api"
+  IP_ADRESSE: "167.99.83.46:22"
+  PORT_ADRESSE: "8080"
   WEBHOOK_URL: "https://discord.com/api/webhooks/980753549086564392/yKCWhuKqihxVvVRmVzA7t230BmX-Anyq5DwtTVspVWeMuToQisocofSgOBlhmLfG2-zo"
 
 stages:
@@ -23,7 +25,7 @@ golang:build:
   artifacts:
     expire_in: 30 days
     paths:
-      - "./$FOLDER_API/dist/$API_NAME"
+      - "./dist/$API_NAME"
   script:
     - cd $FOLDER_API
     - ./cmd/script/build.sh
@@ -76,7 +78,8 @@ golang:test-deploy:
   script:
     - cd $FOLDER_API
     - ./cmd/script/test-prod-client.sh
-    - ./dist/$CLIENT_NAME
+    - cd ./dist
+    - ./$CLIENT_NAME $IP_ADRESSE $PORT_ADRESSE
 
 discord:notification:
   image: alpine:latest
