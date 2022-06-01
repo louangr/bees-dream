@@ -13,7 +13,7 @@ import (
 )
 
 // swagger:response loginStruct
-type swaggUserStruct struct {
+type swaggLoginStruct struct {
 	// in:body
 	Body Login
 }
