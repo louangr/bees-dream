@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"internal/persistence/types"
 	"net/http"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -44,11 +45,25 @@ func StructToBson[T types.Collection](data T) bson.D {
 
 func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.Header().Set("Access-Control-Allow-Headers", "*")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+
+		var route string = strings.Split(r.RequestURI, "/")[1]
+
+		if route != "login" {
+			err := VerifyJWT(r, w)
+
+			if !err.IsNil() {
+				w.WriteHeader(err.Code)
+				fmt.Fprintf(w, "%s", err.ToJson())
+				return
+			}
+		}
 		handler(w, r)
+
 	}
 }
 

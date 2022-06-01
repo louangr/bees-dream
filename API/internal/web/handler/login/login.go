@@ -8,6 +8,7 @@ import (
 	"internal/persistence/errors"
 	"io/ioutil"
 	"net/http"
+	"utils"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -38,28 +39,42 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(errAuth.Code)
 
 		fmt.Fprintf(w, "%s", errAuth.ToJson())
-	} else {
-		password, _ := login.UnHashPassword()
+		return
+	}
 
-		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	password, _ := login.UnHashPassword()
 
-		if err != nil {
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 
-			messageError = fmt.Sprintf("Wrong password for login %s", user.Login)
-			errAuth = errors.NewError(404, messageError)
+	if err != nil {
 
-			w.WriteHeader(errAuth.Code)
-			fmt.Fprintf(w, "%s", errAuth.ToJson())
+		messageError = fmt.Sprintf("Wrong password for login %s", user.Login)
+		errAuth = errors.NewError(404, messageError)
 
-		} else {
-
-			var logged e.Logged = e.NewLogged(user, "token")
-
-			js, _ := json.Marshal(logged)
-
-			fmt.Fprintf(w, "%s", js)
-		}
+		w.WriteHeader(errAuth.Code)
+		fmt.Fprintf(w, "%s", errAuth.ToJson())
+		return
 
 	}
+
+	token, errJ := utils.GenerateJWT(user)
+
+	if !errJ.IsNil() {
+		w.WriteHeader(errAuth.Code)
+		fmt.Fprintf(w, "%s", errJ.ToJson())
+		return
+	}
+
+	user.Password = ""
+
+	js, _ := json.Marshal(user)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "token",
+		Value:   token.Token,
+		Expires: token.Time,
+	})
+
+	fmt.Fprintf(w, "%s", js)
 
 }
