@@ -52,6 +52,12 @@ require internal/web/handler/login v1.0.0
 
 replace internal/web/handler/login => ./internal/web/handler/login
 
+//Errors
+
+require internal/persistence/errors v1.0.0
+
+replace internal/persistence/errors => ./internal/persistence/errors
+
 //Mongo dependencies
 require (
 	github.com/go-stack/stack v1.8.0 // indirect

@@ -58,8 +58,11 @@ func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
 
 	monodose, err := dao.FindById(id)
 
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
+	if !err.IsNil() {
+
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 
@@ -86,8 +89,10 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.Create(user)
 
-	if err != nil {
-		fmt.Fprint(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 
 		js, _ := json.Marshal(res)
@@ -119,8 +124,10 @@ func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 
 	monodose, err := dao.Delete(id)
 
-	if err != nil {
-		fmt.Fprint(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 		fmt.Fprintf(w, "%s", js)
@@ -147,8 +154,11 @@ func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	user, err := dao.Update(user)
 
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
+
 	} else {
 		js, _ := json.Marshal(user)
 
