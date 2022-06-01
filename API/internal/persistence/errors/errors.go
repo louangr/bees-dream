@@ -5,8 +5,17 @@ import (
 	"fmt"
 )
 
+// swagger:response errorsJson
+type swaggErrorsJson struct {
+	// in:body
+	Body struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
+}
+
 type ErrorsJson struct {
-	Code    int    `json:"Code"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 

@@ -50,7 +50,7 @@ func (u UserRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "200":
 //     "$ref": "#/responses/monodoseStruct"
 //   "404":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -77,9 +77,9 @@ func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
 // description: If the request body format is not correct, a 400 status code will be returned
 // responses:
 //   "200":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 //   "400":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 
@@ -114,9 +114,9 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 //   "404":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -141,9 +141,9 @@ func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 // description: If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
 // responses:
 //   "200":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 //   "400":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	body, _ := ioutil.ReadAll(r.Body)

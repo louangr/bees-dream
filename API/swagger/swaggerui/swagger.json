@@ -54,10 +54,10 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           },
           "400": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           }
         }
       },
@@ -81,10 +81,10 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           },
           "400": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           }
         }
       }
@@ -111,7 +111,7 @@
             "$ref": "#/responses/monodoseStruct"
           },
           "404": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           }
         }
       },
@@ -133,10 +133,10 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           },
           "404": {
-            "$ref": "#/responses/genericResponse"
+            "$ref": "#/responses/errorsJson"
           }
         }
       }
@@ -146,6 +146,11 @@
     "Beekeeper": {
       "type": "object",
       "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Age"
+        },
         "company": {
           "type": "string",
           "x-go-name": "Company"
@@ -168,11 +173,11 @@
           "type": "string",
           "x-go-name": "Dluo"
         },
-        "endofproduction": {
+        "endOfProduction": {
           "type": "string",
           "x-go-name": "EndOfProduction"
         },
-        "startofproduction": {
+        "startOfProduction": {
           "type": "string",
           "x-go-name": "Make"
         }
@@ -188,7 +193,7 @@
         "dates": {
           "$ref": "#/definitions/Date"
         },
-        "honeyvariety": {
+        "honeyVariety": {
           "type": "string",
           "x-go-name": "HoneyVariety"
         },
@@ -206,11 +211,16 @@
     }
   },
   "responses": {
-    "genericResponse": {
+    "errorsJson": {
       "description": "",
       "schema": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "Code"
+          },
           "message": {
             "type": "string",
             "x-go-name": "Message"

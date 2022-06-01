@@ -50,7 +50,7 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "200":
 //     "$ref": "#/responses/monodoseStruct"
 //   "404":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -85,9 +85,9 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 //   "400":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 
@@ -122,9 +122,9 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 //   "404":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -156,9 +156,9 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 //   "400":
-//     "$ref": "#/responses/genericResponse"
+//     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 
