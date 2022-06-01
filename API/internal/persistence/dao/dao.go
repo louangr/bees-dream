@@ -82,7 +82,7 @@ func (d *Dao[T]) FindById(id int) (T, errors.ErrorsJson) {
 		return obj, errors.ErrorsJson{}
 	}
 
-	return types.Empty(obj), errors.NewError(520, messageError)
+	return types.Empty(obj), errors.NewError(500, messageError)
 
 }
 
@@ -144,7 +144,7 @@ func (d *Dao[T]) Delete(id int) (T, errors.ErrorsJson) {
 
 	}
 
-	return empty, errors.NewError(520, messageError)
+	return empty, errors.NewError(500, messageError)
 }
 
 func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
@@ -159,7 +159,7 @@ func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 
 	if d.Exist(id) {
 		messageError = fmt.Sprintf("Object %s with id %d already exist", collection, id)
-		return empty, errors.NewError(404, messageError)
+		return empty, errors.NewError(400, messageError)
 	}
 
 	conn, err := m.GetConnexion()
@@ -170,14 +170,14 @@ func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 		_, err := coll.InsertOne(context.TODO(), item)
 		if err != nil {
 			messageError = fmt.Sprintf("Can't insert object %s with id %d in database", collection, id)
-			return empty, errors.NewError(520, messageError)
+			return empty, errors.NewError(500, messageError)
 		}
 
 		return item, errors.ErrorsJson{}
 
 	}
 
-	return empty, errors.NewError(520, messageError)
+	return empty, errors.NewError(500, messageError)
 
 }
 
@@ -210,11 +210,11 @@ func (d *Dao[T]) Update(item T) (T, errors.ErrorsJson) {
 
 		if err != nil {
 			messageError = fmt.Sprintf("Can't update object %s with id %d in database", collection, id)
-			return empty, errors.NewError(520, messageError)
+			return empty, errors.NewError(500, messageError)
 		}
 
 		return item, errors.ErrorsJson{}
 	}
 
-	return empty, errors.NewError(520, messageError)
+	return empty, errors.NewError(500, messageError)
 }

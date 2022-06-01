@@ -46,16 +46,20 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 
 			messageError = fmt.Sprintf("Wrong password for login %s", user.Login)
-			errAuth = errors.NewError(401, messageError)
+			errAuth = errors.NewError(404, messageError)
 
 			w.WriteHeader(errAuth.Code)
 			fmt.Fprintf(w, "%s", errAuth.ToJson())
-			return
+
+		} else {
+
+			var logged e.Logged = e.NewLogged(user, "token")
+
+			js, _ := json.Marshal(logged)
+
+			fmt.Fprintf(w, "%s", js)
 		}
 
-		js, _ := json.Marshal(user)
-
-		fmt.Fprintf(w, "%s", js)
 	}
 
 }

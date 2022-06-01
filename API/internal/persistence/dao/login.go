@@ -41,5 +41,5 @@ func (a Authentification) Authentification(login string) (e.User, errors.ErrorsJ
 		return user, errors.ErrorsJson{}
 	}
 
-	return e.User{}, errors.NewError(520, messageError)
+	return e.User{}, errors.NewError(500, messageError)
 }
