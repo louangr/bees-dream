@@ -17,27 +17,28 @@ type swaggMonodoseStructArray struct {
 }
 
 type Beekeeper struct {
-	LastName  string `json:"lastname"`
-	FirstName string `json:"firstname"`
-	Company   string `json:"company"`
+	LastName  string `json:"lastname" bson:"LastName"`
+	FirstName string `json:"firstname" bson:"FirstName"`
+	Company   string `json:"company" bson:"Company"`
+	Age       int    `json:"age" bson:"Age"`
 }
 
 type Date struct {
-	Dluo            string `json:"dluo"`
-	Make            string `json:"startofproduction"`
-	EndOfProduction string `json:"endofproduction"`
+	Dluo            string `json:"dluo" bson:"Dluo"`
+	Make            string `json:"startofproduction" bson:"Make"`
+	EndOfProduction string `json:"endofproduction" bson:"EndOfProduction"`
 }
 
 type Monodose struct {
-	Id           int        `json:"id"`
-	Beekeeper    *Beekeeper `json:"beekeeper"`
-	Dates        *Date      `json:"dates"`
-	Location     string     `json:"location"`
-	HoneyVariety string     `json:"honeyvariety"`
+	Id           int        `json:"id" bson:"Id"`
+	Beekeeper    *Beekeeper `json:"beekeeper" bson:"Beekeeper"`
+	Dates        *Date      `json:"dates" bson:"Dates"`
+	Location     string     `json:"location" bson:"Location"`
+	HoneyVariety string     `json:"honeyvariety" bson:"HoneyVariety"`
 }
 
-func NewBeekeeper(lastName string, firstName string, compagny string) Beekeeper {
-	return Beekeeper{lastName, firstName, compagny}
+func NewBeekeeper(lastName string, firstName string, compagny string, age int) Beekeeper {
+	return Beekeeper{lastName, firstName, compagny, age}
 }
 
 func NewDate(dluo string, make string, endOfProduction string) Date {

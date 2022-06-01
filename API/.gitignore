@@ -1,4 +1,5 @@
-dist/*
+dist/api-bee-dream
+dist/client-bee-dream
 
 .DS_STORE
-configs/*
+configs/.env

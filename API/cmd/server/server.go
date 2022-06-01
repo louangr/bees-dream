@@ -6,7 +6,6 @@
 //
 //	Schemes: http, https
 //	Version: 1.0.0
-//	BasePath: /
 //	Contact: 21Team <by@carrier.pigeon>
 //
 //	Consumes:
@@ -21,12 +20,14 @@ package main
 import (
 	"fmt"
 	m "internal/persistence/mongo"
-	handlerMonodose "internal/web/handler/monodose"
-	handlerUser "internal/web/handler/user"
+	hLogin "internal/web/handler/login"
+	hMonodose "internal/web/handler/monodose"
+	hUser "internal/web/handler/user"
+
+	"log"
+	. "utils"
 
 	"net/http"
-
-	"github.com/gorilla/handlers"
 
 	"github.com/gorilla/mux"
 )
@@ -35,59 +36,46 @@ func main() {
 
 	const port string = "8080"
 
-	corsObj := handlers.AllowedOrigins([]string{"*"})
+	err := m.Connexion()
 
-	m.Connexion()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 
-	//Swagger
+	routesM := hMonodose.NewMonodoseRoutes()
+	monodoseR := router.PathPrefix("/monodose").Subrouter()
+	monodoseR.HandleFunc("", HeadersMiddleware(routesM.GetAll)).Methods("GET")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Get)).Methods("GET")
+	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Add)).Methods("POST")
+	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Update)).Methods("PUT")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Delete)).Methods("DELETE")
+	monodoseR.HandleFunc("", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+
+	routesU := hUser.NewUserRoutes()
+	userR := router.PathPrefix("/user").Subrouter()
+	userR.HandleFunc("", HeadersMiddleware(routesU.GetAll)).Methods("GET")
+	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesU.Get)).Methods("GET")
+	userR.HandleFunc("", HeadersMiddleware(routesU.Add)).Methods("POST")
+	userR.HandleFunc("", HeadersMiddleware(routesU.Update)).Methods("PUT")
+	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesU.Delete)).Methods("DELETE")
+	userR.HandleFunc("", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+
+	routesL := hLogin.NewLoginRoutes()
+	router.HandleFunc("/login", routesL.Connexion).Methods("POST")
+	router.HandleFunc("/login", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+
 	fs := http.FileServer(http.Dir("./swagger/swaggerui"))
 	router.PathPrefix("/swaggerui/").Handler(http.StripPrefix("/swaggerui/", fs))
 
-	//Monodose
-
-	routesM := handlerMonodose.NewMonodoseRoutes()
-
-	monodoseR := router.PathPrefix("/monodose").Subrouter()
-
-	//Get all
-	monodoseR.HandleFunc("", routesM.GetAll).Methods("GET")
-
-	//Get by id
-	monodoseR.HandleFunc("/{id}", routesM.Get).Methods("GET")
-
-	//Add
-	monodoseR.HandleFunc("", routesM.Add).Methods("POST")
-
-	//Delete
-	monodoseR.HandleFunc("/{id}", routesM.Delete).Methods("DELETE")
-
-	//Update
-	monodoseR.HandleFunc("", routesM.Update).Methods("PUT")
-
-	//User
-
-	routesU := handlerUser.NewUserRoutes()
-
-	userR := router.PathPrefix("/user").Subrouter()
-
-	userR.HandleFunc("", routesU.Update).Methods("PUT")
-
-	userR.HandleFunc("", routesU.Add).Methods("POST")
-
-	userR.HandleFunc("", routesU.GetAll).Methods("GET")
-
-	userR.HandleFunc("/{id}", routesU.Get).Methods("GET")
-
-	userR.HandleFunc("/{id}", routesU.Delete).Methods("DELETE")
-
-	/*
-		//Login
-		router.HandleFunc("/login/").Methods("POST")
-	*/
-
 	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
+	http.ListenAndServe(":"+port, router)
+}
 
-	http.ListenAndServe(":"+port, handlers.CORS(corsObj)(router))
+func CORSVerification(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "%s", "{}")
 }

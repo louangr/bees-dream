@@ -19,7 +19,6 @@
     },
     "version": "1.0.0"
   },
-  "basePath": "/",
   "paths": {
     "/monodose": {
       "get": {
@@ -49,7 +48,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/responses/monodoseStruct"
+              "$ref": "#/definitions/Monodose"
             }
           }
         ],
@@ -76,7 +75,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/responses/monodoseStruct"
+              "$ref": "#/definitions/Monodose"
             }
           }
         ],
@@ -149,7 +148,7 @@
       "properties": {
         "company": {
           "type": "string",
-          "x-go-name": "Compagny"
+          "x-go-name": "Company"
         },
         "firstname": {
           "type": "string",
@@ -169,11 +168,11 @@
           "type": "string",
           "x-go-name": "Dluo"
         },
-        "endOfProduction": {
+        "endofproduction": {
           "type": "string",
           "x-go-name": "EndOfProduction"
         },
-        "make": {
+        "startofproduction": {
           "type": "string",
           "x-go-name": "Make"
         }
@@ -189,7 +188,7 @@
         "dates": {
           "$ref": "#/definitions/Date"
         },
-        "honeyVariety": {
+        "honeyvariety": {
           "type": "string",
           "x-go-name": "HoneyVariety"
         },

@@ -31,7 +31,6 @@ var dao d.Dao[e.User] = d.NewDao[e.User]()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (u UserRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -53,15 +52,17 @@ func (u UserRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
 
 	monodose, err := dao.FindById(id)
 
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
+	if !err.IsNil() {
+
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 
@@ -80,7 +81,6 @@ func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var user e.User
@@ -89,8 +89,10 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.Create(user)
 
-	if err != nil {
-		fmt.Fprint(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 
 		js, _ := json.Marshal(res)
@@ -116,15 +118,16 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
 
 	monodose, err := dao.Delete(id)
 
-	if err != nil {
-		fmt.Fprint(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 		fmt.Fprintf(w, "%s", js)
@@ -142,7 +145,6 @@ func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	body, _ := ioutil.ReadAll(r.Body)
 
@@ -152,8 +154,11 @@ func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	user, err := dao.Update(user)
 
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
+
 	} else {
 		js, _ := json.Marshal(user)
 

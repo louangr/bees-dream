@@ -31,7 +31,6 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -53,15 +52,18 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
 
 	monodose, err := dao.FindById(id)
 
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
+	if !err.IsNil() {
+
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 
@@ -79,7 +81,7 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   in: body
 //   description: monodose to add
 //   schema:
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/definitions/Monodose"
 //   required: true
 // responses:
 //   "200":
@@ -87,7 +89,6 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -96,8 +97,10 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	res, err := dao.Create(monodose)
 
-	if err != nil {
-		fmt.Fprint(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 
 		js, _ := json.Marshal(res)
@@ -123,15 +126,16 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   "404":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
 
 	monodose, err := dao.Delete(id)
 
-	if err != nil {
-		fmt.Fprint(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 		fmt.Fprintf(w, "%s", js)
@@ -148,7 +152,7 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   in: body
 //   description: monodose to update
 //   schema:
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/definitions/Monodose"
 //   required: true
 // responses:
 //   "200":
@@ -156,8 +160,6 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "400":
 //     "$ref": "#/responses/genericResponse"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var monodose e.Monodose
@@ -166,8 +168,10 @@ func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	monodose, err := dao.Update(monodose)
 
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
+	if !err.IsNil() {
+		w.WriteHeader(err.Code)
+
+		fmt.Fprintf(w, "%s", err.ToJson())
 	} else {
 		js, _ := json.Marshal(monodose)
 

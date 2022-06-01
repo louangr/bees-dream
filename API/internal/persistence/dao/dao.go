@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"fmt"
+	"internal/persistence/errors"
 	m "internal/persistence/mongo"
 	"internal/persistence/types"
 	"log"
@@ -56,9 +57,11 @@ func (d *Dao[T]) FindAll() (t []T) {
 	return res
 }
 
-func (d *Dao[T]) FindById(id int) (T, error) {
+func (d *Dao[T]) FindById(id int) (T, errors.ErrorsJson) {
 
 	var obj T
+
+	var messageError string = "Can't get data from database"
 
 	var collection string = types.GetCollection(obj)
 
@@ -72,13 +75,14 @@ func (d *Dao[T]) FindById(id int) (T, error) {
 
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
-				return types.Empty(obj), fmt.Errorf("Id %d does not exist in %s collection", id, collection)
+				messageError = fmt.Sprintf("Id %d does not exist in %s collection", id, collection)
+				return types.Empty(obj), errors.NewError(404, messageError)
 			}
 		}
-		return obj, nil
+		return obj, errors.ErrorsJson{}
 	}
 
-	return types.Empty(obj), fmt.Errorf("Can't get data from database")
+	return types.Empty(obj), errors.NewError(520, messageError)
 
 }
 
@@ -92,16 +96,14 @@ func (d *Dao[T]) Exist(id int) bool {
 
 	if err == nil {
 
-		var monodose T
+		var item T
 
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
-		err := coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&monodose)
+		coll.FindOne(context.TODO(), bson.D{{"Id", id}}).Decode(&item)
 
-		if err != nil {
-			if err == mongo.ErrNoDocuments {
-				return false
-			}
+		if item.GetId() == 0 {
+			return false
 		}
 
 		return true
@@ -111,47 +113,53 @@ func (d *Dao[T]) Exist(id int) bool {
 	return false
 }
 
-func (d *Dao[T]) Delete(id int) (T, error) {
+func (d *Dao[T]) Delete(id int) (T, errors.ErrorsJson) {
 
 	var empty T
+
+	var messageError string = "Can't get data from database"
 
 	var collection string = types.GetCollection(empty)
 
 	monodose, err := d.FindById(id)
 
-	if err != nil {
+	if !err.IsNil() {
 		return monodose, err
 	}
 
-	conn, err := m.GetConnexion()
+	conn, t := m.GetConnexion()
 
-	if err == nil {
+	if t == nil {
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 		var filter bson.D = bson.D{{"Id", id}}
 
 		result, _ := coll.DeleteOne(context.TODO(), filter)
 
 		if result.DeletedCount == 0 {
-			return empty, fmt.Errorf("Can't delete %s with id %d does not exist", collection, id)
+			messageError = fmt.Sprintf("Can't delete %s with id %d does not exist", collection, id)
+			return empty, errors.NewError(404, messageError)
 		}
 
-		return monodose, nil
+		return monodose, errors.ErrorsJson{}
 
 	}
 
-	return empty, fmt.Errorf("Can't get data from database")
+	return empty, errors.NewError(520, messageError)
 }
 
-func (d *Dao[T]) Create(item T) (T, error) {
+func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 
 	var empty T
 
 	var id int = item.GetId()
 
+	var messageError string = "Can't get data from database"
+
 	var collection string = item.GetCollectionName()
 
 	if d.Exist(id) {
-		return empty, fmt.Errorf("Object %s with id %d already exist", collection, id)
+		messageError = fmt.Sprintf("Object %s with id %d already exist", collection, id)
+		return empty, errors.NewError(404, messageError)
 	}
 
 	conn, err := m.GetConnexion()
@@ -160,29 +168,32 @@ func (d *Dao[T]) Create(item T) (T, error) {
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
 		_, err := coll.InsertOne(context.TODO(), item)
-
 		if err != nil {
-			return empty, fmt.Errorf("Can't insert object %s with id %d in database", collection, id)
+			messageError = fmt.Sprintf("Can't insert object %s with id %d in database", collection, id)
+			return empty, errors.NewError(520, messageError)
 		}
 
-		return item, nil
+		return item, errors.ErrorsJson{}
 
 	}
 
-	return empty, fmt.Errorf("Can't get data from database")
+	return empty, errors.NewError(520, messageError)
 
 }
 
-func (d *Dao[T]) Update(item T) (T, error) {
+func (d *Dao[T]) Update(item T) (T, errors.ErrorsJson) {
 
 	var empty T
+
+	var messageError string = "Can't get data from database"
 
 	var id int = item.GetId()
 
 	var collection string = item.GetCollectionName()
 
 	if !d.Exist(id) {
-		return empty, fmt.Errorf("Object %s with id %d does not exist", collection, id)
+		messageError = fmt.Sprintf("Object %s with id %d does not exist", collection, id)
+		return empty, errors.NewError(404, messageError)
 	}
 
 	conn, err := m.GetConnexion()
@@ -198,11 +209,12 @@ func (d *Dao[T]) Update(item T) (T, error) {
 		_, err := coll.UpdateOne(context.TODO(), filter, update)
 
 		if err != nil {
-			return empty, fmt.Errorf("Can't update object %s with id %d in database", collection, id)
+			messageError = fmt.Sprintf("Can't update object %s with id %d in database", collection, id)
+			return empty, errors.NewError(520, messageError)
 		}
 
-		return item, nil
+		return item, errors.ErrorsJson{}
 	}
 
-	return empty, fmt.Errorf("%s with id %d does not exist", collection, id)
+	return empty, errors.NewError(520, messageError)
 }
