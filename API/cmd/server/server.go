@@ -52,6 +52,7 @@ func main() {
 	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Update)).Methods("PUT")
 	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Delete)).Methods("DELETE")
 	monodoseR.HandleFunc("", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	routesU := hUser.NewUserRoutes()
 	userR := router.PathPrefix("/user").Subrouter()
@@ -61,6 +62,7 @@ func main() {
 	userR.HandleFunc("", HeadersMiddleware(routesU.Update)).Methods("PUT")
 	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesU.Delete)).Methods("DELETE")
 	userR.HandleFunc("", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
+	userR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(CORSVerification)).Methods("OPTIONS")
 
 	routesL := hLogin.NewLoginRoutes()
 	router.HandleFunc("/login", routesL.Connexion).Methods("POST")
