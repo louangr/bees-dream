@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/MonodoseApi.ts
 apis/index.ts
 index.ts
