@@ -26,8 +26,10 @@
     }
 
     .alveole {
-        width: 600px;
-        height: 600px;
+        min-width: 600px;
+        width: 50vw;
+        height: 50vw;
+        min-height: 600px;
         text-align: center;
     
         display: grid;

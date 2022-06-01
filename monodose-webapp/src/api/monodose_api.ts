@@ -17,7 +17,7 @@ const fetchInfoMonodose = async () => {
             firstname: result.beekeeper.firstname,
             lastname: result.beekeeper.lastname,
             company: result.beekeeper.company,
-            age: 21
+            age: result.beekeeper.age ? result.beekeeper.age : '21' 
             },
             dates: {
                 dluo: result.dates.dluo,
