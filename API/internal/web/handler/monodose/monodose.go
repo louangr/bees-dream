@@ -23,20 +23,22 @@ var _ interfaces.Routes = (*MonodoseRoutes)(nil)
 
 var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 
-// swagger:operation GET /monodose monodose GetAll
+// swagger:operation GET /monodose monodose GetAllMonodoses
 // ---
 // summary: Return all monodoses
 // description: If the are not monodoses, an empty array will be returned
 // responses:
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
+//   "500":
+//     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
 
-// swagger:operation GET /monodose/{id} monodose Get
+// swagger:operation GET /monodose/{id} monodose GetMonodoseById
 // ---
 // summary: Return a monodose by Id
 // description: If the monodose is not found, a 404 status code will be returned
@@ -50,6 +52,8 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "200":
 //     "$ref": "#/responses/monodoseStruct"
 //   "404":
+//     "$ref": "#/responses/errorsJson"
+//   "500":
 //     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 
@@ -72,7 +76,7 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// swagger:operation POST /monodose monodose Add
+// swagger:operation POST /monodose monodose AddMonodose
 // ---
 // summary: Create a new monodose
 // description: If the request body format is not correct, a 400 status code will be returned
@@ -85,8 +89,10 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/monodoseStruct"
 //   "400":
+//     "$ref": "#/responses/errorsJson"
+//   "500":
 //     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
@@ -110,7 +116,7 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// swagger:operation DELETE /monodose/{id} monodose Delete
+// swagger:operation DELETE /monodose/{id} monodose DeleteMonodoseById
 // ---
 // summary: Delete a monodose by Id
 // description: If the monodose is not found, a 404 status code will be returned
@@ -122,8 +128,10 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/monodoseStruct"
 //   "404":
+//     "$ref": "#/responses/errorsJson"
+//   "500":
 //     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -143,7 +151,7 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// swagger:operation PUT /monodose monodose Update
+// swagger:operation PUT /monodose monodose UpdateMonodose
 // ---
 // summary: Update an existing monodose
 // description: If the request body format is not correct or the target monodose Id is not found, a 400 status code will be returned
@@ -156,8 +164,10 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
+//     "$ref": "#/responses/monodoseStruct"
+//   "404":
 //     "$ref": "#/responses/errorsJson"
-//   "400":
+//   "500":
 //     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)

@@ -2,6 +2,18 @@ package entities
 
 import "fmt"
 
+// swagger:response userStruct
+type swaggUserStruct struct {
+	// in:body
+	Body User
+}
+
+// swagger:response userStructArray
+type swaggUserStructArray struct {
+	// in:body
+	Body []User
+}
+
 type Information struct {
 	FirstName string `json:"firstname" bson:"FirstName"`
 	LastName  string `json:"lastname" bson:"LastName"`

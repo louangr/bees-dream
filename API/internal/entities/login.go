@@ -12,6 +12,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// swagger:response loginStruct
+type swaggUserStruct struct {
+	// in:body
+	Body Login
+}
+
 type Login struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
