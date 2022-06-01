@@ -26,12 +26,14 @@
     }
 
     .alveole {
-        /*border: 1px solid black;*/
-        width: 780px;
-        height: 800px;
+        min-width: 600px;
+        width: 50vw;
+        height: 50vw;
+        min-height: 600px;
         text-align: center;
     
         display: grid;
+        align-items: center;
         grid-template-columns: 20% 20% 20% 20% 20%;
         grid-template-rows: 33% 33% 33%;
     }
@@ -70,10 +72,15 @@
         align-self: center;
         justify-self: center; 
     }
+
+    .loading-svg{
+        width: 200px;
+    }
 }
 
 /*------------------------mobile screen--------------------------------------------------------*/
 @media (max-width:800px){
+
     .background-container
     {
         background-image: none;
@@ -95,7 +102,7 @@
     }
 
     .alveole{
-        width: 80%;
+        width: 78%;
         margin-top: 50px;
         aspect-ratio: 1 / 1;
         text-align: center;
@@ -140,5 +147,13 @@
 
         margin-bottom: 400px;
     }
+
+    .loading-svg{
+        width: 20vw;
+    }
+}
+
+.chargement{
+    text-align: center;
 }
 

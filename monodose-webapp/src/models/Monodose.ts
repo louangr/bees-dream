@@ -1,13 +1,16 @@
 export interface Monodose {
-    id: string;
+    id: number
     beekeeper: {
         firstname: string
         lastname: string
         company: string
+        age?: number
     }
-    location: string;
-    productionstartdate: Date;
-    productionenddate: Date;
-    dluodate: Date;
-    honeyvariety: string;
+    dates: {
+        dluo: string
+        startofproduction: string
+        endofproduction: string
+    }
+    location: string
+    honeyvariety: string
 }

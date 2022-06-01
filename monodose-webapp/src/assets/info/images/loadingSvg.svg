@@ -1,0 +1,78 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1086 1050" width="1086" height="1050">
+	<title>abeille-svg</title>
+	<style>
+		<!--.s1 { fill: #ffd326 #FFD326 }-->
+		@keyframes animeAlveole {
+			0%{
+				fill: #FFFF;
+			}
+			50%{
+				fill:#FFD326
+			}
+			100%{
+				fill:#FFFF
+			}
+		}
+
+		@keyframes turnOffAlvelole {
+			0%{
+				fill:#FFD326
+			}
+			100%{
+				fill:#FFFF
+			}
+		}
+
+		.s0 { fill: #646464 }
+
+		.s1{
+			transition: all .5s;
+			fill: #FFFF;
+		}
+
+		#Forme1{
+			animation: animeAlveole 2s 0s 1 both;
+			animation-iteration-count: infinite;
+		}
+
+		#Forme2{
+			animation: animeAlveole 2s 1s 1 both;
+			animation-iteration-count: infinite;
+		}
+
+		#Forme3{
+			animation: animeAlveole 2s 0s 1 both;
+			animation-iteration-count: infinite;
+		}
+
+		#Forme7{
+			animation: animeAlveole 2s 1s 1 both;
+			animation-iteration-count: infinite;
+		}
+
+		#Forme6{
+			animation: animeAlveole 2s 0s 1 both;
+			animation-iteration-count: infinite;
+		}
+
+		#Forme5{
+			animation: animeAlveole 2s 1s 1 both;
+			animation-iteration-count: infinite;
+		}
+
+		#Forme4{
+			fill: #FFD326;
+			animation-iteration-count: infinite;
+		}
+
+	</style>
+	<g id="layer1">
+		<path id="Forme1" class="s1" d="m200 313v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="Forme2" class="s1" d="m555 313v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="Forme3" class="s1" d="m732 620v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="Forme4" class="s1" d="m378 619v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="Forme5" class="s1" d="m25 619v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="Forme6" class="s1" d="m201 925v-189l163-95h4l162 94v191l-162 94h-4"/>
+		<path id="Forme7" class="s1" d="m555 925v-189l163-95h4l162 94v191l-162 94h-4"/>
+	</g>
+</svg>

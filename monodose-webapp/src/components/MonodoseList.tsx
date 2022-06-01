@@ -12,34 +12,36 @@ import AddIcon from '@mui/icons-material/Add'
 import MonodoseModal, { MonodoseModalMode } from './MonodoseModal'
 
 interface Column {
-    id: 'location' | 'productionstartdate' | 'productionenddate' | 'dluodate' | 'honeyvariety'
+    id: string
     label: string
     minWidth?: number
     align?: 'right'
-    format?: (value: number) => string
+    format: (m: Monodose) => string
 }
 
 const columns: readonly Column[] = [
-    { id: 'location', label: 'Localisation', minWidth: 170 },
-    { id: 'productionstartdate', label: 'Date début de production', minWidth: 170 },
-    { id: 'productionenddate', label: 'Date fin de production', minWidth: 170 },
-    { id: 'dluodate', label: 'Date DLUO', minWidth: 170 },
-    { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170 }
+    { id: 'location', label: 'Localisation', minWidth: 170, format: (m) => m.location },
+    { id: 'dates.startofproduction', label: 'Date début de production', minWidth: 170, format: (m) => m.dates.startofproduction },
+    { id: 'dates.endofproduction', label: 'Date fin de production', minWidth: 170, format: (m) => m.dates.endofproduction },
+    { id: 'dates.dluo', label: 'Date DLUO', minWidth: 170, format: (m) => m.dates.dluo },
+    { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170, format: (m) => m.honeyvariety }
 ]
 
 // TODO: random data, remove them after connecting the list to API
 const rows: Monodose[] = [
     {
-        id: '1',
+        id: 1,
         beekeeper: {
             firstname: 'FirstName',
             lastname: 'LastName',
             company: 'Company'
         },
         location: 'Nantes',
-        productionstartdate: new Date(),
-        productionenddate: new Date(),
-        dluodate: new Date(),
+        dates: {
+            startofproduction: '10/01/2022',
+            endofproduction: '30/05/2022',
+            dluo: '30/02/2023'
+        },
         honeyvariety: 'variety',
     },
 ]
@@ -77,7 +79,7 @@ const MonodoseList: React.FC = () => {
                                             setIsModalOpen(true)
                                         }}
                                     >
-                                        {columns.map((column) => <TableCell key={column.id} align={column.align}>{row[column.id].toLocaleString()}</TableCell>)}
+                                        {columns.map((column) => <TableCell key={column.id} align={column.align}>{column.format(row)}</TableCell>)}
                                     </TableRow>
                                 ))
                             }

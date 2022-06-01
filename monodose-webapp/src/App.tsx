@@ -9,6 +9,7 @@ import Login from "./components/Login"
 import { UserContext } from "./context/UserContext"
 import QrPage from "./pages/QrPage"
 
+
 const App: React.FC = () => {
   const [user, setUser] = React.useState<User | undefined>(undefined)
   const value = React.useMemo(() => ({ user, setUser }), [user, setUser])
