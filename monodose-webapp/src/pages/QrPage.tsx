@@ -20,21 +20,25 @@ const QrPage: React.FC = () => {
         page: {
             flexDirection: 'row',
         },
+
         section: {
-            margin: 10,
-            padding: 10,
             flexDirection: 'row',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            justifyContent: "center",
         },
         imageParent: {
-            marginVertical: 15,
-            marginHorizontal: 15,
-            width: 75,
-            height: 75,
+
+            marginTop: 10,
+            marginBottom: 0,
+            marginLeft: 5,
+            marginRight: 5,
+            width: 60,
+            height: 60,
         },
         imageEnfant: {
-            marginVertical: 15,
-            marginHorizontal: 15,
+            marginTop: 15,
+            marginBottom: 15,
+            marginHorizontal: 10,
             width: 50,
             height: 50,
         },
@@ -49,7 +53,7 @@ const QrPage: React.FC = () => {
 
                 {
 
-                    Array(100).fill(1).map(() => (
+                    Array(159).fill(1).map(() => (
 
                         <Image style={styles.imageEnfant}
 
@@ -77,14 +81,24 @@ const QrPage: React.FC = () => {
         link.click();
     }
 
+    function download_qr_test() {
+        var btn = document.getElementById("test") as HTMLButtonElement;
+        btn.click();
+    }
+
     return (
 
         <div style={SharedStyle.container}>
+            <Button
+                onClick={() => download_qr_test()}
+            >
+                test
+            </Button>
             <div style={SharedStyle.formContainer}>
                 <Button
                     startIcon={<QrCode2Icon />}
                     variant="contained"
-                    onClick={() => { /*setQrValue('{site}/monodose/{id}');*/setQrValue('192.168.226.1:3000/?id=5'); setQrVisibility(true); }}
+                    onClick={() => { /*setQrValue('{site}/monodose/{id}');*/setQrValue('google.com'); setQrVisibility(true); }}
                 >
                     Générer QR
                 </Button>
@@ -122,8 +136,9 @@ const QrPage: React.FC = () => {
 
                 </div>
 
+
                 <PDFDownloadLink document={<DocPDF />} fileName="qrcodes.pdf">
-                    <Button
+                    <Button id="test"
                         startIcon={<PictureAsPdfIcon />}
                         variant="contained"
                         style={{ visibility: QrVisibility ? "visible" : "hidden" }}
