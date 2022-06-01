@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface Beekeeper {
     /**
      * 
+     * @type {number}
+     * @memberof Beekeeper
+     */
+    age?: number;
+    /**
+     * 
      * @type {string}
      * @memberof Beekeeper
      */
@@ -49,6 +55,7 @@ export function BeekeeperFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'age': !exists(json, 'age') ? undefined : json['age'],
         'company': !exists(json, 'company') ? undefined : json['company'],
         'firstname': !exists(json, 'firstname') ? undefined : json['firstname'],
         'lastname': !exists(json, 'lastname') ? undefined : json['lastname'],
@@ -64,6 +71,7 @@ export function BeekeeperToJSON(value?: Beekeeper | null): any {
     }
     return {
         
+        'age': value.age,
         'company': value.company,
         'firstname': value.firstname,
         'lastname': value.lastname,

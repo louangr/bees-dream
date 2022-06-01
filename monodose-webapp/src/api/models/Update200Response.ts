@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface Update200Response {
     /**
      * 
+     * @type {number}
+     * @memberof Update200Response
+     */
+    code?: number;
+    /**
+     * 
      * @type {string}
      * @memberof Update200Response
      */
@@ -37,6 +43,7 @@ export function Update200ResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
+        'code': !exists(json, 'code') ? undefined : json['code'],
         'message': !exists(json, 'message') ? undefined : json['message'],
     };
 }
@@ -50,6 +57,7 @@ export function Update200ResponseToJSON(value?: Update200Response | null): any {
     }
     return {
         
+        'code': value.code,
         'message': value.message,
     };
 }

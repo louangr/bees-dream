@@ -30,13 +30,13 @@ export interface ModelDate {
      * @type {string}
      * @memberof ModelDate
      */
-    endofproduction?: string;
+    endOfProduction?: string;
     /**
      * 
      * @type {string}
      * @memberof ModelDate
      */
-    startofproduction?: string;
+    startOfProduction?: string;
 }
 
 export function ModelDateFromJSON(json: any): ModelDate {
@@ -50,8 +50,8 @@ export function ModelDateFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     return {
         
         'dluo': !exists(json, 'dluo') ? undefined : json['dluo'],
-        'endofproduction': !exists(json, 'endofproduction') ? undefined : json['endofproduction'],
-        'startofproduction': !exists(json, 'startofproduction') ? undefined : json['startofproduction'],
+        'endOfProduction': !exists(json, 'endOfProduction') ? undefined : json['endOfProduction'],
+        'startOfProduction': !exists(json, 'startOfProduction') ? undefined : json['startOfProduction'],
     };
 }
 
@@ -65,8 +65,8 @@ export function ModelDateToJSON(value?: ModelDate | null): any {
     return {
         
         'dluo': value.dluo,
-        'endofproduction': value.endofproduction,
-        'startofproduction': value.startofproduction,
+        'endOfProduction': value.endOfProduction,
+        'startOfProduction': value.startOfProduction,
     };
 }
 
