@@ -10,15 +10,21 @@ import { useEffect, useState } from 'react'
 import fetchInfoMonodose from '../api/monodose_api'
 import {Monodose} from '../api/models/Monodose'
 import LoadingSVG from '../assets/info/images/loadingSvg.svg'
+import { MonodoseApiClient } from '../api/main'
 
 const MonodosePage: React.FC = () => {
     const [data, setData] = useState<any>()
     
     useEffect(() => {
-        window.setTimeout(() => {fetchInfoMonodose().then( (infos:Monodose) => {
-            setData(infos);
-        })},2000)
-    }, []);
+        window.setTimeout(async () => {
+            const queryParams = new URLSearchParams(window.location.search)
+            const id = queryParams.get("id")
+
+            if(id != undefined){
+                const infos = await MonodoseApiClient.getMonodoseById({id:id})
+                setData(infos);
+            }
+        },2000)},[]);
 
     return (
         <div className='background-container'>
