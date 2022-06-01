@@ -78,8 +78,7 @@ golang:test-deploy:
   script:
     - cd $FOLDER_API
     - ./cmd/script/test-prod-client.sh
-    - cd ./dist
-    - ./$CLIENT_NAME $IP_ADRESSE $PORT_ADRESSE
+    - ./dist/$CLIENT_NAME $IP_ADRESSE $PORT_ADRESSE
 
 discord:notification:
   image: alpine:latest
