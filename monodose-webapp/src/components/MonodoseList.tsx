@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { Monodose } from '../models/Monodose'
+import { Monodose } from '../api/models/Monodose'
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import MonodoseModal, { MonodoseModalMode } from './MonodoseModal'
@@ -16,15 +16,15 @@ interface Column {
     label: string
     minWidth?: number
     align?: 'right'
-    format: (m: Monodose) => string
+    format: (m: Monodose) => string | undefined
 }
 
 const columns: readonly Column[] = [
     { id: 'location', label: 'Localisation', minWidth: 170, format: (m) => m.location },
-    { id: 'dates.startofproduction', label: 'Date début de production', minWidth: 170, format: (m) => m.dates.startofproduction },
-    { id: 'dates.endofproduction', label: 'Date fin de production', minWidth: 170, format: (m) => m.dates.endofproduction },
-    { id: 'dates.dluo', label: 'Date DLUO', minWidth: 170, format: (m) => m.dates.dluo },
-    { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170, format: (m) => m.honeyvariety }
+    { id: 'dates.startofproduction', label: 'Date début de production', minWidth: 170, format: (m) => m.dates?.startOfProduction },
+    { id: 'dates.endofproduction', label: 'Date fin de production', minWidth: 170, format: (m) => m.dates?.endOfProduction },
+    { id: 'dates.dluo', label: 'Date DLUO', minWidth: 170, format: (m) => m.dates?.dluo },
+    { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170, format: (m) => m.honeyVariety }
 ]
 
 // TODO: random data, remove them after connecting the list to API
@@ -38,11 +38,11 @@ const rows: Monodose[] = [
         },
         location: 'Nantes',
         dates: {
-            startofproduction: '10/01/2022',
-            endofproduction: '30/05/2022',
+            startOfProduction: '10/01/2022',
+            endOfProduction: '30/05/2022',
             dluo: '30/02/2023'
         },
-        honeyvariety: 'variety',
+        honeyVariety: 'variety',
     },
 ]
 

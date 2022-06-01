@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Monodose} from "../models/Monodose";
+import {Monodose} from "../api/models/Monodose";
 
 let data: Monodose;
 
@@ -21,11 +21,11 @@ const fetchInfoMonodose = async () => {
             },
             dates: {
                 dluo: result.dates.dluo,
-                startofproduction: result.dates.startofproduction,
-                endofproduction: result.dates.endofproduction
+                startOfProduction: result.dates.startOfProduction,
+                endOfProduction: result.dates.endOfProduction
             },
             location:  result.location,
-            honeyvariety: 'acacia'
+            honeyVariety: 'acacia'
       }
 
   } catch (err) {

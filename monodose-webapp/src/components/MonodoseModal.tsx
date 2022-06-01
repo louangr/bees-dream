@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { Button } from '@mui/material';
 import { Role } from '../models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Monodose } from '../models/Monodose'
+import { Monodose } from '../api/models/Monodose'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
