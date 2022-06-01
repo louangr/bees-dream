@@ -5,7 +5,7 @@ variables:
   FOLDER_API: "API"
   TAG_LATEST: $CI_REGISTRY_IMAGE/golang-api:latest
   CONTAINER_NAME: "c-golang-api"
-  IP_ADRESSE: "167.99.83.46:22"
+  IP_ADRESSE: "167.99.83.46"
   PORT_ADRESSE: "8080"
   WEBHOOK_URL: "https://discord.com/api/webhooks/980753549086564392/yKCWhuKqihxVvVRmVzA7t230BmX-Anyq5DwtTVspVWeMuToQisocofSgOBlhmLfG2-zo"
 
