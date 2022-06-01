@@ -1,0 +1,7 @@
+variables:
+
+stages:
+  - build
+  - test
+  - publish
+  - notification
