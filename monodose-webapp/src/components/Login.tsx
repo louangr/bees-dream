@@ -1,10 +1,8 @@
 import React from "react"
 import { TextField } from "@mui/material"
 import LoadingButton from '@mui/lab/LoadingButton'
-import { User } from "../api/models/User"
 import SharedStyle from "../shared/styles"
 import { JSEncrypt } from "jsencrypt";
-import axios from "axios";
 import { LoginApiClient } from "../api/main"
 import { Logged } from "../api/models/Logged"
 
@@ -19,7 +17,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [hasPasswordError, setHasPasswordError] = React.useState<boolean>(false)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  const encryptPassword = (password:string) : string => {
+  const encryptPassword = (password: string): string => {
     // Start our encryptor.
     var encrypt = new JSEncrypt();
 
@@ -38,7 +36,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
     // Perform our encryption based on our public key - only private key can read it!
     var encrypted = encrypt.encrypt(password);
-    return encrypted+"";
+    return encrypted + "";
   }
   const onSubmitButtonClick = async () => {
     const hasEmail = email && email.trim() !== ""
@@ -50,13 +48,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     if (hasEmail && hasPassword) {
       setIsLoading(true)
 
-      const loggedUser = await LoginApiClient.login({login:{ login: email,password: encryptPassword(password)}})
-            
+      const loggedUser = await LoginApiClient.login({ login: { login: email, password: encryptPassword(password) } })
+
       /*axios.post('http://167.99.83.46:8080/login',{ login: email,password: encryptPassword(password)}).then((data)=>{
       })*/
 
       setIsLoading(false)
-      onLogin(loggedUser) 
+      onLogin(loggedUser)
     }
   }
 

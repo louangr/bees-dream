@@ -46,8 +46,6 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
 
   React.useEffect(() => {
 
-    console.log(beekeeper)
-
     setHasLoginError(false)
     setHasPasswordError(false)
     setHasFirstnameError(false)
@@ -112,7 +110,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
         setIsLoading(true)
 
         let pwd
-        if (password != beekeeper?.password) {
+        if (password !== beekeeper?.password) {
           pwd = encryptPassword(password)
         } else {
           pwd = beekeeper?.password
@@ -248,9 +246,9 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
               edge="start"
               color="inherit"
               aria-label="menu"
+              onClick={deleteBeekeeper}
             >
-              <DeleteIcon
-                onClick={deleteBeekeeper} />
+              <DeleteIcon />
             </IconButton>
           )}
         </DialogTitle>

@@ -9,7 +9,6 @@ import { UserContext } from "../context/UserContext"
 import { Role } from "../models/Role"
 
 const AdminPage: React.FC = () => {
-  const [isAlertOpen, setIsAlertOpen] = React.useState<boolean>(true)
   const [tabValue, setTabValue] = React.useState<string>('1')
   const { loggedUser } = React.useContext(UserContext)
 
@@ -34,7 +33,7 @@ const AdminPage: React.FC = () => {
         :
         <MessageAlert
           isOpen={true}
-          onClose={() => setIsAlertOpen(false)}
+          onClose={() => { }}
           message={'Aucune données disponible selon vos droits'}
           isClosable={false}
           isAutoHidden={false}
