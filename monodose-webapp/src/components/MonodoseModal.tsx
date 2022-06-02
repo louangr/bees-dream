@@ -259,7 +259,9 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
 
   const deleteMonodose = (idMonodose: string) => {
     (async () => {
-      const deleteMonodose = await MonodoseApiClient.deleteMonodoseById({ id: idMonodose }, {
+      const deleteMonodose = await MonodoseApiClient.deleteMonodoseById({
+        id: idMonodose
+      }, {
         headers: new Headers([
           ['Token', loggedUser?.token || '']
         ])
