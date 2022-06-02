@@ -50,15 +50,11 @@ func GenerateJWT(user entities.User) (JWT, errors.ErrorsJson) {
 
 func VerifyJWT(r *http.Request, w http.ResponseWriter) errors.ErrorsJson {
 
-	c, errs := r.Cookie("token")
-	if errs != nil {
-		if errs == http.ErrNoCookie {
-			return errors.NewError(http.StatusUnauthorized, "The cookie is not set")
-		}
-		return errors.NewError(http.StatusBadRequest, "Bad request")
+	//c, errs := r.Cookie("token")
+	var token string = r.Header.Get("Token")
+	if token == "" {
+		return errors.NewError(http.StatusUnauthorized, "The token is not set in the header")
 	}
-
-	token := c.Value
 
 	claims := &Claims{}
 

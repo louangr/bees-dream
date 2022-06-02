@@ -36,6 +36,8 @@ func main() {
 
 	const port string = "8080"
 
+	CreateLogFile()
+
 	err := m.Connexion()
 
 	if err != nil {
@@ -71,6 +73,11 @@ func main() {
 	fs := http.FileServer(http.Dir("./swagger/swaggerui"))
 	router.PathPrefix("/swaggerui/").Handler(http.StripPrefix("/swaggerui/", fs))
 
-	fmt.Printf("🚀 Lancement de l'api sur le port %s\n", port)
+	var run string = fmt.Sprintf("🚀 Lancement de l'api sur le port %s", port)
+
+	fmt.Println(run)
+
+	WriteInLog(run)
+
 	http.ListenAndServe(":"+port, router)
 }

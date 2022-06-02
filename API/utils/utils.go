@@ -64,6 +64,10 @@ func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 		}
 		handler(w, r)
 
+		var info string = fmt.Sprintf("Route : %s & Method : %s & Code : %s", r.URL, r.Method)
+
+		WriteInLog(info)
+
 	}
 }
 

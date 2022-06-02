@@ -1,5 +1,6 @@
 dist/api-bee-dream
 dist/client-bee-dream
+dist/api.log
 
 .DS_STORE
 configs/.env
