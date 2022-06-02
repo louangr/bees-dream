@@ -385,6 +385,11 @@
     "Information": {
       "type": "object",
       "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Age"
+        },
         "company": {
           "type": "string",
           "x-go-name": "Company"

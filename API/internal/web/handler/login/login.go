@@ -62,6 +62,8 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("Hashed : ", login.Password)
+
 	password, _ := login.UnHashPassword()
 
 	fmt.Println("Pass : ", password)

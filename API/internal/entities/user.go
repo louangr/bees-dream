@@ -27,15 +27,15 @@ type Information struct {
 }
 
 type User struct {
-	Id           int         `json:"id" bson:"Id"`
-	Informations Information `json:"informations" bson:"Informations"`
-	Role         string      `json:"role" bson:"Role"`
-	Login        string      `json:"login" bson:"Login"`
-	Password     string      `json:"password" bson:"Password"`
+	Id           int          `json:"id" bson:"Id"`
+	Informations *Information `json:"informations" bson:"Informations"`
+	Role         string       `json:"role" bson:"Role"`
+	Login        string       `json:"login" bson:"Login"`
+	Password     string       `json:"password" bson:"Password"`
 }
 
 func NewUser(id int, informations Information, role string, login string, password string) User {
-	return User{id, informations, role, login, password}
+	return User{id, &informations, role, login, password}
 }
 
 func NewInformation(firstName string, lastName string, compagny string, age int) Information {
@@ -50,7 +50,7 @@ func (u User) CreateWithId() any {
 
 	var id int = int(uuid.New().ID())
 
-	return NewUser(id, u.Informations, u.Role, u.Login, u.Password)
+	return NewUser(id, *u.Informations, u.Role, u.Login, u.Password)
 
 }
 
