@@ -1,7 +1,7 @@
 import React from "react"
 import { TextField } from "@mui/material"
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Role, User } from "../models/User"
+import { User } from "../api/models/User"
 import SharedStyle from "../shared/styles"
 
 interface LoginProps {
@@ -32,10 +32,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       onLogin({
         login: email,
         password: password,
-        firstname: 'TestPrenom',
-        lastname: 'TestNom',
-        company: 'TestCompany',
-        role: Role.Admin
+        informations:{
+          firstname: 'TestPrenom',
+          lastname: 'TestNom',
+          company: 'TestCompany'
+        },
+        role: 'admin'
       })
 
       setIsLoading(false)

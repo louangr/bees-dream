@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Button } from '@mui/material';
-import { Role } from '../models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Monodose } from '../api/models/Monodose'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -38,7 +37,6 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
   const [productionStartDate, setProductionStartDate] = React.useState<Date | null | undefined>(null)
   const [productionEndDate, setProductionEndDate] = React.useState<Date | null | undefined>(null)
   const [dluoDate, setDluoDate] = React.useState<Date | null | undefined>(null)
-  const [role, setRole] = React.useState<Role>(Role.BeeKeeper)
   const [qrvalue, setQrvalue] = React.useState<string>('')
 
   const styles = StyleSheet.create({
@@ -169,7 +167,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
               <Select
                 //value={role} // TODO beekeeper id if in edit mode
                 label='Apiculteur'
-                onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
+                //onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
               >
                 {/* TODO : foreach beekeeper list */}
                 <MenuItem style={{ color: '#00000099' }} value={1}>FirstName1 LastName1</MenuItem>

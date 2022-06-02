@@ -4,7 +4,7 @@ import { AppRoutes } from "./routes/routes"
 import MonodosePage from "./pages/MonodosePage"
 import AdminPage from "./pages/AdminPage"
 import FormPage from "./pages/FormPage"
-import { User } from "./models/User"
+import { User } from './api/models/User'
 import Login from "./components/Login"
 import { UserContext } from "./context/UserContext"
 import QrPage from "./pages/QrPage"
