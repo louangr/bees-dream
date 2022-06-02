@@ -59,20 +59,10 @@ func (u UserRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
+	response := dao.FindById(id)
 
-	user, err := dao.FindById(id)
-
-	if !err.IsNil() {
-
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-		js, _ := json.Marshal(user)
-
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }
 
 // swagger:operation POST /user user AddUser
@@ -106,23 +96,8 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	user.Password = login.Password
 
-	fmt.Println("test : ", user)
-
-	res, err := dao.Create(user)
-
-	if !err.IsNil() {
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-
-		js, _ := json.Marshal(res)
-
-		fmt.Println("Test 2 :", js)
-
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.Create(user)
+	fmt.Fprintf(w, "%s", response.ToJson())
 }
 
 // swagger:operation DELETE /user/{id} user DeleteUserById
@@ -147,17 +122,9 @@ func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	user, err := dao.Delete(id)
-
-	if !err.IsNil() {
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-		js, _ := json.Marshal(user)
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.Delete(id)
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }
 
 // swagger:operation PUT /user user UpdateUser
@@ -179,24 +146,13 @@ func (u UserRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   "500":
 //     "$ref": "#/responses/errorsJson"
 func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
-
 	body, _ := ioutil.ReadAll(r.Body)
 
 	var user e.User
 
 	json.Unmarshal(body, &user)
 
-	user, err := dao.Update(user)
-
-	if !err.IsNil() {
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-
-	} else {
-		js, _ := json.Marshal(user)
-
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.Update(user)
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }

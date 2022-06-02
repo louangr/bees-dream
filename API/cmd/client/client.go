@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"internal/entities"
-	"internal/persistence/types"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -15,7 +14,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Client[T types.Collection] struct {
+type Client[T entities.Collection] struct {
 	URL   string
 	token string
 }

@@ -56,24 +56,13 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   "500":
 //     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	monodose, err := dao.FindById(id)
-
-	if !err.IsNil() {
-
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-		js, _ := json.Marshal(monodose)
-
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.FindById(id)
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }
 
 // swagger:operation POST /monodose monodose AddMonodose
@@ -101,19 +90,9 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &monodose)
 
-	res, err := dao.Create(monodose)
-
-	if !err.IsNil() {
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-
-		js, _ := json.Marshal(res)
-
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.Create(monodose)
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }
 
 // swagger:operation DELETE /monodose/{id} monodose DeleteMonodoseById
@@ -138,17 +117,9 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	monodose, err := dao.Delete(id)
-
-	if !err.IsNil() {
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-		js, _ := json.Marshal(monodose)
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.Delete(id)
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }
 
 // swagger:operation PUT /monodose monodose UpdateMonodose
@@ -176,16 +147,7 @@ func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &monodose)
 
-	monodose, err := dao.Update(monodose)
-
-	if !err.IsNil() {
-		w.WriteHeader(err.Code)
-
-		fmt.Fprintf(w, "%s", err.ToJson())
-	} else {
-		js, _ := json.Marshal(monodose)
-
-		fmt.Fprintf(w, "%s", js)
-	}
-
+	response := dao.Update(monodose)
+	fmt.Sprintf(response.ToJson())
+	fmt.Fprintf(w, "%s", response.ToJson())
 }

@@ -3,9 +3,8 @@ package dao
 import (
 	"context"
 	"fmt"
-	"internal/persistence/errors"
+	"internal/entities"
 	m "internal/persistence/mongo"
-	"internal/persistence/types"
 	"log"
 	"utils"
 
@@ -14,12 +13,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Dao[T types.Collection] struct {
+type Dao[T entities.Collection] struct {
 }
 
-//var _ interfaces.RestDao[types.Collection] = (*Dao[types.Collection])(nil)
+//var _ interfaces.RestDao[entities.Collection] = (*Dao[entities.Collection])(nil)
 
-func NewDao[T types.Collection]() Dao[T] {
+func NewDao[T entities.Collection]() Dao[T] {
 
 	return Dao[T]{}
 
@@ -31,7 +30,7 @@ func (d *Dao[T]) FindAll() (t []T) {
 
 	var obj T
 
-	var collection string = types.GetCollection(obj)
+	var collection string = entities.GetCollection(obj)
 
 	conn, err := m.GetConnexion()
 
@@ -57,13 +56,13 @@ func (d *Dao[T]) FindAll() (t []T) {
 	return res
 }
 
-func (d *Dao[T]) FindById(id int) (T, errors.ErrorsJson) {
+func (d *Dao[T]) FindById(id int) entities.GenericResponse[T] {
 
 	var obj T
 
 	var messageError string = "Can't get data from database"
 
-	var collection string = types.GetCollection(obj)
+	var collection string = entities.GetCollection(obj)
 
 	conn, err := m.GetConnexion()
 
@@ -76,21 +75,20 @@ func (d *Dao[T]) FindById(id int) (T, errors.ErrorsJson) {
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
 				messageError = fmt.Sprintf("Id %d does not exist in %s collection", id, collection)
-				return types.Empty(obj), errors.NewError(404, messageError)
+				return entities.NewGenericResponse[T](404, messageError, obj)
 			}
 		}
-		return obj, errors.ErrorsJson{}
+		return entities.NewGenericResponse[T](200, "bbbb", obj)
 	}
 
-	return types.Empty(obj), errors.NewError(500, messageError)
-
+	return entities.NewGenericResponse[T](500, messageError, obj)
 }
 
 func (d *Dao[T]) Exist(id int) bool {
 
 	var obj T
 
-	var collection string = types.GetCollection(obj)
+	var collection string = entities.GetCollection(obj)
 
 	conn, err := m.GetConnexion()
 
@@ -113,19 +111,15 @@ func (d *Dao[T]) Exist(id int) bool {
 	return false
 }
 
-func (d *Dao[T]) Delete(id int) (T, errors.ErrorsJson) {
+func (d *Dao[T]) Delete(id int) entities.GenericResponse[T] {
 
 	var empty T
 
 	var messageError string = "Can't get data from database"
 
-	var collection string = types.GetCollection(empty)
+	var collection string = entities.GetCollection(empty)
 
-	monodose, err := d.FindById(id)
-
-	if !err.IsNil() {
-		return monodose, err
-	}
+	genericResponse := d.FindById(id)
 
 	conn, t := m.GetConnexion()
 
@@ -137,17 +131,16 @@ func (d *Dao[T]) Delete(id int) (T, errors.ErrorsJson) {
 
 		if result.DeletedCount == 0 {
 			messageError = fmt.Sprintf("Can't delete %s with id %d does not exist", collection, id)
-			return empty, errors.NewError(404, messageError)
+			return entities.NewGenericResponse[T](404, messageError, empty)
 		}
 
-		return monodose, errors.ErrorsJson{}
-
+		return entities.NewGenericResponse[T](200, "success", genericResponse.Data)
 	}
 
-	return empty, errors.NewError(500, messageError)
+	return entities.NewGenericResponse[T](500, messageError, empty)
 }
 
-func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
+func (d *Dao[T]) Create(item T) entities.GenericResponse[T] {
 
 	var empty T
 
@@ -161,7 +154,7 @@ func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 
 	if d.Exist(id) {
 		messageError = fmt.Sprintf("Object %s with id %d already exist", collection, id)
-		return empty, errors.NewError(400, messageError)
+		return entities.NewGenericResponse[T](400, messageError, empty)
 	}
 
 	if id == -1 {
@@ -178,18 +171,16 @@ func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 		_, err := coll.InsertOne(context.TODO(), final)
 		if err != nil {
 			messageError = fmt.Sprintf("Can't insert object %s with id %d in database", collection, id)
-			return empty, errors.NewError(500, messageError)
+			return entities.NewGenericResponse[T](500, messageError, empty)
 		}
 
-		return final.(T), errors.ErrorsJson{}
-
+		return entities.NewGenericResponse[T](200, "success", final.(T))
 	}
 
-	return empty, errors.NewError(500, messageError)
-
+	return entities.NewGenericResponse[T](500, messageError, empty)
 }
 
-func (d *Dao[T]) Update(item T) (T, errors.ErrorsJson) {
+func (d *Dao[T]) Update(item T) entities.GenericResponse[T] {
 
 	var empty T
 
@@ -201,7 +192,7 @@ func (d *Dao[T]) Update(item T) (T, errors.ErrorsJson) {
 
 	if !d.Exist(id) {
 		messageError = fmt.Sprintf("Object %s with id %d does not exist", collection, id)
-		return empty, errors.NewError(404, messageError)
+		return entities.NewGenericResponse[T](404, messageError, empty)
 	}
 
 	conn, err := m.GetConnexion()
@@ -218,11 +209,11 @@ func (d *Dao[T]) Update(item T) (T, errors.ErrorsJson) {
 
 		if err != nil {
 			messageError = fmt.Sprintf("Can't update object %s with id %d in database", collection, id)
-			return empty, errors.NewError(500, messageError)
+			return entities.NewGenericResponse[T](500, messageError, empty)
 		}
 
-		return item, errors.ErrorsJson{}
+		return entities.NewGenericResponse[T](200, "success", item)
 	}
 
-	return empty, errors.NewError(500, messageError)
+	return entities.NewGenericResponse[T](500, messageError, empty)
 }

@@ -1,9 +1,7 @@
-package types
-
-import "internal/entities"
+package entities
 
 type Collection interface {
-	entities.Monodose | entities.User
+	Monodose | User
 
 	GetId() int
 	CreateWithId() any

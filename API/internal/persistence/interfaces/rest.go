@@ -1,15 +1,12 @@
 package interfaces
 
-import (
-	error "internal/persistence/errors"
-	t "internal/persistence/types"
-)
+import "internal/entities"
 
-type RestDao[T t.Collection] interface {
+type RestDao[T entities.Collection] interface {
 	FindAll() []T
-	FindById(id int) (T, error.ErrorsJson)
+	FindById(id int) entities.GenericResponse[T]
 	Exist(id int) bool
-	Delete(id int) (T, error.ErrorsJson)
-	Create(item T) (T, error.ErrorsJson)
-	Update(item T) (T, error.ErrorsJson)
+	Delete(id int) entities.GenericResponse[T]
+	Create(item T) entities.GenericResponse[T]
+	Update(item T) entities.GenericResponse[T]
 }

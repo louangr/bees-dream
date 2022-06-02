@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	e "internal/entities"
-	"internal/persistence/errors"
 	m "internal/persistence/mongo"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,7 +17,7 @@ func NewAuthentification() Authentification {
 	return Authentification{}
 }
 
-func (a Authentification) Authentification(login string) (e.User, errors.ErrorsJson) {
+func (a Authentification) Authentification(login string) e.GenericResponse[e.User] {
 
 	var user e.User
 
@@ -35,11 +34,11 @@ func (a Authentification) Authentification(login string) (e.User, errors.ErrorsJ
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
 				messageError = fmt.Sprintf("User with login %s does not exist", login)
-				return e.User{}, errors.NewError(404, messageError)
+				return e.NewGenericResponse[e.User](404, messageError, e.User{})
 			}
 		}
-		return user, errors.ErrorsJson{}
+		return e.NewGenericResponse[e.User](200, "success", user)
 	}
 
-	return e.User{}, errors.NewError(500, messageError)
+	return e.NewGenericResponse[e.User](500, messageError, e.User{})
 }

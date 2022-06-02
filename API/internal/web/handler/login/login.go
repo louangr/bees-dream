@@ -5,7 +5,6 @@ import (
 	"fmt"
 	e "internal/entities"
 	"internal/persistence/dao"
-	"internal/persistence/errors"
 	"io/ioutil"
 	"net/http"
 	"utils"
@@ -51,12 +50,10 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &login)
 
-	user, errAuth := auth.Authentification(login.Login)
+	response := auth.Authentification(login.Login)
 
-	if !errAuth.IsNil() {
-		w.WriteHeader(errAuth.Code)
-
-		fmt.Fprintf(w, "%s", errAuth.ToJson())
+	if response.Code != 200 {
+		fmt.Fprintf(w, "%s", e.NewGenericResponse[e.Logged](response.Code, response.Message, e.Logged{}).ToJson())
 		return
 	}
 
@@ -65,27 +62,19 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 
 	if err != nil {
-
 		messageError = fmt.Sprintf("Wrong password for login %s", user.Login)
-		errAuth = errors.NewError(404, messageError)
-
-		w.WriteHeader(errAuth.Code)
-		fmt.Fprintf(w, "%s", errAuth.ToJson())
+		fmt.Fprintf(w, "%s", e.NewGenericResponse[e.Logged](404, messageError, e.Logged{}).ToJson())
 		return
-
 	}
 
 	token, errJ := utils.GenerateJWT(user)
 
 	if !errJ.IsNil() {
-		w.WriteHeader(errAuth.Code)
-		fmt.Fprintf(w, "%s", errJ.ToJson())
+		fmt.Fprintf(w, "%s", e.NewGenericResponse[e.Logged](errJ.Code, errJ.Message, e.Logged{}).ToJson())
 		return
 	}
 
 	var logged e.Logged = e.NewLogged(user, token.Token)
-
-	js, _ := json.Marshal(logged)
 
 	/* 	http.SetCookie(w, &http.Cookie{
 		Name:    "token",
@@ -93,6 +82,5 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 		Expires: token.Time,
 	}) */
 
-	fmt.Fprintf(w, "%s", js)
-
+	fmt.Fprintf(w, "%s", e.NewGenericResponse[e.Logged](200, messageError, logged).ToJson())
 }

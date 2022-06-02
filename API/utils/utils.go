@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"internal/persistence/types"
+	"internal/entities"
 	"net/http"
 	"strings"
 
@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func BsonToStructs[T types.Collection](data []primitive.M, storage *[]T) {
+func BsonToStructs[T entities.Collection](data []primitive.M, storage *[]T) {
 
 	for _, v := range data {
 
@@ -24,14 +24,14 @@ func BsonToStructs[T types.Collection](data []primitive.M, storage *[]T) {
 
 }
 
-func BsonToStruct[T types.Collection](data primitive.M, storage *T) {
+func BsonToStruct[T entities.Collection](data primitive.M, storage *T) {
 
 	bytess, _ := bson.Marshal(data)
 
 	bson.Unmarshal(bytess, &storage)
 }
 
-func StructToBson[T types.Collection](data T) bson.D {
+func StructToBson[T entities.Collection](data T) bson.D {
 
 	var result bson.D
 
