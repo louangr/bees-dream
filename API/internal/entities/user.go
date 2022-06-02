@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // swagger:response userStruct
@@ -22,6 +23,7 @@ type Information struct {
 	FirstName string `json:"firstname" bson:"FirstName"`
 	LastName  string `json:"lastname" bson:"LastName"`
 	Company   string `json:"company" bson:"Company"`
+	Age       int    `json:"age" bson:"Age"`
 }
 
 type User struct {
@@ -36,8 +38,8 @@ func NewUser(id int, informations Information, role string, login string, passwo
 	return User{id, informations, role, login, password}
 }
 
-func NewInformation(firstName string, lastName string, compagny string) Information {
-	return Information{firstName, lastName, compagny}
+func NewInformation(firstName string, lastName string, compagny string, age int) Information {
+	return Information{firstName, lastName, compagny, age}
 }
 
 func (u User) GetId() int {
@@ -50,6 +52,19 @@ func (u User) CreateWithId() any {
 
 	return NewUser(id, u.Informations, u.Role, u.Login, u.Password)
 
+}
+
+func (u *User) HashPassword() error {
+
+	bytes, err := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
+
+	if err != nil {
+		return fmt.Errorf("Can't encrypt password")
+	}
+
+	u.Password = string(bytes)
+
+	return nil
 }
 
 func (u User) GetCollectionName() string {
