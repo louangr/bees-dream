@@ -1,10 +1,11 @@
 import React from "react"
-import { TextField } from "@mui/material"
+import { AlertColor, TextField } from "@mui/material"
 import LoadingButton from '@mui/lab/LoadingButton'
 import SharedStyle from "../shared/styles"
 import { JSEncrypt } from "jsencrypt";
 import { LoginApiClient } from "../api/main"
 import { Logged } from "../api/models/Logged"
+import MessageAlert from "./MessageAlert";
 
 interface LoginProps {
   onLogin: (loggedUser: Logged) => void
@@ -16,6 +17,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [password, setPassword] = React.useState<string | undefined>(undefined)
   const [hasPasswordError, setHasPasswordError] = React.useState<boolean>(false)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [alertType, setAlertType] = React.useState<AlertColor>('error')
+  const [alertMessage, setAlertMessage] = React.useState<string>('')
+  const [isAlertOpen, setIsAlertOpen] = React.useState<boolean>(false)
 
   const encryptPassword = (password: string): string => {
     // Start our encryptor.
@@ -38,7 +42,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     var encrypted = encrypt.encrypt(password);
     return encrypted + "";
   }
-  const onSubmitButtonClick = async () => {
+  const onSubmitButtonClick = () => {
     const hasEmail = email && email.trim() !== ""
     const hasPassword = password && password.trim() !== ""
 
@@ -48,49 +52,61 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     if (hasEmail && hasPassword) {
       setIsLoading(true)
 
-      const loggedUser = await LoginApiClient.login({ login: { login: email, password: encryptPassword(password) } })
-
-      /*axios.post('http://167.99.83.46:8080/login',{ login: email,password: encryptPassword(password)}).then((data)=>{
-      })*/
+      LoginApiClient.login({ login: { login: email, password: encryptPassword(password) } })
+        .then((result) => {
+          onLogin(result)
+        }).catch(e => {
+          setIsAlertOpen(true)
+          setAlertType('error')
+          setAlertMessage('Erreur : Identifiant ou mot de passe incorrect')
+        })
 
       setIsLoading(false)
-      onLogin(loggedUser)
+
     }
   }
 
   return (
-    <div style={SharedStyle.container}>
-      <div style={SharedStyle.formContainer}>
-        <TextField
-          required
-          error={hasEmailError}
-          id="outlined-required"
-          label={hasEmailError ? "Email requis" : "Email"}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TextField
-          required
-          error={hasPasswordError}
-          id="outlined-password-input"
-          label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
-          type="password"
-          autoComplete="current-password"
-          style={{
-            marginTop: 16,
-            marginBottom: 16
-          }}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <LoadingButton
-          style={{ width: 125 }}
-          variant="contained"
-          loading={isLoading}
-          onClick={onSubmitButtonClick}
-        >
-          Login
-        </LoadingButton>
+    <>
+      <MessageAlert
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        message={alertMessage}
+        type={alertType}
+      />
+      <div style={SharedStyle.container}>
+        <div style={SharedStyle.formContainer}>
+          <TextField
+            required
+            error={hasEmailError}
+            id="outlined-required"
+            label={hasEmailError ? "Email requis" : "Email"}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            required
+            error={hasPasswordError}
+            id="outlined-password-input"
+            label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
+            type="password"
+            autoComplete="current-password"
+            style={{
+              marginTop: 16,
+              marginBottom: 16
+            }}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <LoadingButton
+            style={{ width: 125 }}
+            variant="contained"
+            loading={isLoading}
+            onClick={onSubmitButtonClick}
+          >
+            Login
+          </LoadingButton>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
