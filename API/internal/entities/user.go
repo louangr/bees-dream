@@ -1,6 +1,10 @@
 package entities
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 // swagger:response userStruct
 type swaggUserStruct struct {
@@ -38,6 +42,14 @@ func NewInformation(firstName string, lastName string, compagny string) Informat
 
 func (u User) GetId() int {
 	return u.Id
+}
+
+func (u User) CreateWithId() any {
+
+	var id int = int(uuid.New().ID())
+
+	return NewUser(id, u.Informations, u.Role, u.Login, u.Password)
+
 }
 
 func (u User) GetCollectionName() string {

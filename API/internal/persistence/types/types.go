@@ -6,6 +6,7 @@ type Collection interface {
 	entities.Monodose | entities.User
 
 	GetId() int
+	CreateWithId() any
 	GetCollectionName() string
 }
 
