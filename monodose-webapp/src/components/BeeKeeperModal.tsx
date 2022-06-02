@@ -109,7 +109,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
                 value={role}
                 label="Rôle"
                 onChange={(event: SelectChangeEvent) => setRole(event.target.value)}
-                >
+              >
                 <MenuItem style={{ color: '#00000099' }} value={'admin'}>Administrateur</MenuItem>
                 <MenuItem style={{ color: '#00000099' }} value={'beeKeeper'}>Apiculteur</MenuItem>
               </Select>
