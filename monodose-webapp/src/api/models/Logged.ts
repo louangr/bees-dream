@@ -14,11 +14,11 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    Information,
-    InformationFromJSON,
-    InformationFromJSONTyped,
-    InformationToJSON,
-} from './Information';
+    User,
+    UserFromJSON,
+    UserFromJSONTyped,
+    UserToJSON,
+} from './User';
 
 /**
  * 
@@ -28,40 +28,16 @@ import {
 export interface Logged {
     /**
      * 
-     * @type {number}
-     * @memberof Logged
-     */
-    id?: number;
-    /**
-     * 
-     * @type {Information}
-     * @memberof Logged
-     */
-    informations?: Information;
-    /**
-     * 
-     * @type {string}
-     * @memberof Logged
-     */
-    login?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Logged
-     */
-    password?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Logged
-     */
-    role?: string;
-    /**
-     * 
      * @type {string}
      * @memberof Logged
      */
     token?: string;
+    /**
+     * 
+     * @type {User}
+     * @memberof Logged
+     */
+    user?: User;
 }
 
 export function LoggedFromJSON(json: any): Logged {
@@ -74,12 +50,8 @@ export function LoggedFromJSONTyped(json: any, ignoreDiscriminator: boolean): Lo
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'informations': !exists(json, 'informations') ? undefined : InformationFromJSON(json['informations']),
-        'login': !exists(json, 'login') ? undefined : json['login'],
-        'password': !exists(json, 'password') ? undefined : json['password'],
-        'role': !exists(json, 'role') ? undefined : json['role'],
         'token': !exists(json, 'token') ? undefined : json['token'],
+        'user': !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
     };
 }
 
@@ -92,12 +64,8 @@ export function LoggedToJSON(value?: Logged | null): any {
     }
     return {
         
-        'id': value.id,
-        'informations': InformationToJSON(value.informations),
-        'login': value.login,
-        'password': value.password,
-        'role': value.role,
         'token': value.token,
+        'user': UserToJSON(value.user),
     };
 }
 

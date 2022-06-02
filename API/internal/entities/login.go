@@ -19,7 +19,7 @@ type _ struct {
 }
 
 type Logged struct {
-	User
+	User  User   `json:"user"`
 	Token string `json:"token"`
 }
 

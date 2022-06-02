@@ -403,29 +403,12 @@
     "Logged": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Id"
-        },
-        "informations": {
-          "$ref": "#/definitions/Information"
-        },
-        "login": {
-          "type": "string",
-          "x-go-name": "Login"
-        },
-        "password": {
-          "type": "string",
-          "x-go-name": "Password"
-        },
-        "role": {
-          "type": "string",
-          "x-go-name": "Role"
-        },
         "token": {
           "type": "string",
           "x-go-name": "Token"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
         }
       },
       "x-go-package": "internal/entities"
