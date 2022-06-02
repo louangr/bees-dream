@@ -3,6 +3,7 @@
 export * from './Beekeeper';
 export * from './ErrorsJson';
 export * from './Information';
+export * from './Logged';
 export * from './Login';
 export * from './ModelDate';
 export * from './Monodose';

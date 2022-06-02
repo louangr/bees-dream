@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/LoginApi.ts
 apis/MonodoseApi.ts
 apis/UserApi.ts
@@ -7,6 +6,7 @@ index.ts
 models/Beekeeper.ts
 models/ErrorsJson.ts
 models/Information.ts
+models/Logged.ts
 models/Login.ts
 models/ModelDate.ts
 models/Monodose.ts

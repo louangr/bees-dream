@@ -41,7 +41,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/userStruct"
+            "$ref": "#/responses/loggedStruct"
           },
           "404": {
             "$ref": "#/responses/errorsJson"

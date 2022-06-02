@@ -18,6 +18,9 @@ import {
     ErrorsJson,
     ErrorsJsonFromJSON,
     ErrorsJsonToJSON,
+    Logged,
+    LoggedFromJSON,
+    LoggedToJSON,
     Login,
     LoginFromJSON,
     LoginToJSON,
@@ -36,7 +39,7 @@ export class LoginApi extends runtime.BaseAPI {
      * Ask for login by send Login object in the request body
      * Ask for login
      */
-    async loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<void>> {
+    async loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<runtime.ApiResponse<Logged>> {
         if (requestParameters.login === null || requestParameters.login === undefined) {
             throw new runtime.RequiredError('login','Required parameter requestParameters.login was null or undefined when calling login.');
         }
@@ -55,15 +58,16 @@ export class LoginApi extends runtime.BaseAPI {
             body: LoginToJSON(requestParameters.login),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoggedFromJSON(jsonValue));
     }
 
     /**
      * Ask for login by send Login object in the request body
      * Ask for login
      */
-    async login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<void> {
-        await this.loginRaw(requestParameters, initOverrides);
+    async login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverideFunction): Promise<Logged> {
+        const response = await this.loginRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }

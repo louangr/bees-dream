@@ -32,7 +32,7 @@ func NewLoginRoutes() LoginRoutes {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/userStruct"
+//     "$ref": "#/responses/loggedStruct"
 //   "404":
 //     "$ref": "#/responses/errorsJson"
 //   "500":
