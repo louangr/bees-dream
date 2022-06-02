@@ -21,6 +21,12 @@ import { exists, mapValues } from '../runtime';
 export interface Information {
     /**
      * 
+     * @type {number}
+     * @memberof Information
+     */
+    age?: number;
+    /**
+     * 
      * @type {string}
      * @memberof Information
      */
@@ -49,6 +55,7 @@ export function InformationFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'age': !exists(json, 'age') ? undefined : json['age'],
         'company': !exists(json, 'company') ? undefined : json['company'],
         'firstname': !exists(json, 'firstname') ? undefined : json['firstname'],
         'lastname': !exists(json, 'lastname') ? undefined : json['lastname'],
@@ -64,6 +71,7 @@ export function InformationToJSON(value?: Information | null): any {
     }
     return {
         
+        'age': value.age,
         'company': value.company,
         'firstname': value.firstname,
         'lastname': value.lastname,
