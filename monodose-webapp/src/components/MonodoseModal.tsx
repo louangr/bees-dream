@@ -2,6 +2,7 @@ import * as React from 'react'
 import "../bufferprocess"
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
+import { AlertColor } from '@mui/material'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -20,6 +21,7 @@ import { User } from "../api/models/User"
 import { Document, Page, Image, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
 import { MonodoseApiClient, UserApiClient } from '../api/main'
 import moment from 'moment'
+import MessageAlert from './MessageAlert'
 import { UserContext } from '../context/UserContext'
 
 export enum MonodoseModalMode {
@@ -78,7 +80,12 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
   const [documentPdfValue, setDocumentPdfValue] = React.useState<any>(null);
   const [beekeepers, setBeekeepers] = React.useState<User[]>([])
   const [beekeeperSelected, setBeekeeperSelected] = React.useState<string>('');
-
+  const [isAlertOpen, setIsAlertOpen] = React.useState<boolean>(false)
+  const [isAlertClosable, setIsAlertClosable] = React.useState<boolean>(false)
+  const [isAlertAutoHidden, setIsAlertAutoHidden] = React.useState<boolean>(false)
+  const [alertType, setAlertType] = React.useState<AlertColor>('error')
+  const [alertMessage, setAlertMessage] = React.useState<string>('')
+  const [isDisabled, setIsDisabled] = React.useState<boolean>(false)
   const { loggedUser } = React.useContext(UserContext)
 
 
@@ -139,30 +146,27 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
     }
 
     );
-
-
-
-
-
     //get beekeepers
 
   }, [])
-
+  /**
   React.useEffect(() => {
-    if (qrvalue != undefined) {
+    if () {
 
-      setDocumentPdfValue(DocPDF())
+      
 
     }
   }, [qrvalue])
+  **/
 
   React.useEffect(() => {
-    if (documentPdfValue != null) {
-
-      download_qr("BtnPDF");
+    if (qrvalue != undefined && mode == MonodoseModalMode.Creation) {
+      setDocumentPdfValue(DocPDF())
+      if (documentPdfValue != null) {
+        download_qr("BtnPDF");
+      }
     }
-
-  }, [documentPdfValue])
+  }, [qrvalue])
 
   const onSubmitButton = () => {
 
@@ -223,8 +227,8 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
           ])
         });
 
-        //setQrvalue('21')
-        setQrvalue(addMonodose.id?.toString())
+        setQrvalue('21')
+        //setQrvalue(addMonodose.id?.toString())
         console.log(addMonodose)
 
         setIsLoading(false)
@@ -251,7 +255,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
 
     var btn = document.getElementById(idQr) as HTMLButtonElement;
     if (btn != null) {
-
+      console.log(<DocPDF />);
       btn.click();
     }
 
@@ -265,179 +269,204 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
         headers: new Headers([
           ['Token', loggedUser?.token || '']
         ])
-      });
+      }).then(() => {
+        setIsAlertOpen(true)
+        setIsAlertAutoHidden(true)
+        setIsAlertClosable(true)
+        setAlertType('success')
+        setAlertMessage('Mise à jour effectuée')
+        setIsDisabled(productionEndDate ? true : false)
+      })
+        .catch(() => {
+          setIsAlertOpen(true)
+          setIsAlertAutoHidden(false)
+          setIsAlertClosable(true)
+          setAlertType('error')
+          setAlertMessage('Erreur : Serveur injoignable')
+        });
     })()
 
   }
 
   return (
-    <Dialog open={isModalOpen} onClose={handleClose}>
-      <DialogTitle
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <p style={{ margin: 0, padding: 0 }}>{mode === MonodoseModalMode.Edition ? `Monodose ${monodose?.id}` : 'Nouvelle monodose'}</p>
-        {mode === MonodoseModalMode.Edition && (
-          <div>
-            <IconButton
+    <>
+      <MessageAlert
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        message={alertMessage}
+        isClosable={isAlertClosable}
+        isAutoHidden={isAlertAutoHidden}
+        type={alertType}
+      />
+      <Dialog open={isModalOpen} onClose={handleClose}>
+        <DialogTitle
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <p style={{ margin: 0, padding: 0 }}>{mode === MonodoseModalMode.Edition ? `Monodose ${monodose?.id}` : 'Nouvelle monodose'}</p>
+          {mode === MonodoseModalMode.Edition && (
+            <div>
+              <IconButton
 
-              size='large'
-              edge='start'
-              color='inherit'
-              aria-label='menu'
-            >
-              <QrCode2Icon />
-            </IconButton>
-            <IconButton
-              onClick={() => { deleteMonodose(monodose!.id!.toString()) }}
-              size='large'
-              edge='start'
-              color='inherit'
-              aria-label='menu'
-            >
-              <DeleteIcon />
-            </IconButton>
-          </div>
-
-        )}
-      </DialogTitle>
-      <DialogContent style={{ paddingBottom: 0 }}>
-
-        <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
-            <TextField
-              label='Localisation'
-              margin='normal'
-              value={location}
-              onChange={(event) => setLocation(event.target.value)}
-            />
-            <TextField
-              label='Variété du miel'
-              margin='normal'
-              value={honeyVariety}
-              onChange={(event) => setHoneyVariety(event.target.value)}
-            />
-            <FormControl
-              margin='normal'>
-              <InputLabel id='simple-select' color='primary'>
-                Apiculteur
-              </InputLabel>
-              <Select
-                value={beekeeperSelected} // TODO beekeeper id if in edit mode
-                label='Apiculteur'
-                //onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
-                onChange={(event: SelectChangeEvent) => setBeekeeperSelected(event.target.value as string)}
+                size='large'
+                edge='start'
+                color='inherit'
+                aria-label='menu'
               >
-                {
-                  beekeepers?.filter(beekeepers => beekeepers.role == "apiculteur").map((beekeeper: User) => (
+                <QrCode2Icon />
+              </IconButton>
+              <IconButton
+                onClick={() => { deleteMonodose(monodose!.id!.toString()) }}
+                size='large'
+                edge='start'
+                color='inherit'
+                aria-label='menu'
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
 
-                    <MenuItem style={{ color: '#00000099' }} value={beekeeper.id}>{beekeeper.informations?.firstname + " " + beekeeper.informations?.lastname}</MenuItem>
+          )}
+        </DialogTitle>
+        <DialogContent style={{ paddingBottom: 0 }}>
+
+          <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
+              <TextField
+                label='Localisation'
+                margin='normal'
+                value={location}
+                onChange={(event) => setLocation(event.target.value)}
+              />
+              <TextField
+                label='Variété du miel'
+                margin='normal'
+                value={honeyVariety}
+                onChange={(event) => setHoneyVariety(event.target.value)}
+              />
+              <FormControl
+                margin='normal'>
+                <InputLabel id='simple-select' color='primary'>
+                  Apiculteur
+                </InputLabel>
+                <Select
+                  value={beekeeperSelected} // TODO beekeeper id if in edit mode
+                  label='Apiculteur'
+                  //onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
+                  onChange={(event: SelectChangeEvent) => setBeekeeperSelected(event.target.value as string)}
+                >
+                  {
+                    beekeepers?.filter(beekeepers => beekeepers.role == "apiculteur").map((beekeeper: User) => (
+
+                      <MenuItem style={{ color: '#00000099' }} value={beekeeper.id}>{beekeeper.informations?.firstname + " " + beekeeper.informations?.lastname}</MenuItem>
 
 
-                  ))
-                }
-              </Select>
-            </FormControl>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            </div>
+            <Divider orientation='vertical' variant='middle' sx={{ borderRightWidth: 2, borderRadius: 10 }} flexItem />
+            <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
+              <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  showDaysOutsideCurrentMonth
+                  clearable
+                  clearText='Effacer'
+                  cancelText='Annuler'
+                  label='Date début de production'
+                  inputFormat='dd/MM/yyyy'
+                  value={productionStartDate}
+                  onChange={(newProductionStartDate) => {
+                    setProductionStartDate(newProductionStartDate);
+                  }}
+                  PopperProps={{
+                    placement: 'auto-end'
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      margin='normal'
+                      {...params}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  showDaysOutsideCurrentMonth
+                  clearable
+                  clearText='Effacer'
+                  cancelText='Annuler'
+                  label='Date fin de production'
+                  inputFormat='dd/MM/yyyy'
+                  value={productionEndDate}
+                  onChange={(newProductionEndDate) => {
+                    setProductionEndDate(newProductionEndDate)
+                    setDluoDate(newProductionEndDate ? new Date(new Date(newProductionEndDate).setMonth(new Date(newProductionEndDate).getMonth() + 18)) : null)
+                  }}
+                  PopperProps={{
+                    placement: 'auto-end'
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      margin='normal'
+                      {...params}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  disabled
+                  label='Date DLUO'
+                  inputFormat='dd/MM/yyyy'
+                  value={dluoDate}
+                  onChange={setDluoDate}
+                  renderInput={(params) => (
+                    <TextField
+                      margin='normal'
+                      {...params}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+            </div>
+
           </div>
-          <Divider orientation='vertical' variant='middle' sx={{ borderRightWidth: 2, borderRadius: 10 }} flexItem />
-          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
-            <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
-              <DatePicker
-                showDaysOutsideCurrentMonth
-                clearable
-                clearText='Effacer'
-                cancelText='Annuler'
-                label='Date début de production'
-                inputFormat='dd/MM/yyyy'
-                value={productionStartDate}
-                onChange={(newProductionStartDate) => {
-                  setProductionStartDate(newProductionStartDate);
-                }}
-                PopperProps={{
-                  placement: 'auto-end'
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    margin='normal'
-                    {...params}
-                  />
-                )}
-              />
-            </LocalizationProvider>
-            <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
-              <DatePicker
-                showDaysOutsideCurrentMonth
-                clearable
-                clearText='Effacer'
-                cancelText='Annuler'
-                label='Date fin de production'
-                inputFormat='dd/MM/yyyy'
-                value={productionEndDate}
-                onChange={(newProductionEndDate) => {
-                  setProductionEndDate(newProductionEndDate)
-                  setDluoDate(newProductionEndDate ? new Date(new Date(newProductionEndDate).setMonth(new Date(newProductionEndDate).getMonth() + 18)) : null)
-                }}
-                PopperProps={{
-                  placement: 'auto-end'
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    margin='normal'
-                    {...params}
-                  />
-                )}
-              />
-            </LocalizationProvider>
-            <LocalizationProvider locale={fr} dateAdapter={AdapterDateFns}>
-              <DatePicker
-                disabled
-                label='Date DLUO'
-                inputFormat='dd/MM/yyyy'
-                value={dluoDate}
-                onChange={setDluoDate}
-                renderInput={(params) => (
-                  <TextField
-                    margin='normal'
-                    {...params}
-                  />
-                )}
-              />
-            </LocalizationProvider>
-          </div>
-
-        </div>
-        <div style={{ display: "none" }}>
-          {qrvalue != undefined && <div>  <QRCode
-            id="QRCodeParent"
-            size={50}
-            value={"http://localhost:3000/form?id=" + qrvalue}
-          />
-            <QRCode
-              id="QRCodeEnfant"
+          <div style={{ display: "none" }}>
+            {qrvalue != undefined && <div>  <QRCode
+              id="QRCodeParent"
               size={50}
-              value={"http://localhost:3000?id=" + qrvalue}
+              value={"http://localhost:3000/form?id=" + qrvalue}
             />
-          </div>}
+              <QRCode
+                id="QRCodeEnfant"
+                size={50}
+                value={"http://localhost:3000?id=" + qrvalue}
+              />
+            </div>}
 
-          <PDFDownloadLink document={documentPdfValue} fileName={"qrcodes" + qrvalue + ".pdf"}>
-            <Button
-              id="BtnPDF"
-            >
-              Télécharger en PDF
-            </Button>
-          </PDFDownloadLink>
+            <PDFDownloadLink document={documentPdfValue} fileName={"qrcodes" + qrvalue + ".pdf"}>
+              <Button
+                id="BtnPDF"
+              >
+                Télécharger en PDF
+              </Button>
+            </PDFDownloadLink>
 
-        </div>
+          </div>
 
-      </DialogContent>
-      <DialogActions>
-        <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === MonodoseModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
-      </DialogActions>
-    </Dialog >
+        </DialogContent>
+        <DialogActions>
+          <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === MonodoseModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
+        </DialogActions>
+      </Dialog >
+    </>
+
   )
 }
 
