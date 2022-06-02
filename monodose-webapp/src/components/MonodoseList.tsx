@@ -10,6 +10,8 @@ import { Monodose } from '../api/models/Monodose'
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import MonodoseModal, { MonodoseModalMode } from './MonodoseModal'
+import { MonodoseApiClient } from '../api/main'
+import { UserContext } from '../context/UserContext'
 
 interface Column {
     id: string
@@ -27,29 +29,25 @@ const columns: readonly Column[] = [
     { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170, format: (m) => m.honeyVariety }
 ]
 
-// TODO: random data, remove them after connecting the list to API
-const rows: Monodose[] = [
-    {
-        id: 1,
-        beekeeper: {
-            firstname: 'FirstName',
-            lastname: 'LastName',
-            company: 'Company'
-        },
-        location: 'Nantes',
-        dates: {
-            startOfProduction: '10/01/2022',
-            endOfProduction: '30/05/2022',
-            dluo: '30/02/2023'
-        },
-        honeyVariety: 'variety',
-    },
-]
-
 const MonodoseList: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false)
     const [selectedMonodose, setSelectedMonodose] = React.useState<Monodose>()
     const [modalMode, setModalMode] = React.useState<MonodoseModalMode>(MonodoseModalMode.Edition)
+    const { loggedUser } = React.useContext(UserContext)
+    const [rows, setRows] = React.useState<Monodose[]>()
+
+    React.useEffect(() => {
+        (async () => {
+            await MonodoseApiClient.getAllMonodoses({
+                headers: new Headers([
+                    ['Token', loggedUser?.token || '']
+                ])
+            }).then((data) => {
+                setRows(data)
+            })
+
+        })()
+    }, [])
 
     return (
         <>
@@ -58,9 +56,9 @@ const MonodoseList: React.FC = () => {
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                {columns.map((column) => (
+                                {columns.map((column, index) => (
                                     <TableCell
-                                        key={column.id}
+                                        key={index}
                                         align={column.align}
                                         style={{ minWidth: column.minWidth }}
                                     >
@@ -71,15 +69,15 @@ const MonodoseList: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {
-                                rows.map((row) => (
-                                    <TableRow hover sx={{ '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }} role="checkbox" tabIndex={0} key={row.id}
+                                rows?.map((row, index) => (
+                                    <TableRow hover sx={{ '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }} role="checkbox" tabIndex={0} key={index}
                                         onClick={() => {
                                             setSelectedMonodose(row)
                                             setModalMode(MonodoseModalMode.Edition)
                                             setIsModalOpen(true)
                                         }}
                                     >
-                                        {columns.map((column) => <TableCell key={column.id} align={column.align}>{column.format(row)}</TableCell>)}
+                                        {columns.map((column, index) => <TableCell key={index} align={column.align}>{column.format(row)}</TableCell>)}
                                     </TableRow>
                                 ))
                             }
