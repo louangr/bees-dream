@@ -1,7 +1,12 @@
 .questions {
-    margin: 3vw;
+    /* margin: 3vw; */
+    margin-top: 3vw;
+    margin-left: 12vw;
     display: flex;
     flex-flow: column;
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 70px;
+    width: 80%;
 
     .logo{
         position: absolute;
@@ -32,10 +37,9 @@
             position: absolute;
             width: 64px;
             height: 62px;
-            right: 10%
+            right: 5%
         }
     }
-
 
 }
 
