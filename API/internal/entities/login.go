@@ -12,15 +12,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// swagger:response loginStruct
-type swaggUserStruct struct {
-	// in:body
-	Body Login
+type Logged struct {
+	User
+	Token string `json:"token"`
 }
 
 type Login struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
+}
+
+func NewLogged(user User, token string) Logged {
+
+	var log Logged = Logged{user, token}
+
+	log.User.Password = ""
+
+	return log
 }
 
 func NewLogin(login string, password string) Login {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	e "internal/entities"
+	"internal/persistence/errors"
 	m "internal/persistence/mongo"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,9 +18,11 @@ func NewAuthentification() Authentification {
 	return Authentification{}
 }
 
-func (a Authentification) Authentification(login string) (e.User, error) {
+func (a Authentification) Authentification(login string) (e.User, errors.ErrorsJson) {
 
 	var user e.User
+
+	var messageError string = "Can't get data from database"
 
 	conn, err := m.GetConnexion()
 
@@ -31,11 +34,12 @@ func (a Authentification) Authentification(login string) (e.User, error) {
 
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
-				return e.User{}, fmt.Errorf("User with login %s does not exist", login)
+				messageError = fmt.Sprintf("User with login %s does not exist", login)
+				return e.User{}, errors.NewError(404, messageError)
 			}
 		}
-		return user, nil
+		return user, errors.ErrorsJson{}
 	}
 
-	return e.User{}, fmt.Errorf("Can't get data from database")
+	return e.User{}, errors.NewError(500, messageError)
 }
