@@ -55,13 +55,15 @@ func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 
 		var info string
 
-		if route != "login" {
+		var method string = r.Method
+
+		if route != "login" && method != "OPTIONS" {
 			err := VerifyJWT(r, w)
 
 			if !err.IsNil() {
 				w.WriteHeader(err.Code)
 
-				info = fmt.Sprintf("Route : %s & Method : %s", r.URL, r.Method)
+				info = fmt.Sprintf("Route : %s & Method : %s", r.URL, method)
 
 				WriteInLog(info)
 
@@ -72,7 +74,7 @@ func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 
 		handler(w, r)
 
-		info = fmt.Sprintf("Route : %s & Method : %s", r.URL, r.Method)
+		info = fmt.Sprintf("Route : %s & Method : %s", r.URL, method)
 
 		WriteInLog(info)
 

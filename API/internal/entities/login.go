@@ -13,7 +13,7 @@ import (
 )
 
 type Logged struct {
-	User
+	User  User
 	Token string `json:"token"`
 }
 
