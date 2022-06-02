@@ -19,15 +19,15 @@ interface Column {
   label: string
   minWidth?: number
   align?: 'right'
-  format: (u : User) => string | undefined
+  format: (u: User) => string | undefined
 }
 
 const columns: readonly Column[] = [
-  { id: 'informations.firstname', label: 'Prénom', minWidth: 170, format: (u) => u.informations?.firstname},
-  { id: 'informations.lastname', label: 'Nom', minWidth: 170,  format: (u) => u.informations?.lastname },
+  { id: 'informations.firstname', label: 'Prénom', minWidth: 170, format: (u) => u.informations?.firstname },
+  { id: 'informations.lastname', label: 'Nom', minWidth: 170, format: (u) => u.informations?.lastname },
   { id: 'login', label: 'Login', minWidth: 170, format: (u) => u.login },
-  { id: 'informations.company', label: 'Entreprise', minWidth: 170,  format: (u) => u.informations?.company },
-  { id: 'role', label: 'Rôle', minWidth: 170,  format: (u) => u.role }
+  { id: 'informations.company', label: 'Entreprise', minWidth: 170, format: (u) => u.informations?.company },
+  { id: 'age', label: 'Age', minWidth: 170, format: (u) => u.informations?.age?.toString() }
 ]
 
 const BeeKeeperList: React.FC = () => {
@@ -35,22 +35,37 @@ const BeeKeeperList: React.FC = () => {
   const [selectedUser, setSelectedUser] = React.useState<User>()
   const [modalMode, setModalMode] = React.useState<BeeKeeperModalMode>(BeeKeeperModalMode.Edition)
   const { loggedUser } = React.useContext(UserContext)
-  const [rows,setRows] = React.useState<User[]>()
+  const [rows, setRows] = React.useState<User[]>()
 
   React.useEffect(() => {
-    (async () =>{
+    (async () => {
       await UserApiClient.getAllUsers({
         headers: new Headers([
           ['Token', loggedUser?.token || '']
-      ])
-      }).then((data)=>{
-        setRows(data.filter((user)=>{
+        ])
+      }).then((data) => {
+        setRows(data.filter((user) => {
           return user.role === Role.Beekeeper
         }))
       })
 
     })()
-  },[])
+  }, [])
+
+  React.useEffect(() => {
+    (async () => {
+      await UserApiClient.getAllUsers({
+        headers: new Headers([
+          ['Token', loggedUser?.token || '']
+        ])
+      }).then((data) => {
+        setRows(data.filter((user) => {
+          return user.role === Role.Beekeeper
+        }))
+      })
+
+    })()
+  }, [isModalOpen])
 
   return (
     <>

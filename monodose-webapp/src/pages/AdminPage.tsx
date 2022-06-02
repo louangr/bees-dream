@@ -3,6 +3,7 @@ import { Box, Tab } from "@mui/material"
 import React from "react"
 import BeeKeeperList from "../components/BeeKeeperList"
 import CustomAppBar from "../components/CustomAppBar"
+import MessageAlert from "../components/MessageAlert"
 import MonodoseList from "../components/MonodoseList"
 import { UserContext } from "../context/UserContext"
 import { Role } from "../models/Role"
@@ -30,9 +31,14 @@ const AdminPage: React.FC = () => {
           </TabContext>
         </div>
         :
-        <>
-          Aucune données disponibles selon vos droits
-        </>
+        <MessageAlert
+          isOpen={true}
+          onClose={() => { }}
+          message={'Aucune données disponible selon vos droits'}
+          isClosable={false}
+          isAutoHidden={false}
+          type={'error'}
+        />
       }
     </>
   )
