@@ -53,6 +53,8 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 
 	user, errAuth := auth.Authentification(login.Login)
 
+	fmt.Println("U : ", user)
+
 	if !errAuth.IsNil() {
 		w.WriteHeader(errAuth.Code)
 
@@ -62,7 +64,13 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 
 	password, _ := login.UnHashPassword()
 
+	fmt.Println("Pass : ", password)
+
+	fmt.Println("User :", user.Password)
+
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+	fmt.Println("Err : ", err)
 
 	if err != nil {
 

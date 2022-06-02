@@ -100,6 +100,8 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &user)
 
+	user.HashPassword()
+
 	res, err := dao.Create(user)
 
 	if !err.IsNil() {
