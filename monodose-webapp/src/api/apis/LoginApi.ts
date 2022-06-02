@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime';
 import {
+    ErrorsJson,
+    ErrorsJsonFromJSON,
+    ErrorsJsonToJSON,
     Login,
     LoginFromJSON,
     LoginToJSON,
-    Login404Response,
-    Login404ResponseFromJSON,
-    Login404ResponseToJSON,
 } from '../models';
 
 export interface LoginRequest {

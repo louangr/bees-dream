@@ -367,6 +367,21 @@
       },
       "x-go-package": "internal/entities"
     },
+    "ErrorsJson": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        }
+      },
+      "x-go-package": "internal/persistence/errors"
+    },
     "Information": {
       "type": "object",
       "properties": {
@@ -485,18 +500,7 @@
     "errorsJson": {
       "description": "",
       "schema": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int64",
-            "x-go-name": "Code"
-          },
-          "message": {
-            "type": "string",
-            "x-go-name": "Message"
-          }
-        }
+        "$ref": "#/definitions/ErrorsJson"
       }
     },
     "loggedStruct": {

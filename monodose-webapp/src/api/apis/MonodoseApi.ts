@@ -15,9 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
-    Login404Response,
-    Login404ResponseFromJSON,
-    Login404ResponseToJSON,
+    ErrorsJson,
+    ErrorsJsonFromJSON,
+    ErrorsJsonToJSON,
     Monodose,
     MonodoseFromJSON,
     MonodoseToJSON,

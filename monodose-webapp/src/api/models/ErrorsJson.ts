@@ -16,28 +16,28 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Update200Response
+ * @interface ErrorsJson
  */
-export interface Update200Response {
+export interface ErrorsJson {
     /**
      * 
      * @type {number}
-     * @memberof Update200Response
+     * @memberof ErrorsJson
      */
     code?: number;
     /**
      * 
      * @type {string}
-     * @memberof Update200Response
+     * @memberof ErrorsJson
      */
     message?: string;
 }
 
-export function Update200ResponseFromJSON(json: any): Update200Response {
-    return Update200ResponseFromJSONTyped(json, false);
+export function ErrorsJsonFromJSON(json: any): ErrorsJson {
+    return ErrorsJsonFromJSONTyped(json, false);
 }
 
-export function Update200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): Update200Response {
+export function ErrorsJsonFromJSONTyped(json: any, ignoreDiscriminator: boolean): ErrorsJson {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,7 +48,7 @@ export function Update200ResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-export function Update200ResponseToJSON(value?: Update200Response | null): any {
+export function ErrorsJsonToJSON(value?: ErrorsJson | null): any {
     if (value === undefined) {
         return undefined;
     }
