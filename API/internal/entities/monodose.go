@@ -2,6 +2,8 @@ package entities
 
 import (
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 // swagger:response monodoseStruct
@@ -55,6 +57,14 @@ func (m *Monodose) IsNil() bool {
 
 func (m Monodose) GetId() int {
 	return m.Id
+}
+
+func (m Monodose) CreateWithId() any {
+
+	var id int = int(uuid.New().ID())
+
+	return NewMonodose(id, *m.Beekeeper, *m.Dates, m.Location, m.HoneyVariety)
+
 }
 
 func (m Monodose) GetCollectionName() string {

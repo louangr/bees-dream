@@ -153,6 +153,8 @@ func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 
 	var id int = item.GetId()
 
+	var final any
+
 	var messageError string = "Can't get data from database"
 
 	var collection string = item.GetCollectionName()
@@ -162,18 +164,24 @@ func (d *Dao[T]) Create(item T) (T, errors.ErrorsJson) {
 		return empty, errors.NewError(400, messageError)
 	}
 
+	if id == -1 {
+		final = item.CreateWithId()
+	} else {
+		final = item
+	}
+
 	conn, err := m.GetConnexion()
 
 	if err == nil {
 		var coll *mongo.Collection = conn.Database("bee-dream").Collection(collection)
 
-		_, err := coll.InsertOne(context.TODO(), item)
+		_, err := coll.InsertOne(context.TODO(), final)
 		if err != nil {
 			messageError = fmt.Sprintf("Can't insert object %s with id %d in database", collection, id)
 			return empty, errors.NewError(500, messageError)
 		}
 
-		return item, errors.ErrorsJson{}
+		return final.(T), errors.ErrorsJson{}
 
 	}
 
