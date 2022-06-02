@@ -7,7 +7,7 @@ import QrCode2Icon from '@mui/icons-material/QrCode2';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SharedStyle from '../shared/styles';
 import '../assets/info/styles/Qrcode.css';
-import { Document, Page, Text, Image, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
+import { Document, Page, Image, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
 
 
 
@@ -81,19 +81,9 @@ const QrPage: React.FC = () => {
         link.click();
     }
 
-    function download_qr_test() {
-        var btn = document.getElementById("test") as HTMLButtonElement;
-        btn.click();
-    }
-
     return (
 
         <div style={SharedStyle.container}>
-            <Button
-                onClick={() => download_qr_test()}
-            >
-                test
-            </Button>
             <div style={SharedStyle.formContainer}>
                 <Button
                     startIcon={<QrCode2Icon />}

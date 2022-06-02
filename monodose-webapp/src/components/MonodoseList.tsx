@@ -20,11 +20,11 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'location', label: 'Localisation', minWidth: 170, format: (m) => m.location },
-    { id: 'dates.startofproduction', label: 'Date début de production', minWidth: 170, format: (m) => m.dates?.startOfProduction },
-    { id: 'dates.endofproduction', label: 'Date fin de production', minWidth: 170, format: (m) => m.dates?.endOfProduction },
-    { id: 'dates.dluo', label: 'Date DLUO', minWidth: 170, format: (m) => m.dates?.dluo },
-    { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170, format: (m) => m.honeyVariety }
+    { id: 'location', label: 'Localisation', minWidth: 170, format: (m) => m.location! },
+    { id: 'dates.startofproduction', label: 'Date début de production', minWidth: 170, format: (m) => m.dates!.startOfProduction! },
+    { id: 'dates.endofproduction', label: 'Date fin de production', minWidth: 170, format: (m) => m.dates!.endOfProduction! },
+    { id: 'dates.dluo', label: 'Date DLUO', minWidth: 170, format: (m) => m.dates!.dluo! },
+    { id: 'honeyvariety', label: 'Variété du miel', minWidth: 170, format: (m) => m.honeyVariety! }
 ]
 
 // TODO: random data, remove them after connecting the list to API

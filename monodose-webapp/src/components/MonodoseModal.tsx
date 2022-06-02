@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import QrCode2Icon from '@mui/icons-material/QrCode2';
 import { Button } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Monodose } from '../api/models/Monodose'
@@ -15,7 +16,11 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { fr } from 'date-fns/locale';
 import QRCode from 'qrcode.react';
+import { User } from "../api/models/User"
 import { Document, Page, Image, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
+import { MonodoseApiClient, UserApiClient } from '../api/main'
+import moment from 'moment'
+import { UserContext } from '../context/UserContext'
 
 export enum MonodoseModalMode {
   Edition,
@@ -28,16 +33,54 @@ interface MonodoseModalProps {
   isModalOpen: boolean
   handleClose: () => void
 }
+const users: User[] = [{
+  informations: {
+    company: "entreprise00",
+    firstname: "firstname0",
+    lastname: "lastname0"
+  },
+  login: "lastname0@email.com",
+  password: "le password0",
+  role: 'beeKeeper',
+},
+{
+  informations: {
+    company: "entreprise1",
+    firstname: "firstname1",
+    lastname: "lastname1"
+  },
+  login: "lastname1@email.com",
+  password: "le password1",
+  role: 'beeKeeper',
+},
+{
+  informations: {
+    company: "entreprise2",
+    firstname: "firstname2",
+    lastname: "lastname2"
+  },
+  login: "lastname1@email.com",
+  password: "le password2",
+  role: 'admin',
+},
+]
 
 
 const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOpen, handleClose }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [location, setLocation] = React.useState<string | undefined>(undefined)
-  const [honeyVariety, setHoneyVariety] = React.useState<string | undefined>(undefined)
+  const [location, setLocation] = React.useState<string>('')
+  const [honeyVariety, setHoneyVariety] = React.useState<string>('')
   const [productionStartDate, setProductionStartDate] = React.useState<Date | null | undefined>(null)
   const [productionEndDate, setProductionEndDate] = React.useState<Date | null | undefined>(null)
   const [dluoDate, setDluoDate] = React.useState<Date | null | undefined>(null)
-  const [qrvalue, setQrvalue] = React.useState<string>('')
+  // const [role, setRole] = React.useState<Role>(Role.BeeKeeper)
+  const [qrvalue, setQrvalue] = React.useState<string | undefined>(undefined)
+  const [documentPdfValue, setDocumentPdfValue] = React.useState<any>(null);
+  const [beekeepers, setBeekeepers] = React.useState<User[]>([])
+  const [beekeeperSelected, setBeekeeperSelected] = React.useState<string>('');
+
+  const { loggedUser } = React.useContext(UserContext)
+
 
   const styles = StyleSheet.create({
     page: {
@@ -45,6 +88,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
     },
 
     section: {
+      flexGrow: 1,
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: "center",
@@ -65,61 +109,162 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
     },
   });
 
+
+
   const DocPDF = () => (<Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
-        <Image style={styles.imageParent}
-          source={() => qr_urlImg("QRCodeParent")} />
+
         {
-          Array(159).fill(1).map(() => (
+          Array(250).fill(1).map(() => (
             <Image style={styles.imageEnfant}
               source={() => qr_urlImg("QRCodeEnfant")} />
           ))
         }
+        <Image style={styles.imageParent}
+          source={() => qr_urlImg("QRCodeParent")} />
       </View>
     </Page>
   </Document>);
 
-
-  const onSubmitButton = () => {
-    if (mode === MonodoseModalMode.Edition) {
-      setIsLoading(true)
-
-      // TODO: PUT to API to add monodose
-
-      setIsLoading(false)
-    } else if (mode === MonodoseModalMode.Creation) {
-      setIsLoading(true)
-
-      // TODO: POST to API to add monodose
-
-      //setQrvalue(monodose?.id)
-      //tmp
-
-      if (qrvalue == '') {
-        setQrvalue('1')
-      }
-      console.log(qrvalue)
-      download_qr("BtnPDF")
-
-
-      setIsLoading(false)
+  React.useEffect(() => {
+    UserApiClient.getAllUsers({
+      headers: new Headers([
+        ['Token', loggedUser?.token || '']
+      ])
+    }).then((value) => {
+      const beekeepers = value;
+      console.log(beekeepers);
+      setBeekeepers(beekeepers);
     }
 
-    // TODO: according to the result API, close the modal or display error message
-    handleClose()
+    );
+
+
+
+
+
+    //get beekeepers
+
+  }, [])
+
+  React.useEffect(() => {
+    if (qrvalue != undefined) {
+
+      setDocumentPdfValue(DocPDF())
+
+    }
+  }, [qrvalue])
+
+  React.useEffect(() => {
+    if (documentPdfValue != null) {
+
+      download_qr("BtnPDF");
+    }
+
+  }, [documentPdfValue])
+
+  const onSubmitButton = () => {
+    var beekeeper;
+    for (var i = 0; i < beekeepers.length; i++) {
+      if (beekeepers[i].id?.toString() == beekeeperSelected) {
+        beekeeper = beekeepers[i];
+      }
+    }
+
+    console.log(beekeeper)
+    const getuserbyidrequest = {
+      id: beekeeperSelected,
+    }
+    UserApiClient.getUserById({
+      id: beekeeperSelected,
+    }, {
+      headers: new Headers([
+        ['Token', loggedUser?.token || '']
+      ])
+    }).then((value) => {
+      const user = value;
+      const beekeeper = {
+        age: 50,
+        company: user.informations?.company,
+        firstname: user.informations?.firstname,
+        lastname: user.informations?.lastname,
+      }
+      const newMonodose: Monodose = {
+        id: monodose?.id || -1,
+        beekeeper: monodose?.beekeeper || beekeeper,
+        dates: {
+          dluo: moment(dluoDate).format('DD/MM/YYYY') || '',
+          startOfProduction: moment(productionStartDate).format('DD/MM/YYYY') || '',
+          endOfProduction: moment(productionEndDate).format('DD/MM/YYYY') || ''
+        },
+        location: location,
+        honeyVariety: honeyVariety
+
+      }
+      if (mode === MonodoseModalMode.Edition) {
+        (async () => {
+          setIsLoading(true)
+
+          newMonodose.id = 2823005074;
+          const updateMonodose = await MonodoseApiClient.updateMonodose({ monodose: newMonodose }, {
+            headers: new Headers([
+              ['Token', loggedUser?.token || '']
+            ])
+          });
+        })()
+
+        // TODO: PUT to API to add monodose
+
+        setIsLoading(false)
+      } else if (mode === MonodoseModalMode.Creation) {
+
+        (async () => {
+          setIsLoading(true)
+
+          const addMonodose = await MonodoseApiClient.addMonodose({ monodose: newMonodose }, {
+            headers: new Headers([
+              ['Token', loggedUser?.token || '']
+            ])
+          });
+
+          //setQrvalue('21')
+          setQrvalue(addMonodose.id?.toString())
+          console.log(addMonodose)
+
+          setIsLoading(false)
+
+        })()
+
+
+        // TODO: POST to API to add monodose
+
+
+
+      }
+
+      // TODO: according to the result API, close the modal or display error message
+      handleClose()
+    });
+
+
+
   }
 
   const qr_urlImg = (idQr: string) => {
     var canvas = document.getElementById(idQr) as HTMLCanvasElement;
-
     return canvas.toDataURL("image/png");
   }
 
 
   const download_qr = (idQr: string) => {
+
     var btn = document.getElementById(idQr) as HTMLButtonElement;
-    btn.click();
+    if (btn != null) {
+
+      btn.click();
+    }
+
   }
 
   return (
@@ -134,17 +279,29 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
       >
         <p style={{ margin: 0, padding: 0 }}>{mode === MonodoseModalMode.Edition ? `Monodose ${monodose?.id}` : 'Nouvelle monodose'}</p>
         {mode === MonodoseModalMode.Edition && (
-          <IconButton
-            size='large'
-            edge='start'
-            color='inherit'
-            aria-label='menu'
-          >
-            <DeleteIcon />
-          </IconButton>
+          <div>
+            <IconButton
+              size='large'
+              edge='start'
+              color='inherit'
+              aria-label='menu'
+            >
+              <QrCode2Icon />
+            </IconButton>
+            <IconButton
+              size='large'
+              edge='start'
+              color='inherit'
+              aria-label='menu'
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
+
         )}
       </DialogTitle>
       <DialogContent style={{ paddingBottom: 0 }}>
+
         <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
           <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
             <TextField
@@ -165,13 +322,19 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
                 Apiculteur
               </InputLabel>
               <Select
-                //value={role} // TODO beekeeper id if in edit mode
+                value={beekeeperSelected} // TODO beekeeper id if in edit mode
                 label='Apiculteur'
                 //onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
+                onChange={(event: SelectChangeEvent) => setBeekeeperSelected(event.target.value as string)}
               >
-                {/* TODO : foreach beekeeper list */}
-                <MenuItem style={{ color: '#00000099' }} value={1}>FirstName1 LastName1</MenuItem>
-                <MenuItem style={{ color: '#00000099' }} value={2}>FirstName2 LastName2</MenuItem>
+                {
+                  beekeepers?.filter(beekeepers => beekeepers.role == "apiculteur").map((beekeeper: User) => (
+
+                    <MenuItem style={{ color: '#00000099' }} value={beekeeper.id}>{beekeeper.informations?.firstname + " " + beekeeper.informations?.lastname}</MenuItem>
+
+
+                  ))
+                }
               </Select>
             </FormControl>
           </div>
@@ -243,17 +406,19 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
 
         </div>
         <div style={{ display: "none" }}>
-          <QRCode
+          {qrvalue != undefined && <div>  <QRCode
             id="QRCodeParent"
             size={50}
             value={"http://localhost:3000/form?id=" + qrvalue}
           />
-          <QRCode
-            id="QRCodeEnfant"
-            size={50}
-            value={"http://localhost:3000?id=" + qrvalue}
-          />
-          <PDFDownloadLink document={<DocPDF />} fileName="qrcodes.pdf">
+            <QRCode
+              id="QRCodeEnfant"
+              size={50}
+              value={"http://localhost:3000?id=" + qrvalue}
+            />
+          </div>}
+
+          <PDFDownloadLink document={documentPdfValue} fileName={"qrcodes" + qrvalue + ".pdf"}>
             <Button
               id="BtnPDF"
             >
@@ -267,7 +432,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
       <DialogActions>
         <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === MonodoseModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
       </DialogActions>
-    </Dialog>
+    </Dialog >
   )
 }
 
