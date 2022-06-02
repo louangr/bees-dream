@@ -385,6 +385,36 @@
       },
       "x-go-package": "internal/entities"
     },
+    "Logged": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Id"
+        },
+        "informations": {
+          "$ref": "#/definitions/Information"
+        },
+        "login": {
+          "type": "string",
+          "x-go-name": "Login"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "role": {
+          "type": "string",
+          "x-go-name": "Role"
+        },
+        "token": {
+          "type": "string",
+          "x-go-name": "Token"
+        }
+      },
+      "x-go-package": "internal/entities"
+    },
     "Login": {
       "type": "object",
       "properties": {
@@ -469,6 +499,12 @@
         }
       }
     },
+    "loggedStruct": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Logged"
+      }
+    },
     "loginStruct": {
       "description": "",
       "schema": {
@@ -488,6 +524,12 @@
         "items": {
           "$ref": "#/definitions/Monodose"
         }
+      }
+    },
+    "userStruct": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/User"
       }
     },
     "userStructArray": {
