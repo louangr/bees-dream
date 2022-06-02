@@ -108,7 +108,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
       const beekeepers = value;
       setBeekeepers(beekeepers);
     });
-    //get beekeepers
+
   }, []);
 
   const onSubmitButton = () => {
@@ -119,14 +119,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
       }
     }
 
-    /*UserApiClient.getUserById({
-      id: beekeeperSelected,
-    }, {
-      headers: new Headers([
-        ['Token', loggedUser?.token || '']
-      ])
-    }).then((value) => {*/
-    // const user = value;
+
     const beekeeper = {
       age: 50,
       company: user?.informations?.company,
@@ -154,7 +147,22 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           {
             headers: new Headers([["Token", loggedUser?.token || ""]]),
           }
-        );
+        ).then(() => {
+          setIsAlertOpen(true);
+          setIsAlertAutoHidden(true);
+          setIsAlertClosable(true);
+          setAlertType("success");
+          setAlertMessage("Mise à jour effectuée");
+
+        })
+          .catch(() => {
+            setIsAlertOpen(true);
+            setIsAlertAutoHidden(false);
+            setIsAlertClosable(true);
+            setAlertType("error");
+            setAlertMessage("Erreur : Serveur injoignable");
+          });;
+        setIsLoading(false);;
       })();
 
       // TODO: PUT to API to add monodose
@@ -164,15 +172,29 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
     } else if (mode === MonodoseModalMode.Creation) {
       (async () => {
         setIsLoading(true);
-
+        let monodoseID
         const addMonodose = await MonodoseApiClient.addMonodose(
           { monodose: newMonodose },
           {
             headers: new Headers([["Token", loggedUser?.token || ""]]),
           }
-        );
+        ).then((result) => {
+          monodoseID = result.id;
+          setIsAlertOpen(true);
+          setIsAlertAutoHidden(true);
+          setIsAlertClosable(true);
+          setAlertType("success");
+          setAlertMessage("Mise à jour effectuée");
+
+        })
+          .catch(() => {
+            setIsAlertOpen(true);
+            setIsAlertAutoHidden(false);
+            setIsAlertClosable(true);
+            setAlertType("error");
+            setAlertMessage("Erreur : Serveur injoignable");
+          });
         setIsLoading(false);
-        const monodoseID = addMonodose.id;
         if (monodoseID !== undefined) {
           handleClose(monodoseID);
         } else {
@@ -237,14 +259,6 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           </p>
           {mode === MonodoseModalMode.Edition && (
             <div>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-              >
-                <QrCode2Icon />
-              </IconButton>
               <IconButton
                 onClick={() => {
                   deleteMonodose(monodose!.id!.toString());
@@ -354,10 +368,10 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
                     setDluoDate(
                       newProductionEndDate
                         ? new Date(
-                            new Date(newProductionEndDate).setMonth(
-                              new Date(newProductionEndDate).getMonth() + 18
-                            )
+                          new Date(newProductionEndDate).setMonth(
+                            new Date(newProductionEndDate).getMonth() + 18
                           )
+                        )
                         : null
                     );
                   }}
