@@ -184,7 +184,17 @@ func (u UserRoutes) Update(w http.ResponseWriter, r *http.Request) {
 
 	var user e.User
 
+	var login e.Login
+
 	json.Unmarshal(body, &user)
+
+	login = e.NewLogin(user.Login, user.Password)
+
+	notHashed, _ := login.UnHashPassword()
+
+	user.Password = notHashed
+
+	user.HashPassword()
 
 	user, err := dao.Update(user)
 
