@@ -8,13 +8,13 @@ import { UserContext } from "../context/UserContext"
 
 const AdminPage: React.FC = () => {
   const [tabValue, setTabValue] = React.useState<string>('1')
-  const { user } = React.useContext(UserContext)
+  const { loggedUser } = React.useContext(UserContext)
 
   return (
     <>
       <CustomAppBar />
 
-      {user?.role === 'admin'
+      {loggedUser?.user?.role === 'admin'
         ?
         <div style={{ padding: '20px 0px 0px 20px' }}>
           <TabContext value={tabValue}>

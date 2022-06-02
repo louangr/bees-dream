@@ -3,9 +3,13 @@ import { TextField } from "@mui/material"
 import LoadingButton from '@mui/lab/LoadingButton'
 import { User } from "../api/models/User"
 import SharedStyle from "../shared/styles"
+import { JSEncrypt } from "jsencrypt";
+import axios from "axios";
+import { LoginApiClient } from "../api/main"
+import { Logged } from "../api/models/Logged"
 
 interface LoginProps {
-  onLogin: (user: User) => void
+  onLogin: (loggedUser: Logged) => void
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
@@ -15,11 +19,30 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [hasPasswordError, setHasPasswordError] = React.useState<boolean>(false)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
+  const encryptPassword = (password:string) : string => {
+    // Start our encryptor.
+    var encrypt = new JSEncrypt();
+
+    var publicKey = `-----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuohFphBkVlhWg8/NlOeb
+    InofzFd32NIYFOcVDfyjW+tEkc2S/lH3nn3uHHNUMR3zeWzESXyDrbBXaZLeWsT1
+    KxGJFWiNnvgXS9/SGDWFUnYVo14MhyFwvcNbKpAgwztndoaMZY5GHzumuowCgraY
+    666ZHG8V+mGV+nUDROTeAwMjhzZ7C5CEwp3H6XcjuvhJXiyjcDUzNZdD0VaKcASn
+    uexjG9Y2MT+iNqY//jTMvqArAnvfU9F7JqqigTS9dpoH8OYAPEdwH/VmRv88kVb1
+    aLPCAWZTY2nSmwJGZvfflJm/cAxjG55q1UTreKNUaH2L8k8XOjomGBjbKzT3bCPh
+    1QIDAQAB
+    -----END PUBLIC KEY-----`;
+
+    // Assign our encryptor to utilize the public key.
+    encrypt.setPublicKey(publicKey);
+
+    // Perform our encryption based on our public key - only private key can read it!
+    var encrypted = encrypt.encrypt(password);
+    return encrypted+"";
+  }
   const onSubmitButtonClick = async () => {
     const hasEmail = email && email.trim() !== ""
-    console.log('hasEmail', hasEmail)
     const hasPassword = password && password.trim() !== ""
-    console.log('hasPassword', hasPassword)
 
     setHasEmailError(!hasEmail)
     setHasPasswordError(!hasPassword)
@@ -27,20 +50,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     if (hasEmail && hasPassword) {
       setIsLoading(true)
 
-      // TODO: API call to get user from login and password
-
-      onLogin({
-        login: email,
-        password: password,
-        informations:{
-          firstname: 'TestPrenom',
-          lastname: 'TestNom',
-          company: 'TestCompany'
-        },
-        role: 'admin'
-      })
+      const loggedUser = await LoginApiClient.login({login:{ login: email,password: encryptPassword(password)}})
+            
+      /*axios.post('http://167.99.83.46:8080/login',{ login: email,password: encryptPassword(password)}).then((data)=>{
+      })*/
 
       setIsLoading(false)
+      onLogin(loggedUser) 
     }
   }
 

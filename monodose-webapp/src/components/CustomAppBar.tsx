@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserContext"
 
 const CustomAppBar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const { user, setUser } = React.useContext(UserContext)
+  const { loggedUser, setLoggedUser } = React.useContext(UserContext)
 
   return (
     <AppBar position="static">
@@ -12,7 +12,7 @@ const CustomAppBar: React.FC = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Bee's Dream Monodose
         </Typography>
-        {user !== undefined && (
+        {loggedUser?.user !== undefined && (
           <div>
             <IconButton
               size="large"
@@ -22,7 +22,7 @@ const CustomAppBar: React.FC = () => {
               onClick={(event) => setAnchorEl(event.currentTarget)}
               color="inherit"
             >
-              <Avatar>{user.informations?.firstname?.charAt(0).toUpperCase()}</Avatar>
+              <Avatar>{loggedUser.user.informations?.firstname?.charAt(0).toUpperCase()}</Avatar>
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -40,9 +40,9 @@ const CustomAppBar: React.FC = () => {
               onClose={() => setAnchorEl(null)}
               
             >
-              <MenuItem style={{ color: 'black', backgroundColor: 'unset' }}>{`${user.informations?.firstname} ${user.informations?.lastname}`}</MenuItem>
+              <MenuItem style={{ color: 'black', backgroundColor: 'unset' }}>{`${loggedUser?.user.informations?.firstname} ${loggedUser?.user.informations?.lastname}`}</MenuItem>
               <MenuItem style={{ color: 'black' }} onClick={() => {
-                  setUser(undefined)
+                  setLoggedUser(undefined)
                   setAnchorEl(null)
                 }}
               >Logout</MenuItem>

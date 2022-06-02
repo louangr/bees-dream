@@ -7,8 +7,6 @@ import Date_DLUO from '../assets/info/images/Date_DLUO.png'
 import Variete from '../assets/info/images/Variete.png'
 import Logo from '../assets/info/images/logo.png'
 import { useEffect, useState } from 'react'
-import fetchInfoMonodose from '../api/monodose_api'
-import {Monodose} from '../api/models/Monodose'
 import LoadingSVG from '../assets/info/images/loadingSvg.svg'
 import { MonodoseApiClient } from '../api/main'
 

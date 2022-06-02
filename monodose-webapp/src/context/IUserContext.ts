@@ -1,6 +1,7 @@
+import { Logged } from '../api'
 import { User } from '../api/models/User'
 
 export interface IUserContext {
-    user: User | undefined
-    setUser: (user: User | undefined) => void
+    loggedUser: Logged | undefined
+    setLoggedUser: (loggedUser: Logged | undefined) => void
 } 

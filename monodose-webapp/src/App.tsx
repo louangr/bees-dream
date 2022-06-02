@@ -8,15 +8,15 @@ import { User } from './api/models/User'
 import Login from "./components/Login"
 import { UserContext } from "./context/UserContext"
 import QrPage from "./pages/QrPage"
-
+import { Logged } from "./api/models/Logged"
 
 const App: React.FC = () => {
-  const [user, setUser] = React.useState<User | undefined>(undefined)
-  const value = React.useMemo(() => ({ user, setUser }), [user, setUser])
+  const [loggedUser, setLoggedUser] = React.useState<Logged | undefined>(undefined)
+  const value = React.useMemo(() => ({ loggedUser, setLoggedUser }), [loggedUser, setLoggedUser])
 
   const checkAuthentification = (component: JSX.Element): JSX.Element => {
-    return user === undefined
-      ? <Login onLogin={(newUser: User) => setUser(newUser)} />
+    return loggedUser?.user === undefined
+      ? <Login onLogin={(newLoggedUser: Logged) => setLoggedUser(newLoggedUser)} />
       : component
   }
 
