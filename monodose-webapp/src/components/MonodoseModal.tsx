@@ -41,7 +41,6 @@ interface MonodoseModalProps {
   handleClose: (monodoseID: number) => void;
 }
 
-
 const MonodoseModal: React.FC<MonodoseModalProps> = ({
   mode,
   monodose,
@@ -49,8 +48,10 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
   handleClose,
 }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [location, setLocation] = React.useState<string>("");
-  const [honeyVariety, setHoneyVariety] = React.useState<string>("");
+  const [location, setLocation] = React.useState<string | undefined>("");
+  const [honeyVariety, setHoneyVariety] = React.useState<string | undefined>(
+    ""
+  );
   const [productionStartDate, setProductionStartDate] = React.useState<
     Date | null | undefined
   >(null);
@@ -77,17 +78,35 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
       const beekeepers = value;
       setBeekeepers(beekeepers);
     });
-
   }, []);
+
+  React.useEffect(() => {
+    if (mode === MonodoseModalMode.Edition && monodose) {
+      setLocation(monodose.location);
+      setHoneyVariety(monodose.honeyVariety);
+      const stringStartDate: string = monodose?.dates?.startOfProduction ?? "";
+      setProductionStartDate(new Date(stringStartDate));
+      const stringEndDate: string = monodose?.dates?.endOfProduction ?? "";
+      setProductionEndDate(new Date(stringEndDate));
+      const stringDLUO: string = monodose?.dates?.dluo ?? "";
+      setDluoDate(new Date(stringDLUO));
+    } else {
+      setLocation("");
+      setHoneyVariety("");
+      setProductionStartDate(null);
+      setProductionEndDate(null);
+      setDluoDate(null);
+      setBeekeepers([]);
+    }
+  }, [isModalOpen]);
 
   const onSubmitButton = () => {
     var user;
     for (var i = 0; i < beekeepers.length; i++) {
-      if (beekeepers[i].id?.toString() == beekeeperSelected) {
+      if (beekeepers[i].id?.toString() === beekeeperSelected) {
         user = beekeepers[i];
       }
     }
-
 
     const beekeeper = {
       age: 50,
@@ -116,46 +135,44 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           {
             headers: new Headers([["Token", loggedUser?.token || ""]]),
           }
-        ).then(() => {
-          setIsAlertOpen(true);
-          setIsAlertAutoHidden(true);
-          setIsAlertClosable(true);
-          setAlertType("success");
-          setAlertMessage("Mise à jour effectuée");
-
-        })
+        )
+          .then(() => {
+            setIsAlertOpen(true);
+            setIsAlertAutoHidden(true);
+            setIsAlertClosable(true);
+            setAlertType("success");
+            setAlertMessage("Mise à jour effectuée");
+          })
           .catch(() => {
             setIsAlertOpen(true);
             setIsAlertAutoHidden(false);
             setIsAlertClosable(true);
             setAlertType("error");
             setAlertMessage("Erreur : Serveur injoignable");
-          });;
-        setIsLoading(false);;
+          });
+        setIsLoading(false);
       })();
-
-
 
       setIsLoading(false);
       handleClose(0);
     } else if (mode === MonodoseModalMode.Creation) {
       (async () => {
         setIsLoading(true);
-        let monodoseID
+        let monodoseID;
         const addMonodose = await MonodoseApiClient.addMonodose(
           { monodose: newMonodose },
           {
             headers: new Headers([["Token", loggedUser?.token || ""]]),
           }
-        ).then((result) => {
-          monodoseID = result.id;
-          setIsAlertOpen(true);
-          setIsAlertAutoHidden(true);
-          setIsAlertClosable(true);
-          setAlertType("success");
-          setAlertMessage("Ajout effectué");
-
-        })
+        )
+          .then((result) => {
+            monodoseID = result.id;
+            setIsAlertOpen(true);
+            setIsAlertAutoHidden(true);
+            setIsAlertClosable(true);
+            setAlertType("success");
+            setAlertMessage("Ajout effectué");
+          })
           .catch(() => {
             setIsAlertOpen(true);
             setIsAlertAutoHidden(false);
@@ -170,7 +187,6 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           handleClose(0);
         }
       })();
-
     }
   };
 
@@ -337,10 +353,10 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
                     setDluoDate(
                       newProductionEndDate
                         ? new Date(
-                          new Date(newProductionEndDate).setMonth(
-                            new Date(newProductionEndDate).getMonth() + 18
+                            new Date(newProductionEndDate).setMonth(
+                              new Date(newProductionEndDate).getMonth() + 18
+                            )
                           )
-                        )
                         : null
                     );
                   }}
