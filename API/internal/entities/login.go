@@ -49,6 +49,7 @@ func NewLogin(login string, password string) Login {
 }
 
 func (l *Login) HashPassword() error {
+
 	bytes, err := bcrypt.GenerateFromPassword([]byte(l.Password), 14)
 
 	if err != nil {
