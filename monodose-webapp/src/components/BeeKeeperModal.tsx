@@ -4,10 +4,13 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { AlertColor, Divider, IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { User } from '../api/models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { UserApiClient } from '../api/main'
+import { UserContext } from '../context/UserContext'
+import MessageAlert from '../components/MessageAlert'
 
 export enum BeeKeeperModalMode {
   Edition,
@@ -23,8 +26,8 @@ interface BeeKeeperModalProps {
 
 const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModalOpen, handleClose }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [email, setEmail] = React.useState<string | undefined>(undefined)
-  const [hasEmailError, setHasEmailError] = React.useState<boolean>(false)
+  const [login, setLogin] = React.useState<string | undefined>(undefined)
+  const [hasLoginError, setHasLoginError] = React.useState<boolean>(false)
   const [password, setPassword] = React.useState<string | undefined>(undefined)
   const [hasPasswordError, setHasPasswordError] = React.useState<boolean>(false)
   const [firstname, setFirstname] = React.useState<string | undefined>(undefined)
@@ -32,124 +35,253 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
   const [lastname, setLastname] = React.useState<string | undefined>(undefined)
   const [hasLastnameError, setHasLastnameError] = React.useState<boolean>(false)
   const [company, setCompany] = React.useState<string | undefined>(undefined)
-  const [hasCompanyError, setHasCompanyError] = React.useState<boolean>(false)
-  const [role, setRole] = React.useState<string>('beeKeeper')
+  const [age, setAge] = React.useState<string>('0')
+  const [isAlertOpen, setIsAlertOpen] = React.useState<boolean>(false)
+  const [alertType, setAlertType] = React.useState<AlertColor>('error')
+  const [alertMessage, setAlertMessage] = React.useState<string>('')
 
-  const onSubmitButton = () => {
+  const { loggedUser } = React.useContext(UserContext)
+
+
+  React.useEffect(() => {
+
+    setHasLoginError(false)
+    setHasPasswordError(false)
+    setHasFirstnameError(false)
+    setHasLastnameError(false)
+
+    if (mode === BeeKeeperModalMode.Edition && beekeeper) {
+      setLogin(beekeeper.login)
+      setPassword(beekeeper.password)
+      setFirstname(beekeeper.informations?.firstname)
+      setLastname(beekeeper.informations?.lastname)
+      setCompany(beekeeper.informations?.company)
+      setAge(beekeeper.informations?.age?.toString() || '0')
+    } else {
+      setLogin('')
+      setPassword('')
+      setFirstname('')
+      setLastname('')
+      setCompany('')
+      setAge('0')
+    }
+
+  }, [isModalOpen])
+
+  const onSubmitButton = async () => {
+
+    const hasLogin = login && login.trim() !== ""
+    const hasPassword = password && password.trim() !== ""
+    const hasFirstname = firstname && firstname.trim() !== ""
+    const hasLastName = lastname && lastname.trim() !== ""
+
+    setHasLoginError(!hasLogin)
+    setHasPasswordError(!hasPassword)
+    setHasFirstnameError(!hasFirstname)
+    setHasLastnameError(!hasLastName)
+
+    if (hasLogin && hasPassword && hasFirstname && hasLastName) {
+
+      if (mode === BeeKeeperModalMode.Edition) {
+        setIsLoading(true)
+
+        const updatedBeekeeper: User = {
+          id: beekeeper?.id,
+          informations: {
+            firstname: firstname,
+            lastname: lastname,
+            company: company,
+            age: parseInt(age !== undefined ? age : '0')
+          },
+          login: login,
+          role: 'apiculteur'
+        }
+
+        await UserApiClient.updateUser({ user: updatedBeekeeper }, {
+          headers: new Headers([
+            ['Token', loggedUser?.token || '']
+          ])
+        })
+          .then(() => {
+            setIsAlertOpen(true)
+            setAlertType('success')
+            setAlertMessage('Mise à jour effectuée')
+          })
+          .catch(() => {
+            setIsAlertOpen(true)
+            setAlertType('error')
+            setAlertMessage('Erreur : Serveur injoignable')
+          })
+
+        setIsLoading(false)
+
+      } else if (mode === BeeKeeperModalMode.Creation) {
+        setIsLoading(true)
+
+        const newBeekeeper: User = {
+          id: -1,
+          informations: {
+            firstname: firstname,
+            lastname: lastname,
+            company: company,
+            age: parseInt(age !== undefined ? age : '0')
+          },
+          login: login,
+          role: 'apiculteur'
+        }
+
+        await UserApiClient.addUser({ user: newBeekeeper }, {
+          headers: new Headers([
+            ['Token', loggedUser?.token || '']
+          ])
+        })
+          .then(() => {
+            setIsAlertOpen(true)
+            setAlertType('success')
+            setAlertMessage('Apiculteur ajouté')
+          })
+          .catch(() => {
+            setIsAlertOpen(true)
+            setAlertType('error')
+            setAlertMessage('Erreur : Serveur injoignable')
+          })
+
+
+        setIsLoading(false)
+      }
+
+      handleClose()
+    }
+  }
+
+
+  const deleteBeekeeper = async () => {
+
     if (mode === BeeKeeperModalMode.Edition) {
       setIsLoading(true)
 
-      // TODO: PUT to API to add beekeeper
+      let id = beekeeper?.id
+
+      await UserApiClient.deleteUserById({ id: id?.toString() || '-1' }, {
+        headers: new Headers([
+          ['Token', loggedUser?.token || '']
+        ])
+      })
+        .then(() => {
+          setIsAlertOpen(true)
+          setAlertType('success')
+          setAlertMessage('Suppression effectuée')
+        })
+        .catch(() => {
+          setIsAlertOpen(true)
+          setAlertType('error')
+          setAlertMessage('Erreur : Serveur injoignable')
+        })
 
       setIsLoading(false)
-    } else if (mode === BeeKeeperModalMode.Creation) {
-      setIsLoading(true)
 
-      // TODO: POST to API to add beekeeper
 
-      setIsLoading(false)
     }
 
-    // TODO: according to the result API, close the modal or display error message
     handleClose()
+
   }
 
-  return (
-    <Dialog open={isModalOpen} onClose={handleClose}>
-      <DialogTitle
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <p style={{ margin: 0, padding: 0 }}>{mode === BeeKeeperModalMode.Edition ? `${beekeeper?.informations?.firstname} ${beekeeper?.informations?.lastname}` : 'Nouvel apiculteur'}</p>
-        {mode === BeeKeeperModalMode.Edition && (
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
-            <DeleteIcon />
-          </IconButton>
-        )}
-      </DialogTitle>
-      <DialogContent style={{ paddingBottom: 0 }}>
-        <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
-            <TextField
-              required
-              error={hasEmailError}
-              id="outlined-required"
-              label={hasEmailError ? "Email requis" : "Email"}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-            <TextField
-              required
-              error={hasPasswordError}
-              id="outlined-password-input"
-              label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
-              type="password"
-              autoComplete="current-password"
-              style={{
-                marginBottom: 16,
-                marginTop: 16
-              }}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <FormControl>
-              <InputLabel id="simple-select" color="primary">
-                Rôle
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={role}
-                label="Rôle"
-                onChange={(event: SelectChangeEvent) => setRole(event.target.value)}
-                >
-                <MenuItem style={{ color: '#00000099' }} value={'admin'}>Administrateur</MenuItem>
-                <MenuItem style={{ color: '#00000099' }} value={'beeKeeper'}>Apiculteur</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <Divider orientation="vertical" variant="middle" sx={{ borderRightWidth: 2, borderRadius: 10 }} flexItem />
-          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
-            <TextField
-              required
-              error={hasFirstnameError}
-              id="outlined-required"
-              label={hasFirstnameError ? "Prénom required" : "Prénom"}
-              onChange={(event) => setFirstname(event.target.value)}
-            />
-            <TextField
-              required
-              error={hasLastnameError}
-              id="outlined-required"
-              label={hasLastnameError ? "Nom requis" : "Nom"}
-              style={{
-                marginBottom: 16,
-                marginTop: 16
-              }}
-              onChange={(event) => setLastname(event.target.value)}
-            />
-            <TextField
-              required
-              error={hasCompanyError}
-              id="outlined-required"
-              label={hasCompanyError ? "Entreprise requis" : "Entreprise"}
-              onChange={(event) => setCompany(event.target.value)}
-            />
-          </div>
-        </div>
 
-      </DialogContent>
-      <DialogActions>
-        <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === BeeKeeperModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
-      </DialogActions>
-    </Dialog>
+  return (
+    <>
+      <MessageAlert
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        message={alertMessage}
+        type={alertType}
+      />
+
+      <Dialog open={isModalOpen} onClose={handleClose}>
+        <DialogTitle
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <p style={{ margin: 0, padding: 0 }}>{mode === BeeKeeperModalMode.Edition ? `${beekeeper?.informations?.firstname} ${beekeeper?.informations?.lastname}` : 'Nouvel apiculteur'}</p>
+          {mode === BeeKeeperModalMode.Edition && (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+            >
+              <DeleteIcon
+                onClick={deleteBeekeeper} />
+            </IconButton>
+          )}
+        </DialogTitle>
+        <DialogContent style={{ paddingBottom: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'row', padding: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
+              <TextField
+                required
+                value={login}
+                error={hasLoginError}
+                label={hasLoginError ? "Login requis" : "Login"}
+                onChange={(event) => setLogin(event.target.value)}
+              />
+              <TextField
+                required
+                value={password}
+                error={hasPasswordError}
+                label={hasPasswordError ? "Mot de passe requis" : "Mot de passe"}
+                style={{
+                  marginBottom: 16,
+                  marginTop: 16
+                }}
+                type="password"
+                autoComplete="current-password"
+                onChange={(event) => setPassword(event.target.value)}
+              />
+              <TextField
+                value={age}
+                label="Age"
+                onChange={(event) => setAge(event.target.value)}
+              />
+            </div>
+            <Divider orientation="vertical" variant="middle" sx={{ borderRightWidth: 2, borderRadius: 10 }} flexItem />
+            <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
+              <TextField
+                required
+                value={firstname}
+                error={hasFirstnameError}
+                label={hasFirstnameError ? "Prénom required" : "Prénom"}
+                onChange={(event) => setFirstname(event.target.value)}
+              />
+              <TextField
+                required
+                value={lastname}
+                error={hasLastnameError}
+                label={hasLastnameError ? "Nom requis" : "Nom"}
+                style={{
+                  marginBottom: 16,
+                  marginTop: 16
+                }}
+                onChange={(event) => setLastname(event.target.value)}
+              />
+              <TextField
+                value={company}
+                label="Entreprise"
+                onChange={(event) => setCompany(event.target.value)}
+              />
+            </div>
+          </div>
+
+        </DialogContent>
+        <DialogActions>
+          <LoadingButton style={{ marginRight: 9, marginBottom: 9 }} loading={isLoading} onClick={onSubmitButton}>{mode === BeeKeeperModalMode.Edition ? 'Modifier' : 'Ajouter'}</LoadingButton>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 
