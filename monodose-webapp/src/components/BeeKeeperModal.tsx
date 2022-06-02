@@ -11,6 +11,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { UserApiClient } from '../api/main'
 import { UserContext } from '../context/UserContext'
 import MessageAlert from '../components/MessageAlert'
+import JSEncrypt from 'jsencrypt'
 
 export enum BeeKeeperModalMode {
   Edition,
@@ -45,6 +46,8 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
 
   React.useEffect(() => {
 
+    console.log(beekeeper)
+
     setHasLoginError(false)
     setHasPasswordError(false)
     setHasFirstnameError(false)
@@ -68,6 +71,29 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
 
   }, [isModalOpen])
 
+
+  const encryptPassword = (password: string): string => {
+    // Start our encryptor.
+    var encrypt = new JSEncrypt();
+
+    var publicKey = `-----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuohFphBkVlhWg8/NlOeb
+    InofzFd32NIYFOcVDfyjW+tEkc2S/lH3nn3uHHNUMR3zeWzESXyDrbBXaZLeWsT1
+    KxGJFWiNnvgXS9/SGDWFUnYVo14MhyFwvcNbKpAgwztndoaMZY5GHzumuowCgraY
+    666ZHG8V+mGV+nUDROTeAwMjhzZ7C5CEwp3H6XcjuvhJXiyjcDUzNZdD0VaKcASn
+    uexjG9Y2MT+iNqY//jTMvqArAnvfU9F7JqqigTS9dpoH8OYAPEdwH/VmRv88kVb1
+    aLPCAWZTY2nSmwJGZvfflJm/cAxjG55q1UTreKNUaH2L8k8XOjomGBjbKzT3bCPh
+    1QIDAQAB
+    -----END PUBLIC KEY-----`;
+
+    // Assign our encryptor to utilize the public key.
+    encrypt.setPublicKey(publicKey);
+
+    // Perform our encryption based on our public key - only private key can read it!
+    var encrypted = encrypt.encrypt(password);
+    return encrypted + "";
+  }
+
   const onSubmitButton = async () => {
 
     const hasLogin = login && login.trim() !== ""
@@ -85,6 +111,13 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
       if (mode === BeeKeeperModalMode.Edition) {
         setIsLoading(true)
 
+        let pwd
+        if (password != beekeeper?.password) {
+          pwd = encryptPassword(password)
+        } else {
+          pwd = beekeeper?.password
+        }
+
         const updatedBeekeeper: User = {
           id: beekeeper?.id,
           informations: {
@@ -94,6 +127,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
             age: parseInt(age !== undefined ? age : '0')
           },
           login: login,
+          password: pwd,
           role: 'apiculteur'
         }
 
@@ -127,6 +161,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
             age: parseInt(age !== undefined ? age : '0')
           },
           login: login,
+          password: encryptPassword(password),
           role: 'apiculteur'
         }
 
