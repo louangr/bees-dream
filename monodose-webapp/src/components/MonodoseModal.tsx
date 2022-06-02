@@ -165,87 +165,77 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
   }, [documentPdfValue])
 
   const onSubmitButton = () => {
-    var beekeeper;
+
+    var user;
     for (var i = 0; i < beekeepers.length; i++) {
       if (beekeepers[i].id?.toString() == beekeeperSelected) {
-        beekeeper = beekeepers[i];
+        user = beekeepers[i]
       }
     }
 
-    console.log(beekeeper)
-    const getuserbyidrequest = {
-      id: beekeeperSelected,
-    }
-    UserApiClient.getUserById({
+    /*UserApiClient.getUserById({
       id: beekeeperSelected,
     }, {
       headers: new Headers([
         ['Token', loggedUser?.token || '']
       ])
-    }).then((value) => {
-      const user = value;
-      const beekeeper = {
-        age: 50,
-        company: user.informations?.company,
-        firstname: user.informations?.firstname,
-        lastname: user.informations?.lastname,
-      }
-      const newMonodose: Monodose = {
-        id: monodose?.id || -1,
-        beekeeper: monodose?.beekeeper || beekeeper,
-        dates: {
-          dluo: moment(dluoDate).format('DD/MM/YYYY') || '',
-          startOfProduction: moment(productionStartDate).format('DD/MM/YYYY') || '',
-          endOfProduction: moment(productionEndDate).format('DD/MM/YYYY') || ''
-        },
-        location: location,
-        honeyVariety: honeyVariety
+    }).then((value) => {*/
+    // const user = value;
+    const beekeeper = {
+      age: 50,
+      company: user?.informations?.company,
+      firstname: user?.informations?.firstname,
+      lastname: user?.informations?.lastname,
+    }
+    const newMonodose: Monodose = {
+      id: monodose?.id || -1,
+      beekeeper: monodose?.beekeeper || beekeeper,
+      dates: {
+        dluo: moment(dluoDate).format('DD/MM/YYYY') || '',
+        startOfProduction: moment(productionStartDate).format('DD/MM/YYYY') || '',
+        endOfProduction: moment(productionEndDate).format('DD/MM/YYYY') || ''
+      },
+      location: location,
+      honeyVariety: honeyVariety
 
-      }
-      if (mode === MonodoseModalMode.Edition) {
-        (async () => {
-          setIsLoading(true)
+    }
+    if (mode === MonodoseModalMode.Edition) {
+      (async () => {
+        setIsLoading(true)
+        const updateMonodose = await MonodoseApiClient.updateMonodose({ monodose: newMonodose }, {
+          headers: new Headers([
+            ['Token', loggedUser?.token || '']
+          ])
+        });
+      })()
 
-          newMonodose.id = 2823005074;
-          const updateMonodose = await MonodoseApiClient.updateMonodose({ monodose: newMonodose }, {
-            headers: new Headers([
-              ['Token', loggedUser?.token || '']
-            ])
-          });
-        })()
+      // TODO: PUT to API to add monodose
 
-        // TODO: PUT to API to add monodose
+      setIsLoading(false)
+    } else if (mode === MonodoseModalMode.Creation) {
+
+      (async () => {
+        setIsLoading(true)
+
+        const addMonodose = await MonodoseApiClient.addMonodose({ monodose: newMonodose }, {
+          headers: new Headers([
+            ['Token', loggedUser?.token || '']
+          ])
+        });
+
+        //setQrvalue('21')
+        setQrvalue(addMonodose.id?.toString())
+        console.log(addMonodose)
 
         setIsLoading(false)
-      } else if (mode === MonodoseModalMode.Creation) {
 
-        (async () => {
-          setIsLoading(true)
+      })()
+      // TODO: POST to API to add monodose
+    }
 
-          const addMonodose = await MonodoseApiClient.addMonodose({ monodose: newMonodose }, {
-            headers: new Headers([
-              ['Token', loggedUser?.token || '']
-            ])
-          });
-
-          //setQrvalue('21')
-          setQrvalue(addMonodose.id?.toString())
-          console.log(addMonodose)
-
-          setIsLoading(false)
-
-        })()
-
-
-        // TODO: POST to API to add monodose
-
-
-
-      }
-
-      // TODO: according to the result API, close the modal or display error message
-      handleClose()
-    });
+    // TODO: according to the result API, close the modal or display error message
+    handleClose()
+    //});
 
 
 
@@ -267,6 +257,17 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
 
   }
 
+  const deleteMonodose = (idMonodose: string) => {
+    (async () => {
+      const deleteMonodose = await MonodoseApiClient.deleteMonodoseById({ id: idMonodose }, {
+        headers: new Headers([
+          ['Token', loggedUser?.token || '']
+        ])
+      });
+    })()
+
+  }
+
   return (
     <Dialog open={isModalOpen} onClose={handleClose}>
       <DialogTitle
@@ -281,6 +282,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
         {mode === MonodoseModalMode.Edition && (
           <div>
             <IconButton
+
               size='large'
               edge='start'
               color='inherit'
@@ -289,6 +291,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({ mode, monodose, isModalOp
               <QrCode2Icon />
             </IconButton>
             <IconButton
+              onClick={() => { deleteMonodose(monodose!.id!.toString()) }}
               size='large'
               edge='start'
               color='inherit'
