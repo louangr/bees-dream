@@ -83,15 +83,15 @@ func (m LoginRoutes) Connexion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.Password = ""
+	var logged e.Logged = e.NewLogged(user, token.Token)
 
-	js, _ := json.Marshal(user)
+	js, _ := json.Marshal(logged)
 
-	http.SetCookie(w, &http.Cookie{
+	/* 	http.SetCookie(w, &http.Cookie{
 		Name:    "token",
 		Value:   token.Token,
 		Expires: token.Time,
-	})
+	}) */
 
 	fmt.Fprintf(w, "%s", js)
 
