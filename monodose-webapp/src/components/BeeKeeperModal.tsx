@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { Divider, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Role, User } from '../models/User'
+import { User } from '../api/models/User'
 import LoadingButton from '@mui/lab/LoadingButton'
 
 export enum BeeKeeperModalMode {
@@ -33,7 +33,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
   const [hasLastnameError, setHasLastnameError] = React.useState<boolean>(false)
   const [company, setCompany] = React.useState<string | undefined>(undefined)
   const [hasCompanyError, setHasCompanyError] = React.useState<boolean>(false)
-  const [role, setRole] = React.useState<Role>(Role.BeeKeeper)
+  const [role, setRole] = React.useState<string>('beeKeeper')
 
   const onSubmitButton = () => {
     if (mode === BeeKeeperModalMode.Edition) {
@@ -64,7 +64,7 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
           justifyContent: 'space-between'
         }}
       >
-        <p style={{ margin: 0, padding: 0 }}>{mode === BeeKeeperModalMode.Edition ? `${beekeeper?.firstname} ${beekeeper?.lastname}` : 'Nouvel apiculteur'}</p>
+        <p style={{ margin: 0, padding: 0 }}>{mode === BeeKeeperModalMode.Edition ? `${beekeeper?.informations?.firstname} ${beekeeper?.informations?.lastname}` : 'Nouvel apiculteur'}</p>
         {mode === BeeKeeperModalMode.Edition && (
           <IconButton
             size="large"
@@ -108,10 +108,10 @@ const BeeKeeperModal: React.FC<BeeKeeperModalProps> = ({ mode, beekeeper, isModa
                 id="demo-simple-select"
                 value={role}
                 label="Rôle"
-                onChange={(event: SelectChangeEvent) => setRole(event.target.value as Role)}
+                onChange={(event: SelectChangeEvent) => setRole(event.target.value)}
                 >
-                <MenuItem style={{ color: '#00000099' }} value={Role.Admin}>Administrateur</MenuItem>
-                <MenuItem style={{ color: '#00000099' }} value={Role.BeeKeeper}>Apiculteur</MenuItem>
+                <MenuItem style={{ color: '#00000099' }} value={'admin'}>Administrateur</MenuItem>
+                <MenuItem style={{ color: '#00000099' }} value={'beeKeeper'}>Apiculteur</MenuItem>
               </Select>
             </FormControl>
           </div>

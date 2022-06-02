@@ -5,7 +5,6 @@ import BeeKeeperList from "../components/BeeKeeperList"
 import CustomAppBar from "../components/CustomAppBar"
 import MonodoseList from "../components/MonodoseList"
 import { UserContext } from "../context/UserContext"
-import { Role } from "../models/User"
 
 const AdminPage: React.FC = () => {
   const [tabValue, setTabValue] = React.useState<string>('1')
@@ -15,7 +14,7 @@ const AdminPage: React.FC = () => {
     <>
       <CustomAppBar />
 
-      {user?.role === Role.Admin
+      {user?.role === 'admin'
         ?
         <div style={{ padding: '20px 0px 0px 20px' }}>
           <TabContext value={tabValue}>

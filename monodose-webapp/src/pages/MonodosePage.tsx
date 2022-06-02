@@ -8,17 +8,23 @@ import Variete from '../assets/info/images/Variete.png'
 import Logo from '../assets/info/images/logo.png'
 import { useEffect, useState } from 'react'
 import fetchInfoMonodose from '../api/monodose_api'
-import {Monodose} from '../models/Monodose'
+import {Monodose} from '../api/models/Monodose'
 import LoadingSVG from '../assets/info/images/loadingSvg.svg'
+import { MonodoseApiClient } from '../api/main'
 
 const MonodosePage: React.FC = () => {
     const [data, setData] = useState<any>()
     
     useEffect(() => {
-        window.setTimeout(() => {fetchInfoMonodose().then( (infos:Monodose) => {
-            setData(infos);
-        })},2000)
-    }, []);
+        window.setTimeout(async () => {
+            const queryParams = new URLSearchParams(window.location.search)
+            const id = queryParams.get("id")
+
+            if(id != undefined){
+                const infos = await MonodoseApiClient.getMonodoseById({id:id})
+                setData(infos);
+            }
+        },2000)},[]);
 
     return (
         <div className='background-container'>
@@ -29,9 +35,9 @@ const MonodosePage: React.FC = () => {
                 <img src={Logo} className='logo'/>
                 <Info icon={Apiculteur} description={'Apiculteur'} informations={[data.beekeeper.firstname+' '+data.beekeeper.lastname,data.beekeeper.company,data.beekeeper.age+' ans']} className='apiculteur'/>
                 <Info icon={Localisation} description='Localisation' informations={[data.location]} className='localisation'/>
-                <Info icon={DateFabrication} description='Date de fabrication' informations={[data.dates.startofproduction]} className='date_fabrication'/>
+                <Info icon={DateFabrication} description='Date de fabrication' informations={[data.dates.startOfProduction]} className='date_fabrication'/>
                 <Info icon={Date_DLUO} description='Date DLUO' informations={[data.dates.dluo]} className='date_dluo'/>
-                <Info icon={Variete} description='Variété' informations={[data.honeyvariety]} className='variete'/>
+                <Info icon={Variete} description='Variété' informations={[data.honeyVariety]} className='variete'/>
             </div> 
             : 
             <div> 

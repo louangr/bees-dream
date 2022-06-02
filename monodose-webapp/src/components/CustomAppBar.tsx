@@ -22,7 +22,7 @@ const CustomAppBar: React.FC = () => {
               onClick={(event) => setAnchorEl(event.currentTarget)}
               color="inherit"
             >
-              <Avatar>{user.firstname.charAt(0).toUpperCase()}</Avatar>
+              <Avatar>{user.informations?.firstname?.charAt(0).toUpperCase()}</Avatar>
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -40,7 +40,7 @@ const CustomAppBar: React.FC = () => {
               onClose={() => setAnchorEl(null)}
               
             >
-              <MenuItem style={{ color: 'black', backgroundColor: 'unset' }}>{`${user.firstname} ${user.lastname}`}</MenuItem>
+              <MenuItem style={{ color: 'black', backgroundColor: 'unset' }}>{`${user.informations?.firstname} ${user.informations?.lastname}`}</MenuItem>
               <MenuItem style={{ color: 'black' }} onClick={() => {
                   setUser(undefined)
                   setAnchorEl(null)

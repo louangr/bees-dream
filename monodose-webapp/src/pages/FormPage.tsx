@@ -5,7 +5,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import { fr } from 'date-fns/locale'
 import SharedStyle from '../shared/styles'
-import { Monodose } from '../models/Monodose'
+import { Monodose } from '../api/models/Monodose'
 import SaveIcon from '@mui/icons-material/Save'
 import LoadingButton from '@mui/lab/LoadingButton'
 import moment from 'moment'
@@ -36,11 +36,11 @@ const FormPage: React.FC = () => {
       },
       dates: {
         dluo: moment(dluoDate).format('DD/MM/YYYY') || '',
-        startofproduction: moment(productionStartDate).format('DD/MM/YYYY') || '',
-        endofproduction: moment(productionEndDate).format('DD/MM/YYYY') || ''
+        startOfProduction: moment(productionStartDate).format('DD/MM/YYYY') || '',
+        endOfProduction: moment(productionEndDate).format('DD/MM/YYYY') || ''
       },
       location: location,
-      honeyvariety: honeyVariety
+      honeyVariety: honeyVariety
     }
 
     /*
@@ -89,14 +89,14 @@ const FormPage: React.FC = () => {
   }, [])
 
   React.useEffect(() => {
-    let startdate = monodose?.dates.startofproduction || ''
-    let enddate = monodose?.dates.endofproduction || ''
-    let dluodate = monodose?.dates.dluo || ''
+    let startdate = monodose?.dates?.startOfProduction || ''
+    let enddate = monodose?.dates?.endOfProduction || ''
+    let dluodate = monodose?.dates?.dluo || ''
     setProductionStartDate((startdate) !== '' ? (new Date(moment(startdate, 'DD/MM/YYYY').toDate())) : null)
     setProductionEndDate((enddate) !== '' ? (new Date(moment(enddate, 'DD/MM/YYYY').toDate())) : null)
     setDluoDate((dluodate) !== '' ? (new Date(moment(dluodate, 'DD/MM/YYYY').toDate())) : null)
     setLocation(monodose?.location || '')
-    setHoneyVariety(monodose?.honeyvariety || '')
+    setHoneyVariety(monodose?.honeyVariety || '')
   }, [monodose])
 
   return (

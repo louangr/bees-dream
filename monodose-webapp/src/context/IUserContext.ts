@@ -1,4 +1,4 @@
-import { User } from "../models/User"
+import { User } from '../api/models/User'
 
 export interface IUserContext {
     user: User | undefined
