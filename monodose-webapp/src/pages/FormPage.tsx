@@ -53,11 +53,11 @@ const FormPage: React.FC = () => {
 
     const updatedMonodose: Monodose = {
       id: monodose?.id || -1,
-      beekeeper: monodose?.beekeeper || {
+      beekeeper: monodose?.beekeeper?.firstname !== '' ? monodose?.beekeeper : {
         firstname: loggedUser?.user?.informations?.firstname,
         lastname: loggedUser?.user?.informations?.lastname,
         company: loggedUser?.user?.informations?.company,
-        age: 0 //loggedUser?.user?.informations?.age
+        age: loggedUser?.user?.informations?.age
       },
       dates: {
         dluo: dluoDate ? moment(dluoDate).format('DD/MM/YYYY') : '',
