@@ -40,38 +40,7 @@ interface MonodoseModalProps {
   isModalOpen: boolean;
   handleClose: (monodoseID: number) => void;
 }
-const users: User[] = [
-  {
-    informations: {
-      company: "entreprise00",
-      firstname: "firstname0",
-      lastname: "lastname0",
-    },
-    login: "lastname0@email.com",
-    password: "le password0",
-    role: "beeKeeper",
-  },
-  {
-    informations: {
-      company: "entreprise1",
-      firstname: "firstname1",
-      lastname: "lastname1",
-    },
-    login: "lastname1@email.com",
-    password: "le password1",
-    role: "beeKeeper",
-  },
-  {
-    informations: {
-      company: "entreprise2",
-      firstname: "firstname2",
-      lastname: "lastname2",
-    },
-    login: "lastname1@email.com",
-    password: "le password2",
-    role: "admin",
-  },
-];
+
 
 const MonodoseModal: React.FC<MonodoseModalProps> = ({
   mode,
@@ -165,7 +134,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
         setIsLoading(false);;
       })();
 
-      // TODO: PUT to API to add monodose
+
 
       setIsLoading(false);
       handleClose(0);
@@ -184,7 +153,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           setIsAlertAutoHidden(true);
           setIsAlertClosable(true);
           setAlertType("success");
-          setAlertMessage("Mise à jour effectuée");
+          setAlertMessage("Ajout effectué");
 
         })
           .catch(() => {
@@ -201,7 +170,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           handleClose(0);
         }
       })();
-      // TODO: POST to API to add monodose
+
     }
   };
 
@@ -220,7 +189,7 @@ const MonodoseModal: React.FC<MonodoseModalProps> = ({
           setIsAlertAutoHidden(true);
           setIsAlertClosable(true);
           setAlertType("success");
-          setAlertMessage("Mise à jour effectuée");
+          setAlertMessage("Suppression effectuée");
           setIsDisabled(productionEndDate ? true : false);
         })
         .catch(() => {
