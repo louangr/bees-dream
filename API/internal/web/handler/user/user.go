@@ -98,7 +98,15 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 
 	var user e.User
 
+	var login e.Login = e.NewLogin(user.Login, user.Password)
+
 	json.Unmarshal(body, &user)
+
+	login.HashPassword()
+
+	user.Password = login.Password
+
+	fmt.Println("test : ", user)
 
 	res, err := dao.Create(user)
 
@@ -109,6 +117,8 @@ func (u UserRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	} else {
 
 		js, _ := json.Marshal(res)
+
+		fmt.Println("Test 2 :", js)
 
 		fmt.Fprintf(w, "%s", js)
 	}
