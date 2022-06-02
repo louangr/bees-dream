@@ -32,8 +32,7 @@ func RequestTest(URL string, methods string, data []byte, token *string) ([]byte
 	}
 
 	if token != nil {
-		tk := fmt.Sprintf("token=%s", *token)
-		req.Header.Set("Cookie", tk)
+		req.Header.Set("Token", *token)
 	}
 
 	resp, err := client.Do(req)
@@ -41,10 +40,6 @@ func RequestTest(URL string, methods string, data []byte, token *string) ([]byte
 	if err != nil {
 		log.Fatalln("Erreur during Get request")
 		return nil, err
-	}
-
-	if *token == "" && resp.StatusCode == 200 {
-		*token = resp.Cookies()[0].Value
 	}
 
 	defer resp.Body.Close()
@@ -191,6 +186,8 @@ func (c Client[T]) Update(item T) {
 
 func (c *Client[T]) Authentification() {
 
+	var logged entities.Logged
+
 	var login entities.Login = entities.NewLogin("dorian", "R+IXYoOZS5KmWLYRv1O0nVq+d5P2u4QMQBRX+NvlINK7ExKNCQaPzYwtOi+my2Ti9CJfNUEmuxateimIw7ob2yBzy3Tgk1l/JuaygsUCHCRwo5WhXX7iY2ZpjqqJIDFNXESBI5augjrMfSBNbE+b9OA3tenyIwXoICfPNSk3I9NHJ8oZ9pJCAnK45T1GX0lQPfoq2KF2FZL3rXSfuYKfbNicaPV6JZKdFoLq5bEEIrs6X7k5VVrk0Lpp/K461GfWfFVkMWJAdZfSlQGMnuL/F8CxKCSLeLMYd3cijZ3aBJqXcp44JS/UkuyU7lYCXlNs8GpmPj8OnI7r5YAOdMjWHA==")
 
 	var URL string = fmt.Sprintf("%s/login", c.URL)
@@ -198,6 +195,10 @@ func (c *Client[T]) Authentification() {
 	dataToSend, _ := json.Marshal(login)
 
 	body, _ := RequestTest(URL, "POST", dataToSend, &c.token)
+
+	json.Unmarshal(body, &logged)
+
+	c.token = logged.Token
 
 	if c.token == "" {
 		log.Fatalf("❌ Erreur during authentification with login %s: for url %s\nErr : %s\n", login.Login, URL, body)
