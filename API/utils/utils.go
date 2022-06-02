@@ -43,6 +43,23 @@ func StructToBson[T types.Collection](data T) bson.D {
 
 }
 
+func HeadersMiddlewareNoJwt(handler http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,DELETE,OPTIONS")
+
+		handler(w, r)
+
+		var info string = fmt.Sprintf("Route : %s & Method : %s", r.URL, r.Method)
+
+		WriteInLog(info)
+
+	}
+}
+
 func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

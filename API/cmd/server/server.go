@@ -49,7 +49,7 @@ func main() {
 	routesM := hMonodose.NewMonodoseRoutes()
 	monodoseR := router.PathPrefix("/monodose").Subrouter()
 	monodoseR.HandleFunc("", HeadersMiddleware(routesM.GetAll)).Methods("GET")
-	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Get)).Methods("GET")
+	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddlewareNoJwt(routesM.Get)).Methods("GET")
 	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Add)).Methods("POST")
 	monodoseR.HandleFunc("", HeadersMiddleware(routesM.Update)).Methods("PUT")
 	monodoseR.HandleFunc("/{id:[0-9]+}", HeadersMiddleware(routesM.Delete)).Methods("DELETE")
