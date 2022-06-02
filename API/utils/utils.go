@@ -53,18 +53,26 @@ func HeadersMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 
 		var route string = strings.Split(r.RequestURI, "/")[1]
 
+		var info string
+
 		if route != "login" {
 			err := VerifyJWT(r, w)
 
 			if !err.IsNil() {
 				w.WriteHeader(err.Code)
+
+				info = fmt.Sprintf("Route : %s & Method : %s", r.URL, r.Method)
+
+				WriteInLog(info)
+
 				fmt.Fprintf(w, "%s", err.ToJson())
 				return
 			}
 		}
+
 		handler(w, r)
 
-		var info string = fmt.Sprintf("Route : %s & Method : %s & Code : %s", r.URL, r.Method)
+		info = fmt.Sprintf("Route : %s & Method : %s", r.URL, r.Method)
 
 		WriteInLog(info)
 
