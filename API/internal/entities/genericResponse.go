@@ -9,8 +9,8 @@ type Data interface {
 	Monodose | User | Logged
 }
 
-// swagger:response genericResponse
-type _[T Data] struct {
+// swagger:response genericResponseStruct
+type swaggGenericResponseStruct[T Data] struct {
 	// in:body
 	Body GenericResponse[T]
 }

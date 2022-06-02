@@ -63,9 +63,6 @@
         "responses": {
           "200": {
             "$ref": "#/responses/monodoseStructArray"
-          },
-          "500": {
-            "$ref": "#/responses/errorsJson"
           }
         }
       },
@@ -89,13 +86,13 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/monodoseStruct"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "404": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "500": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           }
         }
       },
@@ -119,13 +116,13 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/monodoseStruct"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "400": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "500": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           }
         }
       }
@@ -149,13 +146,13 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/monodoseStruct"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "404": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "500": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           }
         }
       },
@@ -177,13 +174,13 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/monodoseStruct"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "404": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           },
           "500": {
-            "$ref": "#/responses/errorsJson"
+            "$ref": "#/responses/genericResponseStruct"
           }
         }
       }

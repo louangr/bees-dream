@@ -30,8 +30,6 @@ var dao d.Dao[e.Monodose] = d.NewDao[e.Monodose]()
 // responses:
 //   "200":
 //     "$ref": "#/responses/monodoseStructArray"
-//   "500":
-//     "$ref": "#/responses/errorsJson"
 func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 	res, _ := json.Marshal(dao.FindAll())
 
@@ -50,11 +48,11 @@ func (m MonodoseRoutes) GetAll(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "404":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "500":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -78,11 +76,11 @@ func (m MonodoseRoutes) Get(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "400":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "500":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 
@@ -107,11 +105,11 @@ func (m MonodoseRoutes) Add(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "404":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "500":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -135,11 +133,11 @@ func (m MonodoseRoutes) Delete(w http.ResponseWriter, r *http.Request) {
 //   required: true
 // responses:
 //   "200":
-//     "$ref": "#/responses/monodoseStruct"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "404":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 //   "500":
-//     "$ref": "#/responses/errorsJson"
+//     "$ref": "#/responses/genericResponseStruct"
 func (m MonodoseRoutes) Update(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 
